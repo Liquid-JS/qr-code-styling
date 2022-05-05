@@ -1,14 +1,15 @@
-import dotTypes from "../../constants/dotTypes";
 import { DotType, GetNeighbor, DrawArgs, BasicFigureDrawArgs, RotateFigureArgs } from "../../types";
 
-export default class QRDot {
+export class QRDot {
   _element?: SVGElement;
   _svg: SVGElement;
   _type: DotType;
+  _document: Document;
 
-  constructor({ svg, type }: { svg: SVGElement; type: DotType }) {
+  constructor({ svg, type, document }: { svg: SVGElement; type: DotType; document: Document }) {
     this._svg = svg;
     this._type = type;
+    this._document = document;
   }
 
   draw(x: number, y: number, size: number, getNeighbor: GetNeighbor): void {
@@ -16,22 +17,22 @@ export default class QRDot {
     let drawFunction;
 
     switch (type) {
-      case dotTypes.dots:
+      case DotType.dots:
         drawFunction = this._drawDot;
         break;
-      case dotTypes.classy:
+      case DotType.classy:
         drawFunction = this._drawClassy;
         break;
-      case dotTypes.classyRounded:
+      case DotType.classyRounded:
         drawFunction = this._drawClassyRounded;
         break;
-      case dotTypes.rounded:
+      case DotType.rounded:
         drawFunction = this._drawRounded;
         break;
-      case dotTypes.extraRounded:
+      case DotType.extraRounded:
         drawFunction = this._drawExtraRounded;
         break;
-      case dotTypes.square:
+      case DotType.square:
       default:
         drawFunction = this._drawSquare;
     }
@@ -53,7 +54,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "circle");
         this._element.setAttribute("cx", String(x + size / 2));
         this._element.setAttribute("cy", String(y + size / 2));
         this._element.setAttribute("r", String(size / 2));
@@ -67,7 +68,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "rect");
         this._element.setAttribute("x", String(x));
         this._element.setAttribute("y", String(y));
         this._element.setAttribute("width", String(size));
@@ -83,7 +84,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -102,7 +103,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -122,7 +123,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -141,7 +142,7 @@ export default class QRDot {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to left top position

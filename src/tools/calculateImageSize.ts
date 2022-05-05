@@ -13,7 +13,7 @@ interface ImageSizeResult {
   hideXDots: number;
 }
 
-export default function calculateImageSize({
+export function calculateImageSize({
   originalHeight,
   originalWidth,
   maxHiddenDots,

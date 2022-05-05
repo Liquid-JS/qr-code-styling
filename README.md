@@ -53,7 +53,7 @@ npm install qr-code-styling
     });
 
     qrCode.append(document.getElementById("canvas"));
-    qrCode.download({ name: "qr", extension: "svg" });
+    const svgData = qrCode.serialize();
 </script>
 </body>
 </html>
@@ -89,7 +89,6 @@ Property               |Type                     |Default Value|Description
 -----------------------|-------------------------|-------------|-----------------------------------------------------
 width                  |number                   |`300`        |Size of canvas
 height                 |number                   |`300`        |Size of canvas
-type                   |string (`'canvas' 'svg'`)|`canvas`     |The type of the element that will be rendered
 data                   |string                   |             |The date will be encoded to the QR code
 image                  |string                   |             |The image will be copied to the center of the QR code
 margin                 |number                   |`0`          |Margin around canvas
@@ -186,11 +185,7 @@ Param    |Type       |Description
 ---------|-----------|-----------
 container|DOM element|This container will be used for appending of the QR code
 
-`QRCodeStyling.getRawData(extension) => Promise<Blob>`
-
-Param    |Type                                |Default Value|Description
----------|------------------------------------|-------------|------------
-extension|string (`'png' 'jpeg' 'webp' 'svg'`)|`'png'`      |Blob type
+`QRCodeStyling.serialize() => Promise<string>`
 
 `QRCodeStyling.update(options) => void`
 
@@ -229,19 +224,6 @@ const extension = (svg, options) => {
 ```
 
 `QRCodeStyling.deleteExtension() => void`
-
-`QRCodeStyling.download(downloadOptions) => Promise<void>`
-
-Param          |Type  |Description
----------------|------|------------
-downloadOptions|object|Options with extension and name of file (not required)
-
-`downloadOptions` structure
-
-Property |Type                                |Default Value|Description
----------|------------------------------------|-------------|-----------------------------------------------------
-name     |string                              |`'qr'`       |Name of the downloaded file
-extension|string (`'png' 'jpeg' 'webp' 'svg'`)|`'png'`      |File extension
 
 
 ### License

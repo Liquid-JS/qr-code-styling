@@ -1,4 +1,4 @@
-import mergeDeep from "./merge";
+import { mergeDeep } from "./merge";
 
 describe("Test getMode function", () => {
   const simpleObject = {

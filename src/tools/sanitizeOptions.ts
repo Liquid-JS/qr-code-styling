@@ -22,7 +22,7 @@ function sanitizeGradient(gradient: Gradient): Gradient {
   return newGradient;
 }
 
-export default function sanitizeOptions(options: RequiredOptions): RequiredOptions {
+export function sanitizeOptions(options: RequiredOptions): RequiredOptions {
   const newOptions = { ...options };
 
   newOptions.width = Number(newOptions.width);
@@ -72,6 +72,8 @@ export default function sanitizeOptions(options: RequiredOptions): RequiredOptio
       newOptions.backgroundOptions.gradient = sanitizeGradient(newOptions.backgroundOptions.gradient);
     }
   }
+
+  if (!newOptions.document) newOptions.document = document;
 
   return newOptions;
 }

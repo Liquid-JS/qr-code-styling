@@ -1,8 +1,8 @@
-import QROptions from "./QROptions";
+import { defaultOptions } from "./QROptions";
 
 describe("Test default QROptions", () => {
   it("The export of the module should be an object", () => {
-    expect(typeof QROptions).toBe("object");
+    expect(typeof defaultOptions).toBe("object");
   });
 
   describe("Test the content of options", () => {
@@ -17,7 +17,7 @@ describe("Test default QROptions", () => {
       "backgroundOptions"
     ];
     it.each(optionsKeys)("The options should contain particular keys", (key) => {
-      expect(Object.keys(QROptions)).toContain(key);
+      expect(Object.keys(defaultOptions)).toContain(key);
     });
   });
 });

@@ -1,14 +1,15 @@
-import cornerSquareTypes from "../../constants/cornerSquareTypes";
 import { CornerSquareType, DrawArgs, BasicFigureDrawArgs, RotateFigureArgs } from "../../types";
 
-export default class QRCornerSquare {
+export class QRCornerSquare {
   _element?: SVGElement;
   _svg: SVGElement;
   _type: CornerSquareType;
+  _document: Document;
 
-  constructor({ svg, type }: { svg: SVGElement; type: CornerSquareType }) {
+  constructor({ svg, type, document }: { svg: SVGElement; type: CornerSquareType; document: Document }) {
     this._svg = svg;
     this._type = type;
+    this._document = document;
   }
 
   draw(x: number, y: number, size: number, rotation: number): void {
@@ -16,13 +17,13 @@ export default class QRCornerSquare {
     let drawFunction;
 
     switch (type) {
-      case cornerSquareTypes.square:
+      case CornerSquareType.square:
         drawFunction = this._drawSquare;
         break;
-      case cornerSquareTypes.extraRounded:
+      case CornerSquareType.extraRounded:
         drawFunction = this._drawExtraRounded;
         break;
-      case cornerSquareTypes.dot:
+      case CornerSquareType.dot:
       default:
         drawFunction = this._drawDot;
     }
@@ -45,7 +46,7 @@ export default class QRCornerSquare {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -67,7 +68,7 @@ export default class QRCornerSquare {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -93,7 +94,7 @@ export default class QRCornerSquare {
     this._rotateFigure({
       ...args,
       draw: () => {
-        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",

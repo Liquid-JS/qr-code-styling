@@ -1,15 +1,35 @@
+import { browser } from "../tools/image";
+
 export interface UnknownObject {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
-export type DotType = "dots" | "rounded" | "classy" | "classy-rounded" | "square" | "extra-rounded";
-export type CornerDotType = "dot" | "square";
-export type CornerSquareType = "dot" | "square" | "extra-rounded";
-export type FileExtension = "svg" | "png" | "jpeg" | "webp";
-export type GradientType = "radial" | "linear";
-export type DrawType = "canvas" | "svg";
-export type ShapeType = "square" | "circle";
+export enum DotType {
+  dots = "dots",
+  rounded = "rounded",
+  classy = "classy",
+  classyRounded = "classy-rounded",
+  square = "square",
+  extraRounded = "extra-rounded"
+}
+export enum CornerDotType {
+  dot = "dot",
+  square = "square"
+}
+export enum CornerSquareType {
+  dot = "dot",
+  square = "square",
+  extraRounded = "extra-rounded"
+}
+export enum GradientType {
+  radial = "radial",
+  linear = "linear"
+}
+export enum ShapeType {
+  square = "square",
+  circle = "circle"
+}
 
 export type Gradient = {
   type: GradientType;
@@ -20,31 +40,7 @@ export type Gradient = {
   }[];
 };
 
-export interface DotTypes {
-  [key: string]: DotType;
-}
-
-export interface GradientTypes {
-  [key: string]: GradientType;
-}
-
-export interface CornerDotTypes {
-  [key: string]: CornerDotType;
-}
-
-export interface CornerSquareTypes {
-  [key: string]: CornerSquareType;
-}
-
-export interface DrawTypes {
-  [key: string]: DrawType;
-}
-
-export interface ShapeTypes {
-  [key: string]: ShapeType;
-}
-
-export type TypeNumber =
+type TypeNumber =
   | 0
   | 1
   | 2
@@ -87,30 +83,42 @@ export type TypeNumber =
   | 39
   | 40;
 
-export type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
-export type Mode = "Numeric" | "Alphanumeric" | "Byte" | "Kanji";
+const TypeNumber = Array(41)
+  .fill(0)
+  .map((_, i) => i) as unknown as {
+  [P in TypeNumber]: P;
+};
+
+export { TypeNumber };
+
+export enum ErrorCorrectionLevel {
+  L = "L",
+  M = "M",
+  Q = "Q",
+  H = "H"
+}
+export enum Mode {
+  numeric = "Numeric",
+  alphanumeric = "Alphanumeric",
+  byte = "Byte",
+  kanji = "Kanji"
+}
 export interface QRCode {
   addData(data: string, mode?: Mode): void;
   make(): void;
   getModuleCount(): number;
   isDark(row: number, col: number): boolean;
-  createImgTag(cellSize?: number, margin?: number): string;
-  createSvgTag(cellSize?: number, margin?: number): string;
-  createSvgTag(opts?: { cellSize?: number; margin?: number; scalable?: boolean }): string;
-  createDataURL(cellSize?: number, margin?: number): string;
-  createTableTag(cellSize?: number, margin?: number): string;
-  createASCII(cellSize?: number, margin?: number): string;
-  renderTo2dContext(context: CanvasRenderingContext2D, cellSize?: number): void;
 }
 
 export type Options = {
-  type?: DrawType;
+  document?: Document;
   shape?: ShapeType;
   width?: number;
   height?: number;
   margin?: number;
   data?: string;
   image?: string;
+  imageTools?: typeof browser;
   qrOptions?: {
     typeNumber?: TypeNumber;
     mode?: Mode;
@@ -145,11 +153,6 @@ export type Options = {
 };
 
 export type FilterFunction = (i: number, j: number) => boolean;
-
-export type DownloadOptions = {
-  name?: string;
-  extension?: FileExtension;
-};
 
 export type DrawArgs = {
   x: number;

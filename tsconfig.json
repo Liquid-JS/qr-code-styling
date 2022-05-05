@@ -2,8 +2,8 @@
     "compilerOptions": {
         "outDir": "./lib/",
         "sourceMap": true,
-        "module": "es6",
-        "target": "es5",
+        "module": "esnext",
+        "target": "es2020",
         "allowJs": true,
         "moduleResolution": "node",
         "declaration": true,
@@ -16,7 +16,20 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "importHelpers": true,
+        "skipLibCheck": true,
+        "lib": [
+            "ES2020",
+            "DOM"
+        ]
     },
-    "include": ["./src/**/*"]
+    "files": [
+        "./src/index.ts",
+        "./src/node.ts"
+    ],
+    "exclude": [
+        "**/*.test.js",
+        "**/*.test.ts"
+    ]
 }
