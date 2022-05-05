@@ -1,4 +1,4 @@
-import { browser } from "../tools/image";
+import { browserImageTools } from "../tools/browserImageTools";
 
 export interface UnknownObject {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,7 +118,7 @@ export type Options = {
   margin?: number;
   data?: string;
   image?: string | Buffer | Blob;
-  imageTools?: typeof browser;
+  imageTools?: typeof browserImageTools;
   qrOptions?: {
     typeNumber?: TypeNumber;
     mode?: Mode;
@@ -182,3 +182,10 @@ export type RotateFigureArgs = {
 export type GetNeighbor = (x: number, y: number) => boolean;
 
 export type ExtensionFunction = (svg: SVGElement, options: Options) => void;
+
+export enum FileExtension {
+  svg = "svg",
+  png = "png",
+  jpeg = "jpeg",
+  webp = "webp"
+}

@@ -33,7 +33,7 @@ npm install qr-code-styling
 <div id="canvas"></div>
 <script type="text/javascript">
 
-    const qrCode = new QRCodeStyling({
+    const qrCode = new QRCodeStyling.QRCodeStyling({
         width: 300,
         height: 300,
         type: "svg",
@@ -53,7 +53,7 @@ npm install qr-code-styling
     });
 
     qrCode.append(document.getElementById("canvas"));
-    const svgData = qrCode.serialize();
+    QRCodeStyling.browserUtils.download(qrCode);
 </script>
 </body>
 </html>

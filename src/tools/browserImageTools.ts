@@ -1,6 +1,6 @@
 import { RequiredOptions } from "../core/QROptions";
 
-export const browser = {
+export const browserImageTools = {
   toDataURL(url: string | Buffer | Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       if (typeof url == "string") {
@@ -43,7 +43,7 @@ export const browser = {
       image.onerror = image.onabort = reject;
       if (typeof options.image == "string") image.src = options.image;
       else
-        browser
+        browserImageTools
           .toDataURL(options.image)
           .then((url) => (image.src = url))
           .catch(reject);

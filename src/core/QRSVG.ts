@@ -3,7 +3,7 @@ import { QRCornerDot } from "../figures/cornerDot/QRCornerDot";
 import { QRCornerSquare } from "../figures/cornerSquare/QRCornerSquare";
 import { QRDot } from "../figures/dot/QRDot";
 import { calculateImageSize } from "../tools/calculateImageSize";
-import { browser } from "../tools/image";
+import { browserImageTools } from "../tools/browserImageTools";
 import { FilterFunction, Gradient, GradientType, QRCode, ShapeType } from "../types";
 import { RequiredOptions } from "./QROptions";
 
@@ -37,7 +37,7 @@ export class QRSVG {
   _options: RequiredOptions;
   _qr?: QRCode;
   _document: Document;
-  private _imageTools: typeof browser;
+  private _imageTools: typeof browserImageTools;
 
   //TODO don't pass all options to this class
   constructor(options: RequiredOptions) {
@@ -47,7 +47,7 @@ export class QRSVG {
     this._element.setAttribute("height", String(options.height));
     this._defs = this._document.createElementNS("http://www.w3.org/2000/svg", "defs");
     this._element.appendChild(this._defs);
-    this._imageTools = options.imageTools || browser;
+    this._imageTools = options.imageTools || browserImageTools;
 
     this._options = options;
   }
