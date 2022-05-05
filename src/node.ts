@@ -1,3 +1,4 @@
+import { fromBuffer } from "file-type";
 import { JSDOM } from "jsdom";
 import fetch from "node-fetch";
 import sharp from "sharp";
@@ -10,17 +11,29 @@ export class QRCodeStyling extends _QRCodeStyling {
     const dom = new JSDOM("<!DOCTYPE html>");
     const imageCache = new Map<string, Promise<{ contentType?: string | null; data: Buffer }>>();
 
-    const loadImage = (url: string) => {
-      let pr = imageCache.get(url);
-      if (pr) return pr;
-      pr = fetch(url).then((res) =>
-        res.arrayBuffer().then((buff) => ({
-          contentType: res.headers.get("Content-Type"),
-          data: Buffer.from(buff)
-        }))
-      );
-      imageCache.set(url, pr);
-      return pr;
+    const loadImage = async (url: string | Buffer | Blob) => {
+      if (typeof url == "string") {
+        let pr = imageCache.get(url);
+        if (pr) return pr;
+        pr = fetch(url).then((res) =>
+          res
+            .arrayBuffer()
+            .then((buff) => Buffer.from(buff))
+            .then(async (data) => ({
+              contentType: res.headers.get("Content-Type") || (await fromBuffer(data).then((r) => r?.mime)),
+              data
+            }))
+        );
+        imageCache.set(url, pr);
+        return pr;
+      } else {
+        const buff = Buffer.from(url as Buffer);
+        const mime = await fromBuffer(buff).then((r) => r?.mime);
+        return {
+          contentType: mime,
+          data: buff
+        };
+      }
     };
 
     global.XMLSerializer = dom.window.XMLSerializer;
@@ -29,13 +42,16 @@ export class QRCodeStyling extends _QRCodeStyling {
       ...options,
       document: options.document || dom.window.document,
       imageTools: options.imageTools || {
-        toDataURL: (url: string) =>
-          loadImage(url).then(({ contentType, data }) => `data:${contentType};base64,${data.toString("base64")}`),
+        toDataURL: (url) =>
+          loadImage(url).then(
+            ({ contentType, data }) =>
+              `data:${contentType?.replace("application/xml", "image/svg+xml")};base64,${data.toString("base64")}`
+          ),
         getSize: async (options) => {
           if (!options.image) {
             throw new Error("Image is not defined");
           }
-          const { data } = await loadImage(options.image);
+          const { data } = Buffer.isBuffer(options.image) ? { data: options.image } : await loadImage(options.image);
           const meta = await sharp(data).metadata();
           return {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

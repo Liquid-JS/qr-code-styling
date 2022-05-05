@@ -117,7 +117,7 @@ export type Options = {
   height?: number;
   margin?: number;
   data?: string;
-  image?: string;
+  image?: string | Buffer | Blob;
   imageTools?: typeof browser;
   qrOptions?: {
     typeNumber?: TypeNumber;

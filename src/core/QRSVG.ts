@@ -437,15 +437,37 @@ export class QRSVG {
     const dw = width - options.imageOptions.margin * 2;
     const dh = height - options.imageOptions.margin * 2;
 
-    const image = this._document.createElementNS("http://www.w3.org/2000/svg", "image");
+    const imageUrl = await this._imageTools.toDataURL(options.image || "");
+    let image: SVGElement = this._document.createElementNS("http://www.w3.org/2000/svg", "image");
+    image.setAttribute("href", imageUrl || "");
+
+    if (imageUrl.startsWith("data:image/svg+xml;")) {
+      let data = imageUrl.substring(19);
+      const i = data.indexOf(",");
+      const encoding = data.substring(0, i);
+      data = data.substring(i + 1);
+
+      switch (encoding) {
+        case "base64":
+          data = typeof atob == "function" ? atob(data) : Buffer.from(data, "base64").toString("utf8");
+          break;
+        default:
+          data = "";
+          break;
+      }
+
+      if (data) {
+        const container = this._document.createElement("div");
+        container.innerHTML = data;
+        const rootEl = container.querySelector<SVGElement>("svg");
+        if (rootEl) image = rootEl;
+      }
+    }
+
     image.setAttribute("x", String(dx));
     image.setAttribute("y", String(dy));
     image.setAttribute("width", `${dw}px`);
     image.setAttribute("height", `${dh}px`);
-
-    const imageUrl = await this._imageTools.toDataURL(options.image || "");
-
-    image.setAttribute("href", imageUrl || "");
 
     this._element.appendChild(image);
   }
