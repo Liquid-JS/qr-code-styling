@@ -16,18 +16,9 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "esModuleInterop": true,
-        "importHelpers": true,
-        "skipLibCheck": true,
-        "lib": [
-            "ES2020",
-            "DOM"
-        ]
+        "esModuleInterop": true
     },
-    "files": [
-        "./src/index.ts",
-        "./src/node.ts"
-    ],
+    "include": ["./src/**/*"],
     "exclude": [
         "**/*.test.js",
         "**/*.test.ts"
