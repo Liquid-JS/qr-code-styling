@@ -145,11 +145,13 @@ export type Options = {
     color?: string;
     gradient?: Gradient;
   };
-  backgroundOptions?: {
-    round?: number;
-    color?: string;
-    gradient?: Gradient;
-  };
+  backgroundOptions?:
+    | {
+        round?: number;
+        color?: string;
+        gradient?: Gradient;
+      }
+    | false;
 };
 
 export type FilterFunction = (i: number, j: number) => boolean;

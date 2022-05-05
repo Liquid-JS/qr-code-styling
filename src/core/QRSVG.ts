@@ -128,38 +128,34 @@ export class QRSVG {
     const element = this._element;
     const options = this._options;
 
-    if (element) {
-      const gradientOptions = options.backgroundOptions?.gradient;
-      const color = options.backgroundOptions?.color;
+    if (element && options.backgroundOptions) {
+      const gradientOptions = options.backgroundOptions.gradient;
+      const color = options.backgroundOptions.color;
 
-      if (gradientOptions || color) {
-        this._createColor({
-          options: gradientOptions,
-          color: color,
-          additionalRotation: 0,
-          x: 0,
-          y: 0,
-          height: options.height,
-          width: options.width,
-          name: "background-color"
-        });
-      }
+      this._createColor({
+        options: gradientOptions,
+        color: color,
+        additionalRotation: 0,
+        x: 0,
+        y: 0,
+        height: options.height,
+        width: options.width,
+        name: "background-color"
+      });
 
-      if (options.backgroundOptions?.round) {
-        const size = Math.min(options.width, options.height);
-        const element = this._document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        this._backgroundClipPath = this._document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-        this._backgroundClipPath.setAttribute("id", "clip-path-background-color");
-        this._defs.appendChild(this._backgroundClipPath);
+      const size = Math.min(options.width, options.height);
+      const element = this._document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      this._backgroundClipPath = this._document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+      this._backgroundClipPath.setAttribute("id", "clip-path-background-color");
+      this._defs.appendChild(this._backgroundClipPath);
 
-        element.setAttribute("x", String((options.width - size) / 2));
-        element.setAttribute("y", String((options.height - size) / 2));
-        element.setAttribute("width", String(size));
-        element.setAttribute("height", String(size));
-        element.setAttribute("rx", String((size / 2) * options.backgroundOptions.round));
+      element.setAttribute("x", String((options.width - size) / 2));
+      element.setAttribute("y", String((options.height - size) / 2));
+      element.setAttribute("width", String(size));
+      element.setAttribute("height", String(size));
+      element.setAttribute("rx", String((size / 2) * (options.backgroundOptions.round || 0)));
 
-        this._backgroundClipPath.appendChild(element);
-      }
+      this._backgroundClipPath.appendChild(element);
     }
   }
 
