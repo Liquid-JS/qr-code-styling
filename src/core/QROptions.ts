@@ -1,11 +1,10 @@
-import { DotType, ErrorCorrectionLevel, Gradient, Mode, Options, ShapeType, TypeNumber } from "../types";
+import { CanvasOptions, DotType, ErrorCorrectionLevel, Gradient, Mode, Options, ShapeType, TypeNumber } from "../types";
 
 export interface RequiredOptions extends Options {
   document: Document;
   shape: ShapeType;
   width: number;
   height: number;
-  margin: number;
   data: string;
   qrOptions: {
     typeNumber: TypeNumber;
@@ -28,10 +27,9 @@ export interface RequiredOptions extends Options {
 export const defaultOptions: RequiredOptions = {
   document: undefined as never,
   shape: ShapeType.square,
-  width: 300,
-  height: 300,
+  width: undefined as never,
+  height: undefined as never,
   data: "",
-  margin: 0,
   qrOptions: {
     typeNumber: TypeNumber[0],
     mode: undefined,
@@ -47,4 +45,16 @@ export const defaultOptions: RequiredOptions = {
     type: DotType.square,
     color: "#000"
   }
+};
+
+export interface RequiredCanvasOptions extends CanvasOptions {
+  width: number;
+  height: number;
+  margin: number;
+}
+
+export const defaultCanvasOptions: RequiredCanvasOptions = {
+  width: 300,
+  height: 300,
+  margin: 10
 };

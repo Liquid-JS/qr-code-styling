@@ -1,16 +1,26 @@
 import { QRCodeStyling } from "../core/QRCodeStyling";
-import { FileExtension } from "../types";
+import { defaultCanvasOptions, RequiredCanvasOptions } from "../core/QROptions";
+import { CanvasOptions, FileExtension } from "../types";
+import { mergeDeep } from "./merge";
+import { sanitizeCanvasOptions } from "./sanitizeOptions";
 
 export function drawToCanvas(
-  qrCode: QRCodeStyling
+  qrCode: QRCodeStyling,
+  options?: CanvasOptions
 ): { canvas: HTMLCanvasElement; canvasDrawingPromise: Promise<void> | undefined } | undefined {
   if (!qrCode._qr) {
     return;
   }
 
+  const { width, height, margin } = options
+    ? sanitizeCanvasOptions(mergeDeep(defaultCanvasOptions, options) as RequiredCanvasOptions)
+    : defaultCanvasOptions;
+
   const canvas = document.createElement("canvas");
-  canvas.width = qrCode._options.width;
-  canvas.height = qrCode._options.height;
+  canvas.width = width;
+  canvas.height = height;
+
+  const size = Math.min(width, height) - 2 * margin;
 
   qrCode._setupSvg();
   const canvasDrawingPromise = qrCode._svgDrawingPromise?.then(async () => {
@@ -24,7 +34,7 @@ export function drawToCanvas(
 
     return new Promise<void>((resolve, reject) => {
       image.onload = (): void => {
-        canvas?.getContext("2d")?.drawImage(image, 0, 0);
+        canvas?.getContext("2d")?.drawImage(image, (width - size) / 2, (height - size) / 2, size, size);
         resolve();
       };
       image.onerror = image.onabort = reject;
@@ -38,7 +48,8 @@ export function drawToCanvas(
 
 export async function download(
   qrCode: QRCodeStyling,
-  downloadOptions: FileExtension | { name?: string; extension: FileExtension }
+  downloadOptions: FileExtension | { name?: string; extension: FileExtension },
+  options?: CanvasOptions
 ): Promise<void> {
   if (!qrCode._qr) throw "QR code is empty";
   let extension = FileExtension.png;
@@ -65,7 +76,7 @@ export async function download(
     const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
     downloadURI(url, `${name}.svg`);
   } else {
-    const res = drawToCanvas(qrCode);
+    const res = drawToCanvas(qrCode, options);
     if (!res) return;
     const { canvas, canvasDrawingPromise } = res;
     await canvasDrawingPromise;

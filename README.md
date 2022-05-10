@@ -34,9 +34,6 @@ npm install qr-code-styling
 <script type="text/javascript">
 
     const qrCode = new QRCodeStyling.QRCodeStyling({
-        width: 300,
-        height: 300,
-        type: "svg",
         data: "https://www.facebook.com/",
         image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
         dotsOptions: {
@@ -48,7 +45,7 @@ npm install qr-code-styling
         },
         imageOptions: {
             crossOrigin: "anonymous",
-            margin: 20
+            margin: 1
         }
     });
 
@@ -87,11 +84,8 @@ options|object|Init object
 
 Property               |Type                     |Default Value|Description
 -----------------------|-------------------------|-------------|-----------------------------------------------------
-width                  |number                   |`300`        |Size of canvas
-height                 |number                   |`300`        |Size of canvas
 data                   |string                   |             |The date will be encoded to the QR code
 image                  |string                   |             |The image will be copied to the center of the QR code
-margin                 |number                   |`0`          |Margin around canvas
 qrOptions              |object                   |             |Options will be passed to `qrcode-generator` lib
 imageOptions           |object                   |             |Specific image options, details see below
 dotsOptions            |object                   |             |Dots styling options
@@ -113,7 +107,7 @@ Property          |Type                                   |Default Value|Descrip
 ------------------|---------------------------------------|-------------|------------------------------------------------------------------------------
 hideBackgroundDots|boolean                                |`true`       |Hide all dots covered by the image
 imageSize         |number                                 |`0.4`        |Coefficient of the image size. Not recommended to use ove 0.5. Lower is better
-margin            |number                                 |`0`          |Margin of the image in px
+margin            |number                                 |`0`          |Margin of the image in blocks
 crossOrigin       |string(`'anonymous' 'use-credentials'`)|             |Set "anonymous" if you want to download QR code from other origins.
 
 `options.dotsOptions` structure

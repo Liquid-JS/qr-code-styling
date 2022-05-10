@@ -6,7 +6,7 @@ describe("Test default QROptions", () => {
   });
 
   describe("Test the content of options", () => {
-    const optionsKeys = ["width", "height", "data", "margin", "qrOptions", "imageOptions", "dotsOptions"];
+    const optionsKeys = ["data", "qrOptions", "imageOptions", "dotsOptions"];
     it.each(optionsKeys)("The options should contain particular keys", (key) => {
       expect(Object.keys(defaultOptions)).toContain(key);
     });

@@ -1,4 +1,4 @@
-import { RequiredOptions } from "../core/QROptions";
+import { RequiredCanvasOptions, RequiredOptions } from "../core/QROptions";
 import { Gradient } from "../types";
 
 function sanitizeGradient(gradient: Gradient): Gradient {
@@ -25,19 +25,12 @@ function sanitizeGradient(gradient: Gradient): Gradient {
 export function sanitizeOptions(options: RequiredOptions): RequiredOptions {
   const newOptions = { ...options };
 
-  newOptions.width = Number(newOptions.width);
-  newOptions.height = Number(newOptions.height);
-  newOptions.margin = Number(newOptions.margin);
   newOptions.imageOptions = {
     ...newOptions.imageOptions,
     hideBackgroundDots: Boolean(newOptions.imageOptions.hideBackgroundDots),
     imageSize: Number(newOptions.imageOptions.imageSize),
     margin: Number(newOptions.imageOptions.margin)
   };
-
-  if (newOptions.margin > Math.min(newOptions.width, newOptions.height)) {
-    newOptions.margin = Math.min(newOptions.width, newOptions.height);
-  }
 
   newOptions.dotsOptions = {
     ...newOptions.dotsOptions
@@ -74,6 +67,20 @@ export function sanitizeOptions(options: RequiredOptions): RequiredOptions {
   }
 
   if (!newOptions.document) newOptions.document = document;
+
+  return newOptions;
+}
+
+export function sanitizeCanvasOptions(options: RequiredCanvasOptions): RequiredCanvasOptions {
+  const newOptions = { ...options };
+
+  newOptions.width = Number(newOptions.width);
+  newOptions.height = Number(newOptions.height);
+  newOptions.margin = Number(newOptions.margin);
+
+  if (newOptions.margin > Math.min(newOptions.width, newOptions.height)) {
+    newOptions.margin = Math.min(newOptions.width, newOptions.height);
+  }
 
   return newOptions;
 }

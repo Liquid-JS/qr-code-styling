@@ -67,7 +67,7 @@ export class QRSVG {
 
   async drawQR(qr: QRCode): Promise<void> {
     const count = qr.getModuleCount();
-    const minSize = Math.min(this._options.width, this._options.height) - this._options.margin * 2;
+    const minSize = Math.min(this._options.width, this._options.height);
     const realQRSize = this._options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
     const dotSize = Math.floor(realQRSize / count);
     let drawImageSize = {
@@ -172,7 +172,7 @@ export class QRSVG {
       throw "The canvas is too small.";
     }
 
-    const minSize = Math.min(options.width, options.height) - options.margin * 2;
+    const minSize = Math.min(options.width, options.height);
     const realQRSize = options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
     const dotSize = Math.floor(realQRSize / count);
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
@@ -289,7 +289,7 @@ export class QRSVG {
     }
 
     const count = this._qr.getModuleCount();
-    const minSize = Math.min(options.width, options.height) - options.margin * 2;
+    const minSize = Math.min(options.width, options.height);
     const realQRSize = options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
     const dotSize = Math.floor(realQRSize / count);
     const cornersSquareSize = dotSize * 7;
@@ -429,10 +429,11 @@ export class QRSVG {
     const options = this._options;
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
     const yBeginning = Math.floor((options.height - count * dotSize) / 2);
-    const dx = xBeginning + options.imageOptions.margin + (count * dotSize - width) / 2;
-    const dy = yBeginning + options.imageOptions.margin + (count * dotSize - height) / 2;
-    const dw = width - options.imageOptions.margin * 2;
-    const dh = height - options.imageOptions.margin * 2;
+    const margin = options.imageOptions.margin * dotSize;
+    const dx = xBeginning + margin + (count * dotSize - width) / 2;
+    const dy = yBeginning + margin + (count * dotSize - height) / 2;
+    const dw = width - margin * 2;
+    const dh = height - margin * 2;
 
     const imageUrl = await this._imageTools.toDataURL(options.image || "");
     let image: SVGElement = this._document.createElementNS("http://www.w3.org/2000/svg", "image");

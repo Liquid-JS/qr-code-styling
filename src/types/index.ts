@@ -115,7 +115,6 @@ export type Options = {
   shape?: ShapeType;
   width?: number;
   height?: number;
-  margin?: number;
   data?: string;
   image?: string | Buffer | Blob;
   imageTools?: typeof browserImageTools;
@@ -152,6 +151,12 @@ export type Options = {
         gradient?: Gradient;
       }
     | false;
+};
+
+export type CanvasOptions = {
+  width?: number;
+  height?: number;
+  margin?: number;
 };
 
 export type FilterFunction = (i: number, j: number) => boolean;
