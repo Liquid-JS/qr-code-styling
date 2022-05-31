@@ -28,7 +28,7 @@ export function sanitizeOptions(options: RequiredOptions): RequiredOptions {
   newOptions.imageOptions = {
     ...newOptions.imageOptions,
     hideBackgroundDots: Boolean(newOptions.imageOptions.hideBackgroundDots),
-    imageSize: Number(newOptions.imageOptions.imageSize),
+    imageSize: Math.min(1, Number(newOptions.imageOptions.imageSize)) || 1,
     margin: Number(newOptions.imageOptions.margin)
   };
 

@@ -6,6 +6,7 @@ import { RequiredOptions } from "./core/QROptions";
 import { QRCodeStyling as _QRCodeStyling } from "./index";
 export { ErrorCorrectionPercents } from "./constants/errorCorrectionPercents";
 export * from "./types";
+
 export class QRCodeStyling extends _QRCodeStyling {
   constructor(options: RequiredOptions) {
     const dom = new JSDOM("<!DOCTYPE html>");
