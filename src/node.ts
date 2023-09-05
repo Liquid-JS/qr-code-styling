@@ -1,5 +1,5 @@
+import { DOMImplementation, XMLSerializer, DOMParser } from "@xmldom/xmldom";
 import { fromBuffer } from "file-type";
-import { JSDOM } from "jsdom";
 import fetch from "node-fetch";
 import sharp from "sharp";
 import { RequiredOptions } from "./core/QROptions";
@@ -9,7 +9,7 @@ export * from "./types";
 
 export class QRCodeStyling extends _QRCodeStyling {
   constructor(options: RequiredOptions) {
-    const dom = new JSDOM("<!DOCTYPE html>");
+    const dom = new DOMImplementation().createDocument(null, null);
     const imageCache = new Map<string, Promise<{ contentType?: string | null; data: Buffer }>>();
 
     const loadImage = async (url: string | Buffer | Blob) => {
@@ -37,11 +37,12 @@ export class QRCodeStyling extends _QRCodeStyling {
       }
     };
 
-    global.XMLSerializer = dom.window.XMLSerializer;
+    global.XMLSerializer = XMLSerializer;
+    global.DOMParser = DOMParser;
 
     super({
       ...options,
-      document: options.document || dom.window.document,
+      document: options.document || dom,
       imageTools: options.imageTools || {
         toDataURL: (url) =>
           loadImage(url).then(

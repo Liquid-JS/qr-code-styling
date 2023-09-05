@@ -455,10 +455,9 @@ export class QRSVG {
       }
 
       if (data) {
-        const container = this._document.createElement("div");
-        container.innerHTML = data;
-        const rootEl = container.querySelector<SVGElement>("svg");
-        if (rootEl) image = rootEl;
+        const container = new DOMParser().parseFromString(data, "text/xml");
+        const rootEl = Array.from(container.getElementsByTagName("svg"));
+        if (rootEl.length) image = rootEl[0];
       }
     }
 
