@@ -1,6 +1,6 @@
 {
   "name": "@liquid-js/qr-code-styling",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Add a style and an image to your QR code",
   "main": "lib/qr-code-styling-node.js",
   "browser": "lib/qr-code-styling.js",
@@ -13,7 +13,7 @@
     "file-type": "<17.0.0",
     "node-fetch": "<3.0.0",
     "qrcode-generator": "^1.4.4",
-    "sharp": "^0.32.1"
+    "sharp": ">0.32.1 <1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.1",
