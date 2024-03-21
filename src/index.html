@@ -6,7 +6,9 @@
     </head>
     <body>
         <div id="canvas"></div>
-        <script type="text/javascript">
+        <script type="module">
+            import { QRCodeStyling } from './index.ts'
+
             const options = {
               shape: "circle",
               type: 'svg',
@@ -36,10 +38,10 @@
               },
               imageOptions: {
                 crossOrigin: "anonymous",
-                margin: 1.5
+                margin: 1
               }
             };
-            const qrCode = new QRCodeStyling.QRCodeStyling(options);
+            const qrCode = new QRCodeStyling(options);
 
             qrCode.append(document.getElementById("canvas"));
         </script>
