@@ -12,7 +12,7 @@ describe("Index", () => {
     "TypeNumber",
     "ErrorCorrectionLevel",
     "Mode",
-    "default"
+    "browserUtils"
   ])("The module should export certain submodules", (moduleName) => {
     expect(Object.keys(index)).toContain(moduleName);
   });

@@ -3,9 +3,4 @@ import { QRCodeStyling } from "./core/QRCodeStyling";
 import * as browserUtils from "./tools/browserUtils";
 
 export * from "./types";
-export { ErrorCorrectionPercents, QRCodeStyling };
-
-export default {
-  QRCodeStyling,
-  browserUtils
-};
+export { ErrorCorrectionPercents, QRCodeStyling, browserUtils };

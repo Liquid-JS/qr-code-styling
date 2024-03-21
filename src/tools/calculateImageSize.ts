@@ -4,6 +4,7 @@ interface ImageSizeOptions {
   maxHiddenDots: number;
   maxHiddenAxisDots?: number;
   dotSize: number;
+  margin: number;
 }
 
 interface ImageSizeResult {
@@ -18,7 +19,8 @@ export function calculateImageSize({
   originalWidth,
   maxHiddenDots,
   maxHiddenAxisDots,
-  dotSize
+  dotSize,
+  margin
 }: ImageSizeOptions): ImageSizeResult {
   const hideDots = { x: 0, y: 0 };
   const imageSize = { x: 0, y: 0 };
@@ -32,38 +34,72 @@ export function calculateImageSize({
     };
   }
 
-  const k = originalHeight / originalWidth;
-
-  //Getting the maximum possible axis hidden dots
-  hideDots.x = Math.floor(Math.sqrt(maxHiddenDots / k));
-  //The count of hidden dot's can't be less than 1
-  if (hideDots.x <= 0) hideDots.x = 1;
-  //Check the limit of the maximum allowed axis hidden dots
-  if (maxHiddenAxisDots && maxHiddenAxisDots < hideDots.x) hideDots.x = maxHiddenAxisDots;
-  //The count of dots should be odd
-  if (hideDots.x % 2 === 0) hideDots.x--;
-  imageSize.x = hideDots.x * dotSize;
-  //Calculate opposite axis hidden dots based on axis value.
-  //The value will be odd.
-  //We use ceil to prevent dots covering by the image.
-  hideDots.y = 1 + 2 * Math.ceil((hideDots.x * k - 1) / 2);
-  imageSize.y = Math.round(imageSize.x * k);
-  //If the result dots count is bigger than max - then decrease size and calculate again
-  if (hideDots.y * hideDots.x > maxHiddenDots || (maxHiddenAxisDots && maxHiddenAxisDots < hideDots.y)) {
-    if (maxHiddenAxisDots && maxHiddenAxisDots < hideDots.y) {
-      hideDots.y = maxHiddenAxisDots;
-      if (hideDots.y % 2 === 0) hideDots.x--;
+  if (maxHiddenAxisDots) {
+    // Adjust max size based on image aspect ratio and margin
+    const maxD = maxHiddenAxisDots - 2 * margin;
+    if (originalWidth > originalHeight) {
+      const newH = (maxD * originalHeight) / originalWidth + 2 * margin;
+      maxHiddenDots = Math.min(maxHiddenDots, maxHiddenAxisDots * newH);
     } else {
-      hideDots.y -= 2;
+      const newW = (maxD * originalWidth) / originalHeight + 2 * margin;
+      maxHiddenDots = Math.min(maxHiddenDots, maxHiddenAxisDots * newW);
     }
-    imageSize.y = hideDots.y * dotSize;
-    hideDots.x = 1 + 2 * Math.ceil((hideDots.y / k - 1) / 2);
-    imageSize.x = Math.round(imageSize.y / k);
+  }
+
+  const m2 = margin ** 2;
+  const w2 = originalWidth ** 2;
+  const h2 = originalHeight ** 2;
+
+  //Margin-adjuseted scale
+  const scale =
+    (Math.sqrt(w2 * m2 + h2 * m2 + originalWidth * originalHeight * (maxHiddenDots - 2 * m2)) -
+      originalHeight * margin -
+      originalWidth * margin) /
+    (originalHeight * originalWidth);
+
+  hideDots.x = Math.max(1, Math.floor(originalWidth * scale + 2 * margin));
+  hideDots.y = Math.max(1, Math.floor(originalHeight * scale + 2 * margin));
+
+  if (hideDots.x > hideDots.y) {
+    //The count of dots should be odd
+    if (hideDots.x % 2 === 0) hideDots.x--;
+
+    hideDots.y = Math.max(1, Math.ceil(((hideDots.x - 2 * margin) * originalHeight) / originalWidth + 2 * margin));
+
+    //The count of dots should be odd
+    if (hideDots.y % 2 === 0) hideDots.y--;
+  } else if (hideDots.x < hideDots.y) {
+    //The count of dots should be odd
+    if (hideDots.y % 2 === 0) hideDots.y--;
+
+    hideDots.x = Math.max(1, Math.ceil(((hideDots.y - 2 * margin) * originalWidth) / originalHeight + 2 * margin));
+
+    //The count of dots should be odd
+    if (hideDots.x % 2 === 0) hideDots.x--;
+  }
+
+  const maxW = (hideDots.x - 2 * margin) * dotSize;
+  const maxH = (hideDots.y - 2 * margin) * dotSize;
+
+  if (maxW <= 0 || maxH <= 0) {
+    return {
+      height: 0,
+      width: 0,
+      hideYDots: hideDots.y,
+      hideXDots: hideDots.x
+    };
+  }
+
+  imageSize.x = maxW;
+  imageSize.y = (maxW * originalHeight) / originalWidth;
+  if (imageSize.y > maxH) {
+    imageSize.y = maxH;
+    imageSize.x = (maxH * originalWidth) / originalHeight;
   }
 
   return {
-    height: imageSize.y,
-    width: imageSize.x,
+    height: Math.round(imageSize.y + 2 * margin * dotSize),
+    width: Math.round(imageSize.x + 2 * margin * dotSize),
     hideYDots: hideDots.y,
     hideXDots: hideDots.x
   };

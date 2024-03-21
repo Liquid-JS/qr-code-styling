@@ -7,7 +7,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalHeight: 0,
         originalWidth: 0,
         maxHiddenDots: 0,
-        dotSize: 0
+        dotSize: 0,
+        margin: 0
       })
     ).toEqual({
       height: 0,
@@ -22,7 +23,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalHeight: -1,
         originalWidth: 5,
         maxHiddenDots: 11,
-        dotSize: -5
+        dotSize: -5,
+        margin: 0
       })
     ).toEqual({
       height: 0,
@@ -37,7 +39,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalHeight: 20,
         originalWidth: 10,
         maxHiddenDots: 1,
-        dotSize: 10
+        dotSize: 10,
+        margin: 0
       })
     ).toEqual({
       height: 10,
@@ -52,7 +55,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalHeight: 10,
         originalWidth: 20,
         maxHiddenDots: 1,
-        dotSize: 10
+        dotSize: 10,
+        margin: 0
       })
     ).toEqual({
       height: 5,
@@ -67,7 +71,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalHeight: 1000,
         originalWidth: 2020,
         maxHiddenDots: 50,
-        dotSize: 10
+        dotSize: 10,
+        margin: 0
       })
     ).toEqual({
       height: 45,
@@ -83,7 +88,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalWidth: 2020,
         maxHiddenDots: 50,
         dotSize: 10,
-        maxHiddenAxisDots: 1
+        maxHiddenAxisDots: 1,
+        margin: 0
       })
     ).toEqual({
       height: 5,
@@ -99,7 +105,8 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalWidth: 1000,
         maxHiddenDots: 50,
         dotSize: 10,
-        maxHiddenAxisDots: 1
+        maxHiddenAxisDots: 1,
+        margin: 0
       })
     ).toEqual({
       height: 10,
@@ -115,12 +122,13 @@ describe("Test calculateImageSizeForAxis function", () => {
         originalWidth: 1000,
         maxHiddenDots: 50,
         dotSize: 10,
-        maxHiddenAxisDots: 2
+        maxHiddenAxisDots: 2,
+        margin: 0
       })
     ).toEqual({
-      height: 20,
-      width: 10,
-      hideYDots: 2,
+      height: 10,
+      width: 5,
+      hideYDots: 1,
       hideXDots: 1
     });
   });

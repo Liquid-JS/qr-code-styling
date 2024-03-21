@@ -91,7 +91,8 @@ export class QRSVG {
         originalHeight: size.height,
         maxHiddenDots,
         maxHiddenAxisDots: count - 14,
-        dotSize
+        dotSize,
+        margin: imageOptions.margin
       });
     }
 
@@ -120,7 +121,7 @@ export class QRSVG {
     });
     this.drawCorners();
 
-    if (this._options.image) {
+    if (this._options.image && drawImageSize.width > 0 && drawImageSize.height > 0) {
       await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
     }
   }
