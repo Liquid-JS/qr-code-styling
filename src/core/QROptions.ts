@@ -5,6 +5,7 @@ export interface RequiredOptions extends Options {
   shape: ShapeType;
   width: number;
   height: number;
+  margin: number;
   data: string;
   qrOptions: {
     typeNumber: TypeNumber;
@@ -29,6 +30,7 @@ export const defaultOptions: RequiredOptions = {
   shape: ShapeType.square,
   width: undefined as never,
   height: undefined as never,
+  margin: 0,
   data: "",
   qrOptions: {
     typeNumber: TypeNumber[0],

@@ -28,7 +28,7 @@ export class QRCodeStyling {
     if (!this._qr) {
       return;
     }
-    this._options.width = this._options.height = 10 * this._qr.getModuleCount();
+    this._options.width = this._options.height = 10 * (this._qr.getModuleCount() + 2 * this._options.margin);
     const qrSVG = new QRSVG(this._options);
 
     this._svg = qrSVG.getElement();

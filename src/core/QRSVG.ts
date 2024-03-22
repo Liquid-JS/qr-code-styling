@@ -69,7 +69,7 @@ export class QRSVG {
     const count = qr.getModuleCount();
     const minSize = Math.min(this._options.width, this._options.height);
     const realQRSize = this._options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
-    const dotSize = Math.floor(realQRSize / count);
+    const dotSize = Math.floor(realQRSize / (count + 2 * this._options.margin));
     let drawImageSize = {
       hideXDots: 0,
       hideYDots: 0,
@@ -175,7 +175,7 @@ export class QRSVG {
 
     const minSize = Math.min(options.width, options.height);
     const realQRSize = options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
-    const dotSize = Math.floor(realQRSize / count);
+    const dotSize = Math.floor(realQRSize / (count + 2 * this._options.margin));
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
     const yBeginning = Math.floor((options.height - count * dotSize) / 2);
     const dot = new QRDot({ svg: this._element, type: options.dotsOptions.type, document: this._document });
@@ -222,7 +222,7 @@ export class QRSVG {
     }
 
     if (options.shape === ShapeType.circle) {
-      const additionalDots = Math.floor((minSize / dotSize - count) / 2);
+      const additionalDots = Math.floor((minSize / dotSize - count - 2 * this._options.margin) / 2);
       const fakeCount = count + additionalDots * 2;
       const xFakeBeginning = xBeginning - additionalDots * dotSize;
       const yFakeBeginning = yBeginning - additionalDots * dotSize;
@@ -292,7 +292,7 @@ export class QRSVG {
     const count = this._qr.getModuleCount();
     const minSize = Math.min(options.width, options.height);
     const realQRSize = options.shape === ShapeType.circle ? minSize / Math.sqrt(2) : minSize;
-    const dotSize = Math.floor(realQRSize / count);
+    const dotSize = Math.floor(realQRSize / (count + 2 * this._options.margin));
     const cornersSquareSize = dotSize * 7;
     const cornersDotSize = dotSize * 3;
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
