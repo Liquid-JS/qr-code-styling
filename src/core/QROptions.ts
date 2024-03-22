@@ -22,6 +22,7 @@ export interface RequiredOptions extends Options {
     type: DotType;
     color: string;
     gradient?: Gradient;
+    size: number;
   };
 }
 
@@ -45,7 +46,8 @@ export const defaultOptions: RequiredOptions = {
   },
   dotsOptions: {
     type: DotType.square,
-    color: "#000"
+    color: "#000",
+    size: 10
   }
 };
 

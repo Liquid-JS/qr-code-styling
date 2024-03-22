@@ -2,7 +2,7 @@ import qrcode from "qrcode-generator";
 import { getMode } from "../tools/getMode";
 import { mergeDeep } from "../tools/merge";
 import { sanitizeOptions } from "../tools/sanitizeOptions";
-import { ExtensionFunction, Options, QRCode } from "../types";
+import { ExtensionFunction, Options, QRCode, ShapeType } from "../types";
 import { defaultOptions, RequiredOptions } from "./QROptions";
 import { QRSVG } from "./QRSVG";
 export class QRCodeStyling {
@@ -28,8 +28,13 @@ export class QRCodeStyling {
     if (!this._qr) {
       return;
     }
-    this._options.width = this._options.height = 10 * (this._qr.getModuleCount() + 2 * this._options.margin);
-    const qrSVG = new QRSVG(this._options);
+    const count = Math.ceil((this._options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * this._qr.getModuleCount());
+    const size = this._options.dotsOptions.size * (count + 2 * this._options.margin);
+    const qrSVG = new QRSVG({
+      ...this._options,
+      width: size,
+      height: size
+    });
 
     this._svg = qrSVG.getElement();
     this._svgDrawingPromise = qrSVG.drawQR(this._qr).then(() => {
