@@ -12,7 +12,7 @@ export class QRCodeStyling extends _QRCodeStyling {
     const dom = new DOMImplementation().createDocument(null, null);
     const imageCache = new Map<string, Promise<{ contentType?: string | null; data: Buffer }>>();
 
-    const loadImage = async (url: string | Buffer | Blob) => {
+    const loadImage = async function (url: string | Buffer | Blob) {
       if (typeof url == "string") {
         let pr = imageCache.get(url);
         if (pr) return pr;
@@ -49,7 +49,7 @@ export class QRCodeStyling extends _QRCodeStyling {
             ({ contentType, data }) =>
               `data:${contentType?.replace("application/xml", "image/svg+xml")};base64,${data.toString("base64")}`
           ),
-        getSize: async (options) => {
+        getSize: async function (options) {
           if (!options.image) {
             throw new Error("Image is not defined");
           }
