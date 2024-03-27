@@ -27,6 +27,16 @@ const dotMask = [
   [0, 0, 0, 0, 0, 0, 0]
 ];
 
+const alignmentCount = [
+  [35, 46],
+  [28, 33],
+  [21, 22],
+  [14, 13],
+  [7, 6],
+  [2, 1],
+  [1, 0]
+];
+
 export class QRSVG {
   _element: SVGElement;
   _defs: SVGElement;
@@ -67,6 +77,7 @@ export class QRSVG {
 
   async drawQR(qr: QRCode): Promise<void> {
     const count = qr.getModuleCount();
+    const typeNumber = parseInt(((count - 17) / 4).toFixed(0), 10);
     const dotSize = this._options.dotsOptions.size;
     let drawImageSize = {
       hideXDots: 0,
@@ -82,7 +93,9 @@ export class QRSVG {
       const size = await this._imageTools.getSize(this._options);
       const { imageOptions, qrOptions } = this._options;
       const coverLevel = imageOptions.imageSize * ErrorCorrectionPercents[qrOptions.errorCorrectionLevel];
-      const maxHiddenDots = Math.floor(coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16)));
+      const alignment = alignmentCount.find((v) => v[0] <= typeNumber) || [0, 0];
+      const maxHiddenDots = Math.floor(coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment[1] * 25));
+      console.log(alignment, typeNumber, maxHiddenDots);
 
       drawImageSize = calculateImageSize({
         originalWidth: size.width,
