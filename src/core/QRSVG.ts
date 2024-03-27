@@ -28,13 +28,13 @@ const dotMask = [
 ];
 
 const alignmentCount = [
-  [35, 46],
-  [28, 33],
-  [21, 22],
-  [14, 13],
-  [7, 6],
-  [2, 1],
-  [1, 0]
+  [35, 47],
+  [28, 34],
+  [21, 23],
+  [14, 14],
+  [7, 7],
+  [2, 2],
+  [1, 1]
 ];
 
 export class QRSVG {
@@ -95,7 +95,6 @@ export class QRSVG {
       const coverLevel = imageOptions.imageSize * ErrorCorrectionPercents[qrOptions.errorCorrectionLevel];
       const alignment = alignmentCount.find((v) => v[0] <= typeNumber) || [0, 0];
       const maxHiddenDots = Math.floor(coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment[1] * 25));
-      console.log(alignment, typeNumber, maxHiddenDots);
 
       drawImageSize = calculateImageSize({
         originalWidth: size.width,
