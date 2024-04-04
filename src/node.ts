@@ -1,11 +1,13 @@
-import { DOMImplementation, XMLSerializer, DOMParser } from "@xmldom/xmldom";
-import { fromBuffer } from "file-type";
-import fetch from "node-fetch";
+import { DOMImplementation, DOMParser, XMLSerializer } from "@xmldom/xmldom";
+import { fileTypeFromBuffer } from "file-type";
 import sharp from "sharp";
 import { RequiredOptions } from "./core/QROptions";
 import { QRCodeStyling as _QRCodeStyling } from "./index";
 export { ErrorCorrectionPercents } from "./constants/errorCorrectionPercents";
 export * from "./types";
+import type * as _browserUtils from "./tools/browserUtils";
+
+export const browserUtils: typeof _browserUtils | undefined = undefined;
 
 export class QRCodeStyling extends _QRCodeStyling {
   constructor(options: RequiredOptions) {
@@ -21,7 +23,7 @@ export class QRCodeStyling extends _QRCodeStyling {
             .arrayBuffer()
             .then((buff) => Buffer.from(buff))
             .then(async (data) => ({
-              contentType: res.headers.get("Content-Type") || (await fromBuffer(data).then((r) => r?.mime)),
+              contentType: res.headers.get("Content-Type") || (await fileTypeFromBuffer(data).then((r) => r?.mime)),
               data
             }))
         );
@@ -29,7 +31,7 @@ export class QRCodeStyling extends _QRCodeStyling {
         return pr;
       } else {
         const buff = Buffer.from(url as Buffer);
-        const mime = await fromBuffer(buff).then((r) => r?.mime);
+        const mime = await fileTypeFromBuffer(buff).then((r) => r?.mime);
         return {
           contentType: mime,
           data: buff
