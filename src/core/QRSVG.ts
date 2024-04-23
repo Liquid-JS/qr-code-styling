@@ -231,7 +231,8 @@ export class QRSVG {
     }
 
     if (options.shape === ShapeType.circle) {
-      const additionalDots = Math.floor((minSize / dotSize - count - 2 * this._options.margin) / 2);
+      const margin = (this._options.backgroundOptions && this._options.backgroundOptions.margin) || 0;
+      const additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2);
       const fakeCount = count + additionalDots * 2;
       const xFakeBeginning = xBeginning - additionalDots * dotSize;
       const yFakeBeginning = yBeginning - additionalDots * dotSize;

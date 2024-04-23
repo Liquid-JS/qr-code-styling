@@ -29,7 +29,8 @@ export class QRCodeStyling {
       return;
     }
     const count = Math.ceil((this._options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * this._qr.getModuleCount());
-    const size = this._options.dotsOptions.size * (count + 2 * this._options.margin);
+    const margin = (this._options.backgroundOptions && this._options.backgroundOptions.margin) || 0;
+    const size = this._options.dotsOptions.size * (count + 2 * margin);
     const qrSVG = new QRSVG({
       ...this._options,
       width: size,

@@ -115,7 +115,6 @@ export type Options = {
   shape?: ShapeType;
   width?: number;
   height?: number;
-  margin?: number;
   data?: string;
   image?: string | Buffer | Blob;
   imageTools?: typeof browserImageTools;
@@ -150,6 +149,7 @@ export type Options = {
         round?: number;
         color?: string;
         gradient?: Gradient;
+        margin?: number;
       }
     | false;
 };

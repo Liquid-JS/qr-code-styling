@@ -11,14 +11,14 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 ### Examples
 
 <p float="left">
-<img style="display:inline-block" src="https://raw.githubusercontent.com/kozakdenys/qr-code-styling/master/src/assets/facebook_example_new.png" width="240" />
-<img style="display:inline-block" src="https://raw.githubusercontent.com/kozakdenys/qr-code-styling/master/src/assets/qr_code_example.png" width="240" />
-<img style="display:inline-block" src="https://raw.githubusercontent.com/kozakdenys/qr-code-styling/master/src/assets/telegram_example_new.png" width="240" />
+<img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/facebook.png" width="240" />
+<img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/qr-styling.png" width="240" />
+<img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/telegram.png" width="240" />
 </p>
 
 ### Installation
 
-    npm install qr-code-styling
+    npm install @liquid-js/qr-code-styling
 
 ### Usage
 
@@ -32,7 +32,7 @@ If you have issues / suggestions / notes / questions, please open an issue or co
   <body>
     <div id="canvas"></div>
     <script type="module">
-      import { QRCodeStyling } from "https://unpkg.com/@liquid-js/qr-code-styling@2.0.2/lib/qr-code-styling.js";
+      import { QRCodeStyling } from "https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js";
 
       const options = {
         shape: "circle",
@@ -42,7 +42,7 @@ If you have issues / suggestions / notes / questions, please open an issue or co
         dotsOptions: {
           type: "extra-rounded",
           gradient: {
-            type: "linear", //radial,
+            type: "linear",
             rotation: Math.PI / 2,
             colorStops: [
               { offset: 0, color: "blue" },
@@ -86,7 +86,9 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 
 #### QRCodeStyling instance
 
-`new QRCodeStyling(options) => QRCodeStyling`
+```js
+new QRCodeStyling(options) => QRCodeStyling
+```
 
 | Param   | Type   | Description |
 | ------- | ------ | ----------- |
@@ -94,16 +96,17 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 
 `options` structure
 
-| Property                | Type   | Default Value | Description                                           |
-| ----------------------- | ------ | ------------- | ----------------------------------------------------- |
-| data                    | string |               | The date will be encoded to the QR code               |
-| image                   | string |               | The image will be copied to the center of the QR code |
-| qrOptions               | object |               | Options will be passed to `qrcode-generator` lib      |
-| imageOptions            | object |               | Specific image options, details see below             |
-| dotsOptions             | object |               | Dots styling options                                  |
-| cornersSquareOptions    | object |               | Square in the corners styling options                 |
-| cornersDotOptionsHelper | object |               | Dots in the corners styling options                   |
-| backgroundOptions       | object |               | QR background styling options                         |
+| Property             | Type              | Default Value | Description                                                |
+| -------------------- | ----------------- | ------------- | ---------------------------------------------------------- |
+| data                 | string            |               | The date will be encoded to the QR code                    |
+| image                | string \| Blob    |               | The image will be copied to the center of the QR code      |
+| shape                | string            | `'square'`    | QR code shape                                              |
+| qrOptions            | object            |               | Options will be passed to `qrcode-generator` lib           |
+| imageOptions         | object            |               | Specific image options, details see below                  |
+| dotsOptions          | object            |               | Dots styling options                                       |
+| cornersSquareOptions | object            |               | Square in the corners styling options                      |
+| cornersDotOptions    | object            |               | Dots in the corners styling options                        |
+| backgroundOptions    | object \| boolean | `false`       | QR background styling options, false to disable background |
 
 `options.qrOptions` structure
 
@@ -115,27 +118,21 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 
 `options.imageOptions` structure
 
-| Property           | Type                                    | Default Value | Description                                                                    |
-| ------------------ | --------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
-| hideBackgroundDots | boolean                                 | `true`        | Hide all dots covered by the image                                             |
-| imageSize          | number                                  | `0.4`         | Coefficient of the image size. Not recommended to use ove 0.5. Lower is better |
-| margin             | number                                  | `0`           | Margin of the image in blocks                                                  |
-| crossOrigin        | string(`'anonymous' 'use-credentials'`) |               | Set "anonymous" if you want to download QR code from other origins.            |
+| Property           | Type                                     | Default Value | Description                                                                    |
+| ------------------ | ---------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
+| hideBackgroundDots | boolean                                  | `true`        | Hide all dots covered by the image                                             |
+| imageSize          | number                                   | `0.4`         | Coefficient of the image size. Not recommended to use ove 0.5. Lower is better |
+| margin             | number                                   | `0`           | Margin of the image (in blocks)                                                |
+| crossOrigin        | string (`'anonymous' 'use-credentials'`) |               | Set "anonymous" if you want to download QR code from other origins.            |
 
 `options.dotsOptions` structure
 
-| Property | Type                                                                           | Default Value | Description         |
-| -------- | ------------------------------------------------------------------------------ | ------------- | ------------------- |
-| color    | string                                                                         | `'#000'`      | Color of QR dots    |
-| gradient | object                                                                         |               | Gradient of QR dots |
-| type     | string (`'rounded' 'dots' 'classy' 'classy-rounded' 'square' 'extra-rounded'`) | `'square'`    | Style of QR dots    |
-
-`options.backgroundOptions` structure
-
-| Property | Type   | Default Value |
-| -------- | ------ | ------------- |
-| color    | string | `'#fff'`      |
-| gradient | object |               |
+| Property | Type                                                                           | Default Value | Description             |
+| -------- | ------------------------------------------------------------------------------ | ------------- | ----------------------- |
+| size     | number                                                                         | `10`          | QR dot size (in pixels) |
+| color    | string                                                                         | `'#000'`      | Color of QR dots        |
+| gradient | object                                                                         |               | Gradient of QR dots     |
+| type     | string (`'rounded' 'dots' 'classy' 'classy-rounded' 'square' 'extra-rounded'`) | `'square'`    | Style of QR dots        |
 
 `options.cornersSquareOptions` structure
 
@@ -153,6 +150,15 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 | gradient | object                    |               | Gradient of Corners Dot |
 | type     | string (`'dot' 'square'`) |               | Style of Corners Dot    |
 
+`options.backgroundOptions` structure
+
+| Property | Type             | Default Value | Description                                           |
+| -------- | ---------------- | ------------- | ----------------------------------------------------- |
+| round    | number (`0 - 1`) | `0`           | Background roundnes                                   |
+| color    | string           |               |                                                       |
+| gradient | object           |               |                                                       |
+| margin   | number           | `0`           | Margin (in blocks) between background and the QR code |
+
 Gradient structure
 
 `options.dotsOptions.gradient`
@@ -165,7 +171,7 @@ Gradient structure
 
 | Property   | Type                         | Default Value | Description                                                                             |
 | ---------- | ---------------------------- | ------------- | --------------------------------------------------------------------------------------- |
-| type       | string (`'linear' 'radial'`) | "linear"      | Type of gradient spread                                                                 |
+| type       | string (`'linear' 'radial'`) | `'linear'`    | Type of gradient spread                                                                 |
 | rotation   | number                       | 0             | Rotation of gradient in radians (Math.PI === 180 degrees)                               |
 | colorStops | array of objects             |               | Gradient colors. Example `[{ offset: 0, color: 'blue' }, {  offset: 1, color: 'red' }]` |
 
@@ -186,21 +192,29 @@ Gradient colorStops structure
 
 #### QRCodeStyling methods
 
-`QRCodeStyling.append(container) => void`
+```js
+QRCodeStyling.append(container) => void
+```
 
 | Param     | Type        | Description                                              |
 | --------- | ----------- | -------------------------------------------------------- |
 | container | DOM element | This container will be used for appending of the QR code |
 
-`QRCodeStyling.serialize() => Promise<string>`
+```js
+QRCodeStyling.serialize() => Promise<string>
+```
 
-`QRCodeStyling.update(options) => void`
+```js
+QRCodeStyling.update(options) => void
+```
 
 | Param   | Type   | Description                            |
 | ------- | ------ | -------------------------------------- |
 | options | object | The same options as for initialization |
 
-`QRCodeStyling.applyExtension(extension) => void`
+```js
+QRCodeStyling.applyExtension(extension) => void
+```
 
 | Param     | Type                   | Description                                                                               |
 | --------- | ---------------------- | ----------------------------------------------------------------------------------------- |
@@ -214,16 +228,16 @@ const extension = (svg, options) => {
   const size = Math.min(width, height);
   const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   const borderAttributes = {
-    "fill": "none",
-    "x": (width - size + 40) / 2,
-    "y": (height - size + 40) / 2,
-    "width": size - 40,
-    "height": size - 40,
-    "stroke": 'black',
+    fill: "none",
+    x: (width - size + 40) / 2,
+    y: (height - size + 40) / 2,
+    width: size - 40,
+    height: size - 40,
+    stroke: "black",
     "stroke-width": 40,
-    "rx": 100,
+    rx: 100
   };
-  Object.keys(borderAttributes).forEach(attribute => {
+  Object.keys(borderAttributes).forEach((attribute) => {
     border.setAttribute(attribute, borderAttributes[attribute]);
   });
   svg.appendChild(border);
@@ -236,4 +250,4 @@ QRCodeStyling.deleteExtension() => void
 
 ### License
 
-[MIT License](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE). Copyright (c) 2021 Denys Kozak
+[MIT License](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE)
