@@ -1,17 +1,27 @@
 {
   "name": "@liquid-js/qr-code-styling",
-  "version": "1.10.7",
+  "version": "2.0.2",
   "description": "Add a style and an image to your QR code",
-  "main": "lib/qr-code-styling-node.js",
-  "browser": "lib/qr-code-styling.js",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "main": "./lib/qr-code-styling-node.js",
+  "browser": "./lib/qr-code-styling.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "node": "./lib/qr-code-styling-node.js",
+      "types": "./lib/index.d.ts",
+      "default": "./lib/qr-code-styling.js"
+    }
+  },
   "files": [
     "lib"
   ],
   "dependencies": {
     "@xmldom/xmldom": "^0.8.10",
-    "file-type": "<17.0.0",
-    "node-fetch": "<3.0.0",
+    "file-type": "^19.0.0",
     "qrcode-generator": "^1.4.4",
     "sharp": ">0.32.1 <1.0.0"
   },
@@ -23,8 +33,8 @@
     "@types/node": "<21.0.0",
     "@types/node-fetch": "^2.6.11",
     "@types/sharp": "^0.31.1",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
     "canvas": "^2.11.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -34,14 +44,14 @@
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "rollup": "^4.13.0",
+    "rollup": "^4.14.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.4.3",
-    "vite": "^5.2.2"
+    "vite": "^5.2.8"
   },
   "scripts": {
-    "build": "rimraf lib && rollup -c rollup.config.mjs",
+    "build": "rimraf lib && rollup -c rollup.config.ts --configPlugin rollup-plugin-typescript2",
     "test": "jest",
     "start": "vite src",
     "lint": "eslint . --fix",
