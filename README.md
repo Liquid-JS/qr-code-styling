@@ -1,10 +1,10 @@
 # QR Code Styling
 
-[![Version](https://img.shields.io/npm/v/qr-code-styling.svg)](https://www.npmjs.org/package/qr-code-styling)
+[![Version](https://img.shields.io/npm/v/@liquid-js/qr-code-styling.svg)](https://www.npmjs.org/package/@liquid-js/qr-code-styling)
 
 JavaScript library for generating QR codes with a logo and styling.
 
-Try it here https://qr-code-styling.com
+Try it here <https://qr-code-styling.com>
 
 If you have issues / suggestions / notes / questions, please open an issue or contact me. Let's create a cool library together.
 
@@ -18,62 +18,69 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 
 ### Installation
 
-```
-npm install qr-code-styling
-```
+    npm install qr-code-styling
 
 ### Usage
 
 ```HTML
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>QR Code Styling</title>
-    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-</head>
-<body>
-<div id="canvas"></div>
-<script type="text/javascript">
+  </head>
+  <body>
+    <div id="canvas"></div>
+    <script type="module">
+      import { QRCodeStyling } from "https://unpkg.com/@liquid-js/qr-code-styling@2.0.2/lib/qr-code-styling.js";
 
-    const qrCode = new QRCodeStyling.QRCodeStyling({
-        data: "https://www.facebook.com/",
+      const options = {
+        shape: "circle",
+        type: "svg",
+        data: "h",
         image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
         dotsOptions: {
-            color: "#4267b2",
-            type: "rounded"
+          type: "extra-rounded",
+          gradient: {
+            type: "linear", //radial,
+            rotation: Math.PI / 2,
+            colorStops: [
+              { offset: 0, color: "blue" },
+              { offset: 0.5, color: "red" },
+              { offset: 1, color: "green" }
+            ]
+          }
         },
-        backgroundOptions: {
-            color: "#e9ebee",
+        cornersSquareOptions: {
+          type: "rounded",
+          gradient: {
+            type: "linear",
+            rotation: Math.PI * 0.2,
+            colorStops: [
+              {
+                offset: 0,
+                color: "blue"
+              },
+              {
+                offset: 1,
+                color: "red"
+              }
+            ]
+          }
         },
         imageOptions: {
-            crossOrigin: "anonymous",
-            margin: 1
+          crossOrigin: "anonymous",
+          imageSize: 1,
+          margin: 1
         }
-    });
+      };
+      const qrCode = new QRCodeStyling(options);
 
-    qrCode.append(document.getElementById("canvas"));
-    QRCodeStyling.browserUtils.download(qrCode);
-</script>
-</body>
+      qrCode.append(document.getElementById("canvas"));
+    </script>
+  </body>
 </html>
 ```
-
----
-
-[**React example (Codesandbox)**](https://codesandbox.io/s/qr-code-styling-react-example-l8rwl?file=/src/App.js)
-
-[**Angular example (Codesandbox)**](https://codesandbox.io/s/agitated-panini-tpgb2?file=/src/app/app.component.ts)
-
----
-
-[**React example (source)**](https://github.com/kozakdenys/qr-code-styling-examples/tree/master/examples/react)
-
-[**Angular example (source)**](https://github.com/kozakdenys/qr-code-styling-examples/tree/master/examples/angular)
-
-[**Vue example (source)**](https://github.com/kozakdenys/qr-code-styling-examples/tree/master/examples/vue)
-
----
 
 ### API Documentation
 
@@ -103,7 +110,7 @@ npm install qr-code-styling
 | Property             | Type                                               | Default Value |
 | -------------------- | -------------------------------------------------- | ------------- |
 | typeNumber           | number (`0 - 40`)                                  | `0`           |
-| mode                 | string (`'Numeric' 'Alphanumeric' 'Byte' 'Kanji'`) |
+| mode                 | string (`'Numeric' 'Alphanumeric' 'Byte' 'Kanji'`) |               |
 | errorCorrectionLevel | string (`'L' 'M' 'Q' 'H'`)                         | `'Q'`         |
 
 `options.imageOptions` structure
@@ -128,7 +135,7 @@ npm install qr-code-styling
 | Property | Type   | Default Value |
 | -------- | ------ | ------------- |
 | color    | string | `'#fff'`      |
-| gradient | object |
+| gradient | object |               |
 
 `options.cornersSquareOptions` structure
 
@@ -201,30 +208,32 @@ Gradient colorStops structure
 
 `applyExtension` example
 
-```JS
+```js
 const extension = (svg, options) => {
-    const { width, height } = options;
-    const size = Math.min(width, height);
-    const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    const borderAttributes = {
-        "fill": "none",
-        "x": (width - size + 40) / 2,
-        "y": (height - size + 40) / 2,
-        "width": size - 40,
-        "height": size - 40,
-        "stroke": 'black',
-        "stroke-width": 40,
-        "rx": 100,
-    };
-    Object.keys(borderAttributes).forEach(attribute => {
-      border.setAttribute(attribute, borderAttributes[attribute]);
-    });
-    svg.appendChild(border);
+  const { width, height } = options;
+  const size = Math.min(width, height);
+  const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  const borderAttributes = {
+    "fill": "none",
+    "x": (width - size + 40) / 2,
+    "y": (height - size + 40) / 2,
+    "width": size - 40,
+    "height": size - 40,
+    "stroke": 'black',
+    "stroke-width": 40,
+    "rx": 100,
+  };
+  Object.keys(borderAttributes).forEach(attribute => {
+    border.setAttribute(attribute, borderAttributes[attribute]);
+  });
+  svg.appendChild(border);
 };
 ```
 
-`QRCodeStyling.deleteExtension() => void`
+```js
+QRCodeStyling.deleteExtension() => void
+```
 
 ### License
 
-[MIT License](https://raw.githubusercontent.com/kozakdenys/qr-code-styling/master/LICENSE). Copyright (c) 2021 Denys Kozak
+[MIT License](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE). Copyright (c) 2021 Denys Kozak

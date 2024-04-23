@@ -60,5 +60,5 @@ export interface RequiredCanvasOptions extends CanvasOptions {
 export const defaultCanvasOptions: RequiredCanvasOptions = {
   width: 300,
   height: 300,
-  margin: 10
+  margin: 0
 };
