@@ -34,7 +34,20 @@ export function drawToCanvas(
 
     return new Promise<void>((resolve, reject) => {
       image.onload = (): void => {
-        canvas?.getContext("2d")?.drawImage(image, (width - size) / 2, (height - size) / 2, size, size);
+        // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
+        const aaFactor = Math.ceil((2 * size) / Math.min(image.width, image.height));
+        let aaCanvas: HTMLCanvasElement | OffscreenCanvas;
+        try {
+          aaCanvas = new OffscreenCanvas(image.width * aaFactor, image.height * aaFactor);
+        } catch (_) {
+          // Fallback to regular canvas element
+          aaCanvas = document.createElement("canvas");
+          aaCanvas.width = image.width * aaFactor;
+          aaCanvas.height = image.height * aaFactor;
+        }
+        aaCanvas.getContext("2d")?.drawImage(image, 0, 0, aaCanvas.width, aaCanvas.height);
+
+        canvas?.getContext("2d")?.drawImage(aaCanvas, (width - size) / 2, (height - size) / 2, size, size);
         resolve();
       };
       image.onerror = image.onabort = reject;

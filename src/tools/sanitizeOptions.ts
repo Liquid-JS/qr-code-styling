@@ -38,6 +38,8 @@ export function sanitizeOptions(options: RequiredOptions): RequiredOptions {
   if (newOptions.dotsOptions.gradient) {
     newOptions.dotsOptions.gradient = sanitizeGradient(newOptions.dotsOptions.gradient);
   }
+  // Ensure integer dot size
+  newOptions.dotsOptions.size = Math.round(Math.max(0, newOptions.dotsOptions.size) || 10);
 
   if (newOptions.cornersSquareOptions) {
     newOptions.cornersSquareOptions = {

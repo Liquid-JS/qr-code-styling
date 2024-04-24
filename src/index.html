@@ -6,8 +6,9 @@
   </head>
   <body>
     <div id="canvas"></div>
+    <button type="button" id="download">Download</button>
     <script type="module">
-      import { QRCodeStyling } from "./index.ts";
+      import { QRCodeStyling, browserUtils } from "./index.ts";
 
       const options = {
         shape: "circle",
@@ -45,12 +46,16 @@
         },
         imageOptions: {
           crossOrigin: "anonymous",
+          imageSize: 1,
           margin: 1
         }
       };
       const qrCode = new QRCodeStyling(options);
 
       qrCode.append(document.getElementById("canvas"));
+      document.getElementById("download").addEventListener("click", () => {
+        browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
+      });
     </script>
   </body>
 </html>
