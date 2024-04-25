@@ -1,0 +1,24 @@
+name: Release tag
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0 # Fetch all tags
+
+      - name: Create release for tag
+        uses: Liquid-JS/release-tag@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          no_contributors: true

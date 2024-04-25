@@ -209,7 +209,7 @@ export class QRSVG {
         if (filter && !filter(i, j)) {
           continue;
         }
-        if (!this._qr?.isDark(i, j)) {
+        if (!this._qr?.isDark(j, i)) {
           continue;
         }
 
@@ -220,7 +220,7 @@ export class QRSVG {
           (xOffset: number, yOffset: number): boolean => {
             if (i + xOffset < 0 || j + yOffset < 0 || i + xOffset >= count || j + yOffset >= count) return false;
             if (filter && !filter(i + xOffset, j + yOffset)) return false;
-            return !!this._qr && this._qr.isDark(i + xOffset, j + yOffset);
+            return !!this._qr && this._qr.isDark(j + yOffset, i + xOffset);
           }
         );
 

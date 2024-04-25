@@ -97,12 +97,14 @@ export enum ErrorCorrectionLevel {
   Q = "Q",
   H = "H"
 }
+
 export enum Mode {
   numeric = "Numeric",
   alphanumeric = "Alphanumeric",
   byte = "Byte",
   kanji = "Kanji"
 }
+
 export interface QRCode {
   addData(data: string, mode?: Mode): void;
   make(): void;

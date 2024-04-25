@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "strictPropertyInitialization": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
     "outDir": "./lib/",
     "sourceMap": true,
     "module": "esnext",

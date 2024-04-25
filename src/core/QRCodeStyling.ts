@@ -5,6 +5,7 @@ import { sanitizeOptions } from "../tools/sanitizeOptions";
 import { ExtensionFunction, Options, QRCode, ShapeType } from "../types";
 import { defaultOptions, RequiredOptions } from "./QROptions";
 import { QRSVG } from "./QRSVG";
+
 export class QRCodeStyling {
   _options: RequiredOptions;
   _container?: HTMLElement;
