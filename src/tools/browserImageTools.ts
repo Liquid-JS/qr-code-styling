@@ -1,4 +1,4 @@
-import { RequiredOptions } from "../core/QROptions";
+import { Options } from "../types";
 
 export const browserImageTools = {
   toDataURL(url: string | Buffer | Blob): Promise<string> {
@@ -25,7 +25,7 @@ export const browserImageTools = {
       }
     });
   },
-  getSize(options: RequiredOptions): Promise<{ width: number; height: number }> {
+  getSize(options: Options): Promise<{ width: number; height: number }> {
     return new Promise((resolve, reject) => {
       if (!options.image) {
         return reject("Image is not defined");
@@ -33,7 +33,7 @@ export const browserImageTools = {
 
       const image = new Image();
 
-      if (typeof options.imageOptions.crossOrigin === "string") {
+      if (typeof options.imageOptions?.crossOrigin === "string") {
         image.crossOrigin = options.imageOptions.crossOrigin;
       }
 

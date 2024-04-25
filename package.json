@@ -24,7 +24,8 @@
     "file-type": "^19.0.0",
     "qrcode-generator": "^1.4.4",
     "sharp": ">0.32.1 <1.0.0",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "typedoc": "^0.25.13"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
@@ -63,7 +64,8 @@
     "lint": "prettier -w . && eslint . --fix",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "release": "git diff --exit-code && standard-version && git push --follow-tags origin"
+    "release": "git diff --exit-code && standard-version && git push --follow-tags origin",
+    "docs": "typedoc ./src/index.ts ./src/tools/browserUtils.ts ./src/tools/browserImageTools.ts"
   },
   "repository": {
     "type": "git",

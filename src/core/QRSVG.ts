@@ -38,15 +38,25 @@ const alignmentCount = [
 ];
 
 export class QRSVG {
+  /** @ignore */
   _element: SVGElement;
+  /** @ignore */
   _defs: SVGElement;
+  /** @ignore */
   _backgroundClipPath?: SVGElement;
+  /** @ignore */
   _dotsClipPath?: SVGElement;
+  /** @ignore */
   _cornersSquareClipPath?: SVGElement;
+  /** @ignore */
   _cornersDotClipPath?: SVGElement;
+  /** @ignore */
   _options: RequiredOptions;
+  /** @ignore */
   _qr?: QRCode;
+  /** @ignore */
   _document: Document;
+  /** @ignore */
   private _imageTools: typeof browserImageTools;
 
   //TODO don't pass all options to this class
@@ -478,6 +488,7 @@ export class QRSVG {
     this._element.appendChild(image);
   }
 
+  /** @ignore */
   _createColor({
     options,
     color,

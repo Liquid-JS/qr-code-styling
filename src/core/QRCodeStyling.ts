@@ -7,11 +7,17 @@ import { defaultOptions, RequiredOptions } from "./QROptions";
 import { QRSVG } from "./QRSVG";
 
 export class QRCodeStyling {
+  /** @ignore */
   _options: RequiredOptions;
+  /** @ignore */
   _container?: HTMLElement;
+  /** @ignore */
   _svg?: SVGElement;
+  /** @ignore */
   _qr?: QRCode;
+  /** @ignore */
   _extension?: ExtensionFunction;
+  /** @ignore */
   _svgDrawingPromise?: Promise<void>;
 
   constructor(options?: Partial<Options>) {
@@ -19,12 +25,14 @@ export class QRCodeStyling {
     this.update();
   }
 
+  /** @ignore */
   static _clearContainer(container?: HTMLElement): void {
     if (container) {
       container.innerHTML = "";
     }
   }
 
+  /** @ignore */
   _setupSvg(): void {
     if (!this._qr) {
       return;
@@ -45,6 +53,7 @@ export class QRCodeStyling {
     });
   }
 
+  /** @ignore */
   async _getElement(): Promise<SVGElement | undefined> {
     if (!this._qr) throw "QR code is empty";
 
@@ -55,7 +64,10 @@ export class QRCodeStyling {
     return this._svg;
   }
 
-  update(options?: Partial<Options>): void {
+  update(
+    /** The same options as for initialization */
+    options?: Partial<Options>
+  ): void {
     QRCodeStyling._clearContainer(this._container);
     this._options = options ? sanitizeOptions(mergeDeep(this._options, options) as RequiredOptions) : this._options;
 
@@ -72,7 +84,10 @@ export class QRCodeStyling {
     this.append(this._container);
   }
 
-  append(container?: HTMLElement): void {
+  append(
+    /** This container will be used for appending of the QR code */
+    container?: HTMLElement
+  ): void {
     if (!container) {
       return;
     }
@@ -88,7 +103,36 @@ export class QRCodeStyling {
     this._container = container;
   }
 
-  applyExtension(extension: ExtensionFunction): void {
+  /**
+   *
+   * @example
+   *
+   * ```js
+   * const extension = (svg, options) => {
+   *   const { width, height } = options;
+   *   const size = Math.min(width, height);
+   *   const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+   *   const borderAttributes = {
+   *     fill: "none",
+   *     x: (width - size + 40) / 2,
+   *     y: (height - size + 40) / 2,
+   *     width: size - 40,
+   *     height: size - 40,
+   *     stroke: "black",
+   *     "stroke-width": 40,
+   *     rx: 100
+   *   };
+   *   Object.keys(borderAttributes).forEach((attribute) => {
+   *     border.setAttribute(attribute, borderAttributes[attribute]);
+   *   });
+   *   svg.appendChild(border);
+   * };
+   * ```
+   */
+  applyExtension(
+    /** Extension is a function that takes svg and previously applied options and modifies an svg */
+    extension: ExtensionFunction
+  ): void {
     if (!extension) {
       throw "Extension function should be defined.";
     }

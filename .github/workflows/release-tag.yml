@@ -22,3 +22,24 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           no_contributors: true
+  
+  docs:
+    name: Create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      
+      - run: yarn install
+      - run: yarn docs
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

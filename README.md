@@ -256,7 +256,7 @@ QRCodeStyling.applyExtension(extension) => void
 
 ```js
 const extension = (svg, options) => {
-  const { width, height } = options;
+  const { width, height, document } = options;
   const size = Math.min(width, height);
   const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   const borderAttributes = {

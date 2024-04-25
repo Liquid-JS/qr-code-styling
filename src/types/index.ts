@@ -32,10 +32,23 @@ export enum ShapeType {
 }
 
 export type Gradient = {
+  /**
+   * Type of gradient spread
+   *
+   * @default GradientType.linear
+   */
   type: GradientType;
+  /**
+   * Rotation of gradient (in radians, Math.PI === 180 degrees)
+   *
+   * @default 0
+   */
   rotation?: number;
+  /** Gradient colors. */
   colorStops: {
+    /** Position of color in gradient range */
     offset: number;
+    /** Color of stop in gradient range */
     color: string;
   }[];
 };
@@ -113,44 +126,109 @@ export interface QRCode {
 }
 
 export type Options = {
+  /** Use a custom DOM domplementation */
   document?: Document;
-  shape?: ShapeType;
-  width?: number;
-  height?: number;
-  data?: string;
-  image?: string | Buffer | Blob;
+  /** Use a custom image fetching & serializaton implementation */
   imageTools?: typeof browserImageTools;
+  /** @ignore */
+  width?: number;
+  /** @ignore */
+  height?: number;
+  /** The data will be encoded in the QR code */
+  data?: string;
+  /** The image will be copied to the center of the QR code */
+  image?: string | Buffer | Blob;
+  /**
+   * QR code shape
+   *
+   * @default ShapeType.square
+   */
+  shape?: ShapeType;
+  /** Options will be passed to `qrcode-generator` lib */
   qrOptions?: {
     typeNumber?: TypeNumber;
     mode?: Mode;
+    /** @default ErrorCorrectionLevel.Q */
     errorCorrectionLevel?: ErrorCorrectionLevel;
   };
   imageOptions?: {
+    /**
+     * Hide all dots covered by the image
+     *
+     * @default true
+     */
     hideBackgroundDots?: boolean;
+    /**
+     * Coefficient of the image size
+     *
+     * @default 0.4
+     */
     imageSize?: number;
-    crossOrigin?: string;
+    /**
+     * Margin of the image (in blocks)
+     *
+     * @default 0
+     */
     margin?: number;
+    /**
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/crossOrigin)
+     */
+    crossOrigin?: string;
   };
   dotsOptions?: {
+    /**
+     * QR dot size (in pixels)
+     *
+     * @default 10
+     */
+    size?: number;
+    /**
+     * Color of QR dots
+     *
+     * @default "#000"
+     */
+    color?: string;
+    /** Gradient of QR dots */
+    gradient?: Gradient;
+    /**
+     * Style of QR dots
+     *
+     * @default DotType.square
+     */
     type?: DotType;
-    color?: string;
-    gradient?: Gradient;
   };
+  /** Corners Square options, omitted values match dots */
   cornersSquareOptions?: {
+    /** Color of Corners Square */
+    color?: string;
+    /** Gradient of Corners Square */
+    gradient?: Gradient;
+    /** Style of Corners Square */
     type?: CornerSquareType;
-    color?: string;
-    gradient?: Gradient;
   };
+  /** Corners Dot options, omitted values match squares */
   cornersDotOptions?: {
-    type?: CornerDotType;
+    /** Color of Corners Dot */
     color?: string;
+    /** Gradient of Corners Dot */
     gradient?: Gradient;
+    /** Style of Corners Dot */
+    type?: CornerDotType;
   };
+  /** QR background styling options, false to disable background */
   backgroundOptions?:
     | {
+        /** Background roundnes, from 0 (square) to 1 (circle) */
         round?: number;
+        /** Background color */
         color?: string;
+        /** Background Gradient */
         gradient?: Gradient;
+        /**
+         * Margin (in blocks) between background and the QR code
+         *
+         * @default 0
+         */
         margin?: number;
       }
     | false;
