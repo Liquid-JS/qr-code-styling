@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
     "canvas": "^2.11.2",
+    "clean-package": "^2.2.0",
     "eslint": "<9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.2.0",
@@ -65,7 +66,9 @@
     "prepublishOnly": "npm run build",
     "prepare": "husky",
     "release": "git diff --exit-code && standard-version && git push --follow-tags origin",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "prepack": "clean-package",
+    "postpack": "clean-package restore"
   },
   "repository": {
     "type": "git",
@@ -93,5 +96,13 @@
     "url": "https://github.com/Liquid-JS/qr-code-styling/issues"
   },
   "homepage": "https://qr-code-styling.com",
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "clean-package": {
+    "remove": [
+      "packageManager",
+      "scripts",
+      "devDependencies",
+      "clean-package"
+    ]
+  }
 }

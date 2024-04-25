@@ -1374,6 +1374,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.7.1"
     "@xmldom/xmldom": "npm:^0.8.10"
     canvas: "npm:^2.11.2"
+    clean-package: "npm:^2.2.0"
     eslint: "npm:<9.0.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-jest: "npm:^28.2.0"
@@ -2974,6 +2975,17 @@ __metadata:
   version: 1.2.3
   resolution: "cjs-module-lexer@npm:1.2.3"
   checksum: 10/f96a5118b0a012627a2b1c13bd2fcb92509778422aaa825c5da72300d6dcadfb47134dd2e9d97dfa31acd674891dd91642742772d19a09a8adc3e56bd2f5928c
+  languageName: node
+  linkType: hard
+
+"clean-package@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "clean-package@npm:2.2.0"
+  dependencies:
+    dot-prop: "npm:^6.0.1"
+  bin:
+    clean-package: bin/main.js
+  checksum: 10/69ab3643932ee97fd98f07fcb0bbc42fd55eaca44b1735378d1f562f109dd3acc892bd0cf57470cad8eeaf0dd9ae8ec9db7b00b03a006a6893ba88ca8f85bbd4
   languageName: node
   linkType: hard
 

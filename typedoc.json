@@ -1,14 +1,6 @@
 {
-    "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": [
-        "./src/index.ts",
-        "./src/tools/browserUtils.ts",
-        "./src/tools/browserImageTools.ts"
-    ],
-    "out": "docs",
-    "sort": [
-        "kind",
-        "instance-first",
-        "source-order"
-    ]
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts", "./src/tools/browserUtils.ts", "./src/tools/browserImageTools.ts"],
+  "out": "docs",
+  "sort": ["kind", "instance-first", "source-order"]
 }
