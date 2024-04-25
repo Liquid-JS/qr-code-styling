@@ -22,6 +22,8 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 
 ### Usage
 
+#### Browser
+
 ```HTML
 <!doctype html>
 <html lang="en">
@@ -33,34 +35,83 @@ If you have issues / suggestions / notes / questions, please open an issue or co
     <div id="canvas"></div>
     <button type="button" id="dl">Download</button>
     <script type="module">
-      import { QRCodeStyling, browserUtils } from "./index.ts";
+      import { QRCodeStyling, browserUtils } from "https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js";
 
       const qrCode = new QRCodeStyling({
-        width: 300,
-        height: 300,
-        type: "svg",
         data: "https://www.facebook.com/",
         image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
         dotsOptions: {
           color: "#4267b2",
-          type: "rounded"
+          type: "rounded",
+          size: 10
         },
         backgroundOptions: {
-          color: "#e9ebee"
+          color: "#e9ebee",
+          margin: 1
         },
         imageOptions: {
           crossOrigin: "anonymous",
-          margin: 20
+          margin: 1,
+          imageSize: 0.9
         }
       });
 
       qrCode.append(document.getElementById("canvas"));
+
       document.getElementById("dl").addEventListener("click", () => {
         browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
       });
     </script>
   </body>
 </html>
+```
+
+#### Node
+
+```js
+import { QRCodeStyling } from "@liquid-js/qr-code-styling";
+import { writeFile } from "fs/promises";
+import PDFDocument from "pdfkit";
+import SVGtoPDF from "svg-to-pdfkit";
+
+const qrCode = new QRCodeStyling({
+  data: "https://www.facebook.com/",
+  image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+  dotsOptions: {
+    color: "#4267b2",
+    type: "rounded",
+    size: 10
+  },
+  backgroundOptions: {
+    color: "#e9ebee",
+    margin: 1
+  },
+  imageOptions: {
+    crossOrigin: "anonymous",
+    margin: 1,
+    imageSize: 0.9
+  }
+});
+
+const svgCode = await qrCode.serialize();
+
+const width = parseFloat(qrCode._svg.getAttribute("width"));
+const height = parseFloat(qrCode._svg.getAttribute("height"));
+const buffers = [];
+const doc = new PDFDocument({ size: [width, height] });
+doc.on("data", (v) => buffers.push(v));
+const buffer = await new Promise((resolve) => {
+  doc.on("end", () => {
+    resolve(Buffer.concat(buffers));
+  });
+  SVGtoPDF(doc, svgCode, 0, 0, {
+    width,
+    height,
+    assumePt: true
+  });
+  doc.end();
+});
+await writeFile("qr.pdf", buffer);
 ```
 
 ### API Documentation
@@ -99,12 +150,12 @@ new QRCodeStyling(options) => QRCodeStyling
 
 `options.imageOptions` structure
 
-| Property           | Type                                     | Default Value | Description                                                                    |
-| ------------------ | ---------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
-| hideBackgroundDots | boolean                                  | `true`        | Hide all dots covered by the image                                             |
-| imageSize          | number                                   | `0.4`         | Coefficient of the image size. Not recommended to use ove 0.5. Lower is better |
-| margin             | number                                   | `0`           | Margin of the image (in blocks)                                                |
-| crossOrigin        | string (`'anonymous' 'use-credentials'`) |               | Set "anonymous" if you want to download QR code from other origins.            |
+| Property           | Type                                     | Default Value | Description                                                         |
+| ------------------ | ---------------------------------------- | ------------- | ------------------------------------------------------------------- |
+| hideBackgroundDots | boolean                                  | `true`        | Hide all dots covered by the image                                  |
+| imageSize          | number                                   | `0.4`         | Coefficient of the image size                                       |
+| margin             | number                                   | `0`           | Margin of the image (in blocks)                                     |
+| crossOrigin        | string (`'anonymous' 'use-credentials'`) |               | Set "anonymous" if you want to download QR code from other origins. |
 
 `options.dotsOptions` structure
 
