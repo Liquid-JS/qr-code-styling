@@ -8,7 +8,7 @@ Try it here <https://qr-code-styling.com>
 
 If you have issues / suggestions / notes / questions, please open an issue or contact me. Let's create a cool library together.
 
-### Examples
+## Examples
 
 <p float="left">
 <img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/facebook.png" width="240" />
@@ -16,17 +16,17 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 <img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/telegram.png" width="240" />
 </p>
 
-### Installation
+## Installation
 
     npm install @liquid-js/qr-code-styling
 
-### API Documentation
+## API Documentation
 
 <https://liquid-js.github.io/qr-code-styling/>
 
-### Usage
+## Usage
 
-#### Browser
+### Browser
 
 ```HTML
 <!doctype html>
@@ -70,7 +70,7 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 </html>
 ```
 
-#### Node
+### Node
 
 ```js
 import { QRCodeStyling } from "@liquid-js/qr-code-styling";
@@ -118,6 +118,6 @@ const buffer = await new Promise((resolve) => {
 await writeFile("qr.pdf", buffer);
 ```
 
-### License
+## License
 
 [MIT License](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE)
