@@ -2,3 +2,4 @@
 .yarn
 .coverage
 tmp
+CHANGELOG.md
