@@ -65,7 +65,7 @@
     "prepublishOnly": "npm run build",
     "prepare": "husky",
     "release": "git diff --exit-code && standard-version && git push --follow-tags origin",
-    "docs": "typedoc ./src/index.ts ./src/tools/browserUtils.ts ./src/tools/browserImageTools.ts"
+    "docs": "typedoc"
   },
   "repository": {
     "type": "git",
