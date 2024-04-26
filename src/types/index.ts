@@ -7,7 +7,10 @@ export interface UnknownObject {
 
 export enum DotType {
   dots = "dots",
+  randomDots = "random-dots",
   rounded = "rounded",
+  verticalLines = "vertical-lines",
+  horizontalLines = "horizontal-lines",
   classy = "classy",
   classyRounded = "classy-rounded",
   square = "square",
@@ -15,7 +18,8 @@ export enum DotType {
 }
 export enum CornerDotType {
   dot = "dot",
-  square = "square"
+  square = "square",
+  heart = "heart"
 }
 export enum CornerSquareType {
   dot = "dot",

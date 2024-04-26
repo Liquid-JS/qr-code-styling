@@ -1,4 +1,4 @@
-import { CornerDotType, RotateFigureArgs, BasicFigureDrawArgs, DrawArgs } from "../../types";
+import { BasicFigureDrawArgs, CornerDotType, DrawArgs, RotateFigureArgs } from "../../types";
 
 export class QRCornerDot {
   _element?: SVGElement;
@@ -19,6 +19,9 @@ export class QRCornerDot {
     switch (type) {
       case CornerDotType.square:
         drawFunction = this._drawSquare;
+        break;
+      case CornerDotType.heart:
+        drawFunction = this._drawHeart;
         break;
       case CornerDotType.dot:
       default:
@@ -65,11 +68,171 @@ export class QRCornerDot {
     });
   }
 
+  _basicHeart(args: BasicFigureDrawArgs): void {
+    const { size, x, y } = args;
+
+    this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const path = [
+      "M",
+      0.925,
+      0.3569803,
+      "c",
+      0,
+      0.0339813,
+      -0.0085083,
+      0.0595062,
+      -0.0170166,
+      0.0934875,
+      "C",
+      0.8994751,
+      0.484501,
+      0.8740021,
+      0.5184824,
+      0.8484772,
+      0.5524637,
+      "C",
+      0.8230041,
+      0.5950052,
+      0.7890228,
+      0.6374948,
+      0.7380249,
+      0.6799845,
+      "C",
+      0.6954834,
+      0.7309824,
+      0.6359771,
+      0.7819803,
+      0.5595062,
+      0.8499948,
+      "L",
+      0.5,
+      0.9009928,
+      "L",
+      0.4404938,
+      0.8499948,
+      "C",
+      0.3640228,
+      0.7819803,
+      0.3045166,
+      0.7309824,
+      0.2619751,
+      0.6799845,
+      "C",
+      0.2109772,
+      0.6374948,
+      0.1769958,
+      0.5950052,
+      0.1515228,
+      0.5524637,
+      "C",
+      0.1174896,
+      0.5184824,
+      0.1005249,
+      0.484501,
+      0.0920166,
+      0.4504678,
+      "C",
+      0.0835083,
+      0.4164865,
+      0.075,
+      0.3909616,
+      0.075,
+      0.3569803,
+      "c",
+      0,
+      -0.0680145,
+      0.0255249,
+      -0.1190125,
+      0.0680145,
+      -0.1700104,
+      "c",
+      0.0424896,
+      -0.0424896,
+      0.1019959,
+      -0.0679626,
+      0.1700104,
+      -0.0679626,
+      "c",
+      0.0339813,
+      0,
+      0.0679626,
+      0.0084564,
+      0.1019959,
+      0.025473,
+      "C",
+      0.4490021,
+      0.1614969,
+      0.4744751,
+      0.1869699,
+      0.5,
+      0.2124948,
+      "c",
+      0.0255249,
+      -0.0255249,
+      0.0509979,
+      -0.0509979,
+      0.0849792,
+      -0.0680145,
+      "c",
+      0.0340332,
+      -0.0170166,
+      0.0680146,
+      -0.025473,
+      0.1105042,
+      -0.025473,
+      "c",
+      0.0595062,
+      0,
+      0.1190125,
+      0.025473,
+      0.1615021,
+      0.0679626,
+      "C",
+      0.8994751,
+      0.2379678,
+      0.925,
+      0.2889658,
+      0.925,
+      0.3569803,
+      "z"
+    ];
+    let move = false;
+    let i = 0;
+    this._element.setAttribute(
+      "d",
+      path
+        .map((v) => {
+          if (typeof v == "string") {
+            i = 0;
+            move = v.toUpperCase() == v;
+            return v;
+          }
+          i++;
+          v = v * size;
+          if (move) {
+            v += i % 2 == 1 ? x : y;
+          }
+          return v.toFixed(5);
+        })
+        .join(" ")
+    );
+  }
+
   _drawDot({ x, y, size, rotation }: DrawArgs): void {
     this._basicDot({ x, y, size, rotation });
   }
 
   _drawSquare({ x, y, size, rotation }: DrawArgs): void {
     this._basicSquare({ x, y, size, rotation });
+  }
+
+  _drawHeart({ x, y, size, rotation }: DrawArgs): void {
+    const scaleFactor = 0.2;
+    this._basicHeart({
+      x: x - (scaleFactor * size) / 2,
+      y: y - (scaleFactor * size) / 2,
+      size: size * (1 + scaleFactor),
+      rotation
+    });
   }
 }

@@ -56,7 +56,7 @@ If you have issues / suggestions / notes / questions, please open an issue or co
         imageOptions: {
           crossOrigin: "anonymous",
           margin: 1,
-          imageSize: 0.9
+          imageSize: 0.5
         }
       });
 
@@ -93,7 +93,7 @@ const qrCode = new QRCodeStyling({
   imageOptions: {
     crossOrigin: "anonymous",
     margin: 1,
-    imageSize: 0.9
+    imageSize: 0.5
   }
 });
 
