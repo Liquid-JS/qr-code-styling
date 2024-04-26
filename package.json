@@ -24,8 +24,7 @@
     "file-type": "^19.0.0",
     "qrcode-generator": "^1.4.4",
     "sharp": ">0.32.1 <1.0.0",
-    "tslib": "^2.6.2",
-    "typedoc": "^0.25.13"
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
@@ -55,6 +54,7 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "standard-version": "^9.5.0",
     "ts-jest": "^29.1.2",
+    "typedoc": "^0.25.13",
     "typescript": "^5.4.5",
     "vite": "^5.2.10"
   },
