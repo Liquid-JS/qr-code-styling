@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/Liquid-JS/qr-code-styling/compare/v2.2.0...v2.2.1) (2024-04-26)
+
+
+### Bug Fixes
+
+* heart shape ([9a51ca8](https://github.com/Liquid-JS/qr-code-styling/commit/9a51ca852b73fe859ceea704dcda54e669693177))
+
 ## [2.2.0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.1.2...v2.2.0) (2024-04-26)
 
 
