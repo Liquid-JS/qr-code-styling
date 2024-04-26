@@ -111,7 +111,7 @@ export class QRCodeStyling {
    * const extension = (svg, options) => {
    *   const { width, height } = options;
    *   const size = Math.min(width, height);
-   *   const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+   *   const border = options.document.createElementNS("http://www.w3.org/2000/svg", "rect");
    *   const borderAttributes = {
    *     fill: "none",
    *     x: (width - size + 40) / 2,
