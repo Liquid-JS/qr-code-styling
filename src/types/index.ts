@@ -14,22 +14,26 @@ export enum DotType {
   classy = "classy",
   classyRounded = "classy-rounded",
   square = "square",
-  extraRounded = "extra-rounded"
+  smallSquare = "small-square",
+  extraRounded = "extra-rounded",
+  diamond = "diamond"
 }
 export enum CornerDotType {
   dot = "dot",
   square = "square",
   heart = "heart",
   extraRounded = "extra-rounded",
-  oneClassy = "one-classy",
-  classy = "classy"
+  classy = "classy",
+  outpoint = "outpoint",
+  inpoint = "inpoint"
 }
 export enum CornerSquareType {
   dot = "dot",
   square = "square",
   extraRounded = "extra-rounded",
-  oneClassy = "one-classy",
-  classy = "classy"
+  classy = "classy",
+  outpoint = "outpoint",
+  inpoint = "inpoint"
 }
 export enum GradientType {
   radial = "radial",

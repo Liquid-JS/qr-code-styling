@@ -41,6 +41,12 @@ export class QRDot {
       case DotType.extraRounded:
         drawFunction = this._drawExtraRounded;
         break;
+      case DotType.diamond:
+        drawFunction = this._drawDiamond;
+        break;
+      case DotType.smallSquare:
+        drawFunction = this._drawSmallSquare;
+        break;
       case DotType.square:
       default:
         drawFunction = this._drawSquare;
@@ -176,6 +182,20 @@ export class QRDot {
 
   _drawSquare({ x, y, size }: DrawArgs): void {
     this._basicSquare({ x, y, size, rotation: 0 });
+  }
+
+  _drawSmallSquare({ x, y, size }: DrawArgs): void {
+    const originalSize = size;
+
+    size = originalSize * 0.7;
+    x = x + originalSize * 0.15;
+    y = y + originalSize * 0.15;
+
+    this._basicSquare({ x, y, size, rotation: 0 });
+  }
+
+  _drawDiamond({ x, y, size }: DrawArgs): void {
+    this._basicSquare({ x, y, size, rotation: Math.PI / 4 });
   }
 
   _drawRounded({ x, y, size, getNeighbor }: DrawArgs): void {
