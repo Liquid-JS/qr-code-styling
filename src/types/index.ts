@@ -19,12 +19,17 @@ export enum DotType {
 export enum CornerDotType {
   dot = "dot",
   square = "square",
-  heart = "heart"
+  heart = "heart",
+  extraRounded = "extra-rounded",
+  oneClassy = "one-classy",
+  classy = "classy"
 }
 export enum CornerSquareType {
   dot = "dot",
   square = "square",
-  extraRounded = "extra-rounded"
+  extraRounded = "extra-rounded",
+  oneClassy = "one-classy",
+  classy = "classy"
 }
 export enum GradientType {
   radial = "radial",

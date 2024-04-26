@@ -23,6 +23,15 @@ export class QRCornerDot {
       case CornerDotType.heart:
         drawFunction = this._drawHeart;
         break;
+      case CornerDotType.extraRounded:
+        drawFunction = this._drawRounded;
+        break;
+      case CornerDotType.classy:
+        drawFunction = this._drawClassy;
+        break;
+      case CornerDotType.oneClassy:
+        drawFunction = this._drawOneClassy;
+        break;
       case CornerDotType.dot:
       default:
         drawFunction = this._drawDot;
@@ -218,6 +227,70 @@ export class QRCornerDot {
     );
   }
 
+  _basicRounded(args: BasicFigureDrawArgs): void {
+    const { size, x, y } = args;
+
+    this._rotateFigure({
+      ...args,
+      draw: () => {
+        this._element = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        this._element.setAttribute("x", String(x));
+        this._element.setAttribute("y", String(y));
+        this._element.setAttribute("width", String(size));
+        this._element.setAttribute("height", String(size));
+        this._element.setAttribute("rx", String(size / 4));
+        this._element.setAttribute("ry", String(size / 4));
+      }
+    });
+  }
+
+  _basicOneClassy(args: BasicFigureDrawArgs): void {
+    const { size, x, y } = args;
+    const dotSize = size / 7;
+    this._rotateFigure({
+      ...args,
+      draw: () => {
+        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element.setAttribute("clip-rule", "evenodd");
+        this._element.setAttribute(
+          "d",
+          `M ${x} ${y + 2.5 * dotSize}` +
+            `v ${2 * dotSize}` +
+            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}` +
+            `h ${4.5 * dotSize}` +
+            `v ${-4.5 * dotSize}` +
+            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
+            `h ${-2 * dotSize}` +
+            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}`
+        );
+      }
+    });
+  }
+
+  _basicClassy(args: BasicFigureDrawArgs): void {
+    const { size, x, y } = args;
+    const dotSize = size / 7;
+    this._rotateFigure({
+      ...args,
+      draw: () => {
+        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element.setAttribute("clip-rule", "evenodd");
+        this._element.setAttribute(
+          "d",
+          `M ${x} ${y + 2.5 * dotSize}` +
+            `v ${2 * dotSize}` +
+            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}` +
+            `h ${4.5 * dotSize}` +
+            `v ${-4.5 * dotSize}` +
+            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
+            `h ${-2 * dotSize}` +
+            `H ${x}` +
+            `z`
+        );
+      }
+    });
+  }
+
   _drawDot({ x, y, size, rotation }: DrawArgs): void {
     this._basicDot({ x, y, size, rotation });
   }
@@ -234,5 +307,17 @@ export class QRCornerDot {
       size: size * (1 + scaleFactor),
       rotation
     });
+  }
+
+  _drawRounded({ x, y, size, rotation }: DrawArgs): void {
+    this._basicRounded({ x, y, size, rotation });
+  }
+
+  _drawClassy({ x, y, size, rotation }: DrawArgs): void {
+    this._basicClassy({ x, y, size, rotation });
+  }
+
+  _drawOneClassy({ x, y, size, rotation }: DrawArgs): void {
+    this._basicOneClassy({ x, y, size, rotation });
   }
 }
