@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.1.2...v2.2.0) (2024-04-26)
+
+
+### Features
+
+* classy corners ([1236065](https://github.com/Liquid-JS/qr-code-styling/commit/123606598ae68d46504650a9450c4391525d7770))
+* new dot & corner types ([b38ab86](https://github.com/Liquid-JS/qr-code-styling/commit/b38ab8634ae1bf987017304cf29503d44196533a))
+* new styles ([0bc5e7d](https://github.com/Liquid-JS/qr-code-styling/commit/0bc5e7db95650864f4408459a7b0807e6ef78a74))
+
+
+### Bug Fixes
+
+* deps ([0b508ed](https://github.com/Liquid-JS/qr-code-styling/commit/0b508ed329e4465d24dd9135704d9150aff7f7a3))
+
 ### [2.1.2](https://github.com/Liquid-JS/qr-code-styling/compare/v2.1.1...v2.1.2) (2024-04-25)
 
 ### [2.1.1](https://github.com/Liquid-JS/qr-code-styling/compare/v2.1.0...v2.1.1) (2024-04-25)
