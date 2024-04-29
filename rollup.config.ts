@@ -16,6 +16,16 @@ const config: RollupOptions[] = [
     plugins: [typescript(), commonjs(), nodeResolve(), terser()]
   },
   {
+    input: "src/kanji.ts",
+    output: {
+      file: "./lib/kanji.js",
+      sourcemap: true,
+      format: "esm",
+      name: "Kanji"
+    },
+    plugins: [typescript(), commonjs(), nodeResolve(), terser()]
+  },
+  {
     input: "src/node.ts",
     output: {
       file: "./lib/qr-code-styling-node.js",

@@ -118,6 +118,23 @@ const buffer = await new Promise((resolve) => {
 await writeFile("qr.pdf", buffer);
 ```
 
+### Kanji support
+
+For Kanji mode to work, import `stringToBytesFuncs` from `@liquid-js/qr-code-styling/kanji` and inclue it with config.
+
+```js
+import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";
+
+const qrCode = new QRCodeStyling({
+  data: "漢字",
+  qrOptions: {
+    mode: Mode.kanji
+  },
+  stringToBytesFuncs,
+  // ...other options
+});
+```
+
 ## License
 
 [MIT License](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE)

@@ -75,6 +75,11 @@ export class QRCodeStyling {
       return;
     }
 
+    if (this._options.stringToBytesFuncs) {
+      Object.assign(qrcode.stringToBytesFuncs, this._options.stringToBytesFuncs);
+      delete this._options.stringToBytesFuncs;
+    }
+
     this._qr = qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel);
     let mode = this._options.qrOptions.mode || getMode(this._options.data);
     if (mode == Mode.unicode) {

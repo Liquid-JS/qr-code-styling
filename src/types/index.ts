@@ -246,6 +246,8 @@ export type Options = {
         margin?: number;
       }
     | false;
+  /** `import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";` to add Kanji support */
+  stringToBytesFuncs?: { [encoding: string]: (s: string) => number[] };
 };
 
 export type CanvasOptions = {
