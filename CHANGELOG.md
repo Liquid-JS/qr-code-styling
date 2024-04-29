@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.2.3...v2.3.0) (2024-04-29)
+
+
+### Features
+
+* unicode support ([e682699](https://github.com/Liquid-JS/qr-code-styling/commit/e6826993f46de8e6c5eccb5614b87cd6ce14fa0f))
+
 ### [2.2.3](https://github.com/Liquid-JS/qr-code-styling/compare/v2.2.2...v2.2.3) (2024-04-26)
 
 
