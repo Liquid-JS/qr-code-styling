@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.3.0...v2.4.0) (2024-04-29)
+
+
+### Features
+
+* add support for kanji mode ([d31d2d1](https://github.com/Liquid-JS/qr-code-styling/commit/d31d2d11e2f2e298cf9a220030720c416f36dabe))
+
 ## [2.3.0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.2.3...v2.3.0) (2024-04-29)
 
 
