@@ -128,11 +128,12 @@ export enum Mode {
   numeric = "Numeric",
   alphanumeric = "Alphanumeric",
   byte = "Byte",
-  kanji = "Kanji"
+  kanji = "Kanji",
+  unicode = "Unicode"
 }
 
 export interface QRCode {
-  addData(data: string, mode?: Mode): void;
+  addData(data: string, mode?: Mode.alphanumeric | Mode.byte | Mode.kanji | Mode.numeric): void;
   make(): void;
   getModuleCount(): number;
   isDark(row: number, col: number): boolean;

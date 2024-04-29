@@ -2,7 +2,7 @@ import qrcode from "qrcode-generator";
 import { getMode } from "../tools/getMode";
 import { mergeDeep } from "../tools/merge";
 import { sanitizeOptions } from "../tools/sanitizeOptions";
-import { ExtensionFunction, Options, QRCode, ShapeType } from "../types";
+import { ExtensionFunction, Mode, Options, QRCode, ShapeType } from "../types";
 import { defaultOptions, RequiredOptions } from "./QROptions";
 import { QRSVG } from "./QRSVG";
 
@@ -76,7 +76,14 @@ export class QRCodeStyling {
     }
 
     this._qr = qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel);
-    this._qr.addData(this._options.data, this._options.qrOptions.mode || getMode(this._options.data));
+    let mode = this._options.qrOptions.mode || getMode(this._options.data);
+    if (mode == Mode.unicode) {
+      qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+      mode = Mode.byte;
+    } else {
+      qrcode.stringToBytes = qrcode.stringToBytesFuncs["default"];
+    }
+    this._qr.addData(this._options.data, mode);
     this._qr.make();
 
     this._setupSvg();

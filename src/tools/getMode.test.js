@@ -15,6 +15,6 @@ describe("Test getMode function", () => {
     expect(getMode("01ABCZ./:!@#$%^&*()_+01ABCZ./:!@#$%^&*()_'+|\\")).toBe(Mode.byte);
   });
   it("Return byte mode if a string with Cyrillic symbols is passed", () => {
-    expect(getMode("абвАБВ")).toBe(Mode.byte);
+    expect(getMode("абвАБВ")).toBe(Mode.unicode);
   });
 });
