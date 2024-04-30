@@ -130,7 +130,7 @@ const qrCode = new QRCodeStyling({
   qrOptions: {
     mode: Mode.kanji
   },
-  stringToBytesFuncs,
+  stringToBytesFuncs
   // ...other options
 });
 ```

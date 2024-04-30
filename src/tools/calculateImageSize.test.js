@@ -1,4 +1,4 @@
-import { calculateImageSize } from "./calculateImageSize";
+import { calculateImageSize } from "./calculateImageSize.js";
 
 describe("Test calculateImageSizeForAxis function", () => {
   it("The function should return an correct result for 0 sizes", () => {

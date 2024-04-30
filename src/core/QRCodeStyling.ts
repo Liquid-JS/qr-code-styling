@@ -1,10 +1,10 @@
 import qrcode from "qrcode-generator";
-import { getMode } from "../tools/getMode";
-import { mergeDeep } from "../tools/merge";
-import { sanitizeOptions } from "../tools/sanitizeOptions";
-import { ExtensionFunction, Mode, Options, QRCode, ShapeType } from "../types";
-import { defaultOptions, RequiredOptions } from "./QROptions";
-import { QRSVG } from "./QRSVG";
+import { getMode } from "../tools/getMode.js";
+import { mergeDeep } from "../tools/merge.js";
+import { sanitizeOptions } from "../tools/sanitizeOptions.js";
+import { ExtensionFunction, Mode, Options, QRCode, ShapeType } from "../types/index.js";
+import { defaultOptions, RequiredOptions } from "./QROptions.js";
+import { QRSVG } from "./QRSVG.js";
 
 export class QRCodeStyling {
   /** @ignore */

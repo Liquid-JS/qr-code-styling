@@ -1,4 +1,13 @@
-import { CanvasOptions, DotType, ErrorCorrectionLevel, Gradient, Mode, Options, ShapeType, TypeNumber } from "../types";
+import {
+  CanvasOptions,
+  DotType,
+  ErrorCorrectionLevel,
+  Gradient,
+  Mode,
+  Options,
+  ShapeType,
+  TypeNumber
+} from "../types/index.js";
 
 export interface RequiredOptions extends Options {
   document: Document;

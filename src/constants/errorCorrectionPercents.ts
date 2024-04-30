@@ -1,4 +1,4 @@
-import { ErrorCorrectionLevel } from "../types";
+import { ErrorCorrectionLevel } from "../types/index.js";
 
 export const ErrorCorrectionPercents = {
   [ErrorCorrectionLevel.L]: 0.07,

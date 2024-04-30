@@ -1,11 +1,11 @@
-import { ErrorCorrectionPercents } from "../constants/errorCorrectionPercents";
-import { QRCornerDot } from "../figures/cornerDot/QRCornerDot";
-import { QRCornerSquare } from "../figures/cornerSquare/QRCornerSquare";
-import { QRDot } from "../figures/dot/QRDot";
-import { browserImageTools } from "../tools/browserImageTools";
-import { calculateImageSize } from "../tools/calculateImageSize";
-import { FilterFunction, Gradient, GradientType, QRCode, ShapeType } from "../types";
-import { RequiredOptions } from "./QROptions";
+import { ErrorCorrectionPercents } from "../constants/errorCorrectionPercents.js";
+import { QRCornerDot } from "../figures/cornerDot/QRCornerDot.js";
+import { QRCornerSquare } from "../figures/cornerSquare/QRCornerSquare.js";
+import { QRDot } from "../figures/dot/QRDot.js";
+import { browserImageTools } from "../tools/browserImageTools.js";
+import { calculateImageSize } from "../tools/calculateImageSize.js";
+import { FilterFunction, Gradient, GradientType, QRCode, ShapeType } from "../types/index.js";
+import { RequiredOptions } from "./QROptions.js";
 
 const squareMask = [
   [1, 1, 1, 1, 1, 1, 1],

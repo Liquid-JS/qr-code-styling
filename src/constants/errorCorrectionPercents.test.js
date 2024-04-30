@@ -1,4 +1,4 @@
-import { ErrorCorrectionPercents } from "./errorCorrectionPercents";
+import { ErrorCorrectionPercents } from "./errorCorrectionPercents.js";
 
 describe("Error Correction Percents", () => {
   it("The export of the module should be an object", () => {

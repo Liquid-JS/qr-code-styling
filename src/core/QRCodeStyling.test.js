@@ -1,4 +1,4 @@
-import { QRCodeStyling } from "./QRCodeStyling";
+import { QRCodeStyling } from "./QRCodeStyling.js";
 
 describe("Test QRCodeStyling class", () => {
   beforeAll(() => {

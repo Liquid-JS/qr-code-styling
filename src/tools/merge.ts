@@ -1,4 +1,4 @@
-import { UnknownObject } from "../types";
+import { UnknownObject } from "../types/index.js";
 
 const isObject = (obj: Record<string, unknown>): boolean => !!obj && typeof obj === "object" && !Array.isArray(obj);
 

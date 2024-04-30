@@ -1,4 +1,4 @@
-import { Mode } from "../types";
+import { Mode } from "../types/index.js";
 
 export function getMode(data: string): Mode {
   switch (true) {

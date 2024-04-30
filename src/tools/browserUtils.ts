@@ -1,8 +1,8 @@
-import { QRCodeStyling } from "../core/QRCodeStyling";
-import { defaultCanvasOptions, RequiredCanvasOptions } from "../core/QROptions";
-import { CanvasOptions, FileExtension } from "../types";
-import { mergeDeep } from "./merge";
-import { sanitizeCanvasOptions } from "./sanitizeOptions";
+import { QRCodeStyling } from "../core/QRCodeStyling.js";
+import { defaultCanvasOptions, RequiredCanvasOptions } from "../core/QROptions.js";
+import { CanvasOptions, FileExtension } from "../types/index.js";
+import { mergeDeep } from "./merge.js";
+import { sanitizeCanvasOptions } from "./sanitizeOptions.js";
 
 export function drawToCanvas(
   qrCode: QRCodeStyling,

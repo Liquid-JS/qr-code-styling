@@ -1,4 +1,4 @@
-import { browserImageTools } from "../tools/browserImageTools";
+import { browserImageTools } from "../tools/browserImageTools.js";
 
 export interface UnknownObject {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

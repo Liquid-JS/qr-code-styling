@@ -1,4 +1,4 @@
-import { defaultOptions } from "./QROptions";
+import { defaultOptions } from "./QROptions.js";
 
 describe("Test default QROptions", () => {
   it("The export of the module should be an object", () => {

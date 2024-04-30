@@ -1,5 +1,5 @@
-import { getMode } from "./getMode";
-import { Mode } from "../types";
+import { getMode } from "./getMode.js";
+import { Mode } from "../types/index.js";
 
 describe("Test getMode function", () => {
   it("Return numeric mode if numbers is passed", () => {

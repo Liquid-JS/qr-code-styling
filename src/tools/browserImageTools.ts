@@ -1,4 +1,4 @@
-import { Options } from "../types";
+import { Options } from "../types/index.js";
 
 export const browserImageTools = {
   toDataURL(url: string | Buffer | Blob): Promise<string> {

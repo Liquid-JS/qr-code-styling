@@ -1,11 +1,11 @@
 import { DOMImplementation, DOMParser, XMLSerializer } from "@xmldom/xmldom";
 import { fileTypeFromBuffer } from "file-type";
 import sharp from "sharp";
-import { RequiredOptions } from "./core/QROptions";
-import { QRCodeStyling as _QRCodeStyling } from "./index";
-export { ErrorCorrectionPercents } from "./constants/errorCorrectionPercents";
-export * from "./types";
-import type * as _browserUtils from "./tools/browserUtils";
+import { RequiredOptions } from "./core/QROptions.js";
+import { QRCodeStyling as _QRCodeStyling } from "./index.js";
+export { ErrorCorrectionPercents } from "./constants/errorCorrectionPercents.js";
+export * from "./types/index.js";
+import type * as _browserUtils from "./tools/browserUtils.js";
 
 export const browserUtils: typeof _browserUtils | undefined = undefined;
 

@@ -1,4 +1,4 @@
-import { BasicFigureDrawArgs, CornerDotType, DrawArgs, RotateFigureArgs } from "../../types";
+import { BasicFigureDrawArgs, CornerDotType, DrawArgs, RotateFigureArgs } from "../../types/index.js";
 
 export class QRCornerDot {
   _element?: SVGElement;
