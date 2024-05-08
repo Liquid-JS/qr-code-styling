@@ -94,12 +94,12 @@
     "logo",
     "design"
   ],
-  "author": "Denys Kozak <kozak.denys.dev@gmail.com>",
+  "author": "HitkoDev <development@hitko.si>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Liquid-JS/qr-code-styling/issues"
   },
-  "homepage": "https://qr-code-styling.com",
+  "homepage": "https://styled-qr.liquidjs.io/",
   "packageManager": "yarn@4.1.1",
   "clean-package": {
     "remove": [

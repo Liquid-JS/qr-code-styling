@@ -2,11 +2,9 @@
 
 [![Version](https://img.shields.io/npm/v/@liquid-js/qr-code-styling.svg)](https://www.npmjs.org/package/@liquid-js/qr-code-styling)
 
-JavaScript library for generating QR codes with a logo and styling.
+JavaScript library for generating QR codes with customizable styling.
 
-Try it here <https://qr-code-styling.com>
-
-If you have issues / suggestions / notes / questions, please open an issue or contact me. Let's create a cool library together.
+Try it here <https://styled-qr.liquidjs.io/>
 
 ## Examples
 
