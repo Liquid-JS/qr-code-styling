@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.0-1...v3.0.0-2) (2024-05-09)
+
+
+### Bug Fixes
+
+* close paths ([f6f6adb](https://github.com/Liquid-JS/qr-code-styling/commit/f6f6adb8bdabc2d93d3b7ef4829458541c281103))
+
 ## [3.0.0-1](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.0-0...v3.0.0-1) (2024-05-09)
 
 ## [3.0.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.4.2...v3.0.0-0) (2024-05-09)
