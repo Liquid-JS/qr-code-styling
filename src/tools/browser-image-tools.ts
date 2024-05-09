@@ -1,5 +1,3 @@
-import { Options } from "../types/index.js";
-
 export const browserImageTools = {
   toDataURL(url: string | Buffer | Blob): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -25,26 +23,23 @@ export const browserImageTools = {
       }
     });
   },
-  getSize(options: Options): Promise<{ width: number; height: number }> {
+  getSize(src: string | Blob | Buffer, crossOrigin?: string): Promise<{ width: number; height: number }> {
     return new Promise((resolve, reject) => {
-      if (!options.image) {
-        return reject("Image is not defined");
-      }
-
       const image = new Image();
 
-      if (typeof options.imageOptions?.crossOrigin === "string") {
-        image.crossOrigin = options.imageOptions.crossOrigin;
+      if (crossOrigin === "string") {
+        image.crossOrigin = crossOrigin;
       }
 
       image.onload = (): void => {
         resolve({ width: image.width, height: image.height });
       };
       image.onerror = image.onabort = reject;
-      if (typeof options.image == "string") image.src = options.image;
+
+      if (typeof src == "string") image.src = src;
       else
         browserImageTools
-          .toDataURL(options.image)
+          .toDataURL(src)
           .then((url) => (image.src = url))
           .catch(reject);
     });

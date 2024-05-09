@@ -1,6 +1,12 @@
-import { UnknownObject } from "../types/index.js";
+const isObject = (obj: Record<string, unknown> | undefined): boolean =>
+  !!obj && typeof obj === "object" && !Array.isArray(obj);
 
-const isObject = (obj: Record<string, unknown>): boolean => !!obj && typeof obj === "object" && !Array.isArray(obj);
+export type UnknownObject =
+  | {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      [key: string]: any;
+    }
+  | undefined;
 
 export function mergeDeep(target: UnknownObject, ...sources: UnknownObject[]): UnknownObject {
   if (!sources.length) return target;

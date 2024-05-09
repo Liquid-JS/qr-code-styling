@@ -1,4 +1,4 @@
-import { QRCodeStyling } from "./QRCodeStyling.js";
+import { QRCodeStyling } from "./qr-code-styling.js";
 
 describe("Test QRCodeStyling class", () => {
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe("Test QRCodeStyling class", () => {
     });
     global.document.body.innerHTML = "<div id='container'></div>";
 
-    const container = global.document.getElementById("container");
+    const container = global.document.getElementById("container")!;
 
     qrCode.append(container);
 

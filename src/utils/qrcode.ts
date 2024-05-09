@@ -1,4 +1,11 @@
-import { Mode } from "../types/index.js";
+import { ErrorCorrectionLevel, Mode } from "../types/qrcode.js";
+
+export const ErrorCorrectionPercents = {
+  [ErrorCorrectionLevel.L]: 0.07,
+  [ErrorCorrectionLevel.M]: 0.15,
+  [ErrorCorrectionLevel.Q]: 0.25,
+  [ErrorCorrectionLevel.H]: 0.3
+};
 
 export function getMode(data: string): Mode {
   switch (true) {

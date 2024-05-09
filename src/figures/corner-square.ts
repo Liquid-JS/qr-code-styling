@@ -1,46 +1,47 @@
-import { CornerSquareType, DrawArgs, BasicFigureDrawArgs, RotateFigureArgs } from "../../types/index.js";
+import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
+import { CornerSquareType } from "../utils/options.js";
 
 export class QRCornerSquare {
-  _element?: SVGElement;
-  _svg: SVGElement;
-  _type: CornerSquareType;
-  _document: Document;
+  private _element?: SVGElement;
 
-  constructor({ svg, type, document }: { svg: SVGElement; type: CornerSquareType; document: Document }) {
-    this._svg = svg;
-    this._type = type;
-    this._document = document;
+  get element() {
+    return this._element;
   }
 
-  draw(x: number, y: number, size: number, rotation: number): void {
-    const type = this._type;
+  constructor(
+    private readonly type: `${CornerSquareType}`,
+    private readonly document: Document
+  ) {}
+
+  draw(args: DrawArgs): void {
+    const type = this.type;
     let drawFunction;
 
     switch (type) {
       case CornerSquareType.square:
-        drawFunction = this._drawSquare;
+        drawFunction = this.drawSquare;
         break;
       case CornerSquareType.extraRounded:
-        drawFunction = this._drawExtraRounded;
+        drawFunction = this.drawExtraRounded;
         break;
       case CornerSquareType.classy:
-        drawFunction = this._drawClassy;
+        drawFunction = this.drawClassy;
         break;
       case CornerSquareType.outpoint:
-        drawFunction = this._drawOutpoint;
+        drawFunction = this.drawOutpoint;
         break;
       case CornerSquareType.inpoint:
-        drawFunction = this._drawInpoint;
+        drawFunction = this.drawInpoint;
         break;
       case CornerSquareType.dot:
       default:
-        drawFunction = this._drawDot;
+        drawFunction = this.drawDot;
     }
 
-    drawFunction.call(this, { x, y, size, rotation });
+    drawFunction.call(this, args);
   }
 
-  _rotateFigure({ x, y, size, rotation = 0, draw }: RotateFigureArgs): void {
+  private rotateFigure({ x, y, size, rotation = 0, draw }: RotateFigureArgs): void {
     const cx = x + size / 2;
     const cy = y + size / 2;
 
@@ -48,14 +49,14 @@ export class QRCornerSquare {
     this._element?.setAttribute("transform", `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`);
   }
 
-  _basicDot(args: BasicFigureDrawArgs): void {
+  private basicDot(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
     const dotSize = size / 7;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -70,14 +71,14 @@ export class QRCornerSquare {
     });
   }
 
-  _basicSquare(args: BasicFigureDrawArgs): void {
+  private basicSquare(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
     const dotSize = size / 7;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -96,14 +97,14 @@ export class QRCornerSquare {
     });
   }
 
-  _basicExtraRounded(args: BasicFigureDrawArgs): void {
+  private basicExtraRounded(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
     const dotSize = size / 7;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -132,14 +133,14 @@ export class QRCornerSquare {
     });
   }
 
-  _basicClassy(args: BasicFigureDrawArgs): void {
+  private basicClassy(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
     const dotSize = size / 7;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -165,14 +166,14 @@ export class QRCornerSquare {
     });
   }
 
-  _basicInpoint(args: BasicFigureDrawArgs): void {
+  private basicInpoint(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
     const dotSize = size / 7;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
@@ -199,27 +200,27 @@ export class QRCornerSquare {
     });
   }
 
-  _drawDot({ x, y, size, rotation }: DrawArgs): void {
-    this._basicDot({ x, y, size, rotation });
+  private drawDot({ x, y, size, rotation }: DrawArgs): void {
+    this.basicDot({ x, y, size, rotation });
   }
 
-  _drawSquare({ x, y, size, rotation }: DrawArgs): void {
-    this._basicSquare({ x, y, size, rotation });
+  private drawSquare({ x, y, size, rotation }: DrawArgs): void {
+    this.basicSquare({ x, y, size, rotation });
   }
 
-  _drawExtraRounded({ x, y, size, rotation }: DrawArgs): void {
-    this._basicExtraRounded({ x, y, size, rotation });
+  private drawExtraRounded({ x, y, size, rotation }: DrawArgs): void {
+    this.basicExtraRounded({ x, y, size, rotation });
   }
 
-  _drawClassy({ x, y, size, rotation }: DrawArgs): void {
-    this._basicClassy({ x, y, size, rotation });
+  private drawClassy({ x, y, size, rotation }: DrawArgs): void {
+    this.basicClassy({ x, y, size, rotation });
   }
 
-  _drawInpoint({ x, y, size, rotation }: DrawArgs): void {
-    this._basicInpoint({ x, y, size, rotation });
+  private drawInpoint({ x, y, size, rotation }: DrawArgs): void {
+    this.basicInpoint({ x, y, size, rotation });
   }
 
-  _drawOutpoint({ x, y, size, rotation }: DrawArgs): void {
-    this._basicInpoint({ x, y, size, rotation: (rotation || 0) + Math.PI });
+  private drawOutpoint({ x, y, size, rotation }: DrawArgs): void {
+    this.basicInpoint({ x, y, size, rotation: (rotation || 0) + Math.PI });
   }
 }

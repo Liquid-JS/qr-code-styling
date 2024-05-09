@@ -1,4 +1,4 @@
-import { calculateImageSize } from "./calculateImageSize.js";
+import { calculateImageSize } from "./image.js";
 
 describe("Test calculateImageSizeForAxis function", () => {
   it("The function should return an correct result for 0 sizes", () => {
@@ -17,6 +17,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 0
     });
   });
+
   it("The function should return an correct result for minus values", () => {
     expect(
       calculateImageSize({
@@ -33,6 +34,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 0
     });
   });
+
   it("The function should return an correct result for small images", () => {
     expect(
       calculateImageSize({
@@ -49,6 +51,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 1
     });
   });
+
   it("The function should return an correct result for small images, if height is smaller than width", () => {
     expect(
       calculateImageSize({
@@ -65,6 +68,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 1
     });
   });
+
   it("The function should return an correct result for large images", () => {
     expect(
       calculateImageSize({
@@ -81,6 +85,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 9
     });
   });
+
   it("Use the maxHiddenAxisDots value for x", () => {
     expect(
       calculateImageSize({
@@ -98,6 +103,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 1
     });
   });
+
   it("Use the maxHiddenAxisDots value for y", () => {
     expect(
       calculateImageSize({
@@ -115,6 +121,7 @@ describe("Test calculateImageSizeForAxis function", () => {
       hideXDots: 1
     });
   });
+
   it("Use the maxHiddenAxisDots value for y with even value", () => {
     expect(
       calculateImageSize({

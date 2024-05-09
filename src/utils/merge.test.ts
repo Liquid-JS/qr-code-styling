@@ -24,12 +24,15 @@ describe("Test getMode function", () => {
   it("Merge two objects", () => {
     expect(mergeDeep(simpleObject, { str: "bar" })).toEqual({ str: "bar" });
   });
+
   it("Merge two objects with arrays", () => {
     expect(mergeDeep(objectWithArray, { arr: [3, 4] })).toEqual({ arr: [3, 4] });
   });
+
   it("Merge two objects with nested objects", () => {
     expect(mergeDeep(nestedObject, { obj: { bar: "bar" } })).toEqual({ obj: { foo: "foo", bar: "bar" } });
   });
+
   it("Merge three objects with nested objects", () => {
     expect(mergeDeep(nestedObjectWithArray, nestedObject, { obj: { arr: [3, 4] } })).toEqual({
       obj: {
@@ -38,6 +41,7 @@ describe("Test getMode function", () => {
       }
     });
   });
+
   it("Don't mutate target", () => {
     const target = {
       str: "foo"
@@ -45,9 +49,11 @@ describe("Test getMode function", () => {
 
     expect(mergeDeep(target, { str: "bar" })).not.toBe(target);
   });
+
   it("Skip undefined sources", () => {
     expect(mergeDeep(simpleObject, undefined)).toBe(simpleObject);
   });
+
   it("Skip undefined sources dfs", () => {
     const simpleArray = [1, 2];
 

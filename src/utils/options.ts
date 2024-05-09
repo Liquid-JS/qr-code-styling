@@ -1,16 +1,13 @@
-import { browserImageTools } from "../tools/browserImageTools.js";
-
-export interface UnknownObject {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+import { browserImageTools } from "../tools/browser-image-tools.js";
+import { ErrorCorrectionLevel, TypeNumber } from "../types/qrcode.js";
+import { Gradient, sanitizeGradient } from "./gradient.js";
 
 export enum DotType {
-  dots = "dots",
-  randomDots = "random-dots",
+  dot = "dot",
+  randomDot = "random-dot",
   rounded = "rounded",
-  verticalLines = "vertical-lines",
-  horizontalLines = "horizontal-lines",
+  verticalLine = "vertical-line",
+  horizontalLine = "horizontal-line",
   classy = "classy",
   classyRounded = "classy-rounded",
   square = "square",
@@ -18,6 +15,7 @@ export enum DotType {
   extraRounded = "extra-rounded",
   diamond = "diamond"
 }
+
 export enum CornerDotType {
   dot = "dot",
   square = "square",
@@ -27,6 +25,7 @@ export enum CornerDotType {
   outpoint = "outpoint",
   inpoint = "inpoint"
 }
+
 export enum CornerSquareType {
   dot = "dot",
   square = "square",
@@ -35,121 +34,23 @@ export enum CornerSquareType {
   outpoint = "outpoint",
   inpoint = "inpoint"
 }
-export enum GradientType {
-  radial = "radial",
-  linear = "linear"
-}
+
 export enum ShapeType {
   square = "square",
   circle = "circle"
 }
 
-export type Gradient = {
-  /**
-   * Type of gradient spread
-   *
-   * @default GradientType.linear
-   */
-  type: GradientType;
-  /**
-   * Rotation of gradient (in radians, Math.PI === 180 degrees)
-   *
-   * @default 0
-   */
-  rotation?: number;
-  /** Gradient colors. */
-  colorStops: {
-    /** Position of color in gradient range */
-    offset: number;
-    /** Color of stop in gradient range */
-    color: string;
-  }[];
-};
-
-type TypeNumber =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20
-  | 21
-  | 22
-  | 23
-  | 24
-  | 25
-  | 26
-  | 27
-  | 28
-  | 29
-  | 30
-  | 31
-  | 32
-  | 33
-  | 34
-  | 35
-  | 36
-  | 37
-  | 38
-  | 39
-  | 40;
-
-const TypeNumber = Array(41)
-  .fill(0)
-  .map((_, i) => i) as unknown as {
-  [P in TypeNumber]: P;
-};
-
-export { TypeNumber };
-
-export enum ErrorCorrectionLevel {
-  L = "L",
-  M = "M",
-  Q = "Q",
-  H = "H"
-}
-
-export enum Mode {
-  numeric = "Numeric",
-  alphanumeric = "Alphanumeric",
-  byte = "Byte",
-  kanji = "Kanji",
-  unicode = "Unicode"
-}
-
-export interface QRCode {
-  addData(data: string, mode?: Mode.alphanumeric | Mode.byte | Mode.kanji | Mode.numeric): void;
-  make(): void;
-  getModuleCount(): number;
-  isDark(row: number, col: number): boolean;
-}
-
-export type Options = {
+export interface Options {
   /** Use a custom DOM domplementation */
-  document?: Document;
+  document: Document;
   /** Use a custom image fetching & serializaton implementation */
   imageTools?: typeof browserImageTools;
   /** @ignore */
-  width?: number;
+  width: number;
   /** @ignore */
-  height?: number;
+  height: number;
   /** The data will be encoded in the QR code */
-  data?: string;
+  data: string;
   /** The image will be copied to the center of the QR code */
   image?: string | Buffer | Blob;
   /**
@@ -157,51 +58,51 @@ export type Options = {
    *
    * @default ShapeType.square
    */
-  shape?: ShapeType;
+  shape: `${ShapeType}`;
   /** Options will be passed to `qrcode-generator` lib */
-  qrOptions?: {
-    typeNumber?: TypeNumber;
-    mode?: Mode;
+  qrOptions: {
+    typeNumber: TypeNumber;
+    mode?: `${Mode}`;
     /** @default ErrorCorrectionLevel.Q */
-    errorCorrectionLevel?: ErrorCorrectionLevel;
+    errorCorrectionLevel: `${ErrorCorrectionLevel}`;
   };
-  imageOptions?: {
+  imageOptions: {
     /**
      * Hide all dots covered by the image
      *
      * @default true
      */
-    hideBackgroundDots?: boolean;
+    hideBackgroundDots: boolean;
     /**
      * Coefficient of the image size
      *
      * @default 0.4
      */
-    imageSize?: number;
+    imageSize: number;
     /**
      * Margin of the image (in blocks)
      *
      * @default 0
      */
-    margin?: number;
+    margin: number;
     /**
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/crossOrigin)
      */
     crossOrigin?: string;
   };
-  dotsOptions?: {
+  dotsOptions: {
     /**
      * QR dot size (in pixels)
      *
      * @default 10
      */
-    size?: number;
+    size: number;
     /**
      * Color of QR dots
      *
      * @default "#000"
      */
-    color?: string;
+    color: string;
     /** Gradient of QR dots */
     gradient?: Gradient;
     /**
@@ -209,7 +110,7 @@ export type Options = {
      *
      * @default DotType.square
      */
-    type?: DotType;
+    type: `${DotType}`;
   };
   /** Corners Square options, omitted values match dots */
   cornersSquareOptions?: {
@@ -218,7 +119,7 @@ export type Options = {
     /** Gradient of Corners Square */
     gradient?: Gradient;
     /** Style of Corners Square */
-    type?: CornerSquareType;
+    type?: `${CornerSquareType}`;
   };
   /** Corners Dot options, omitted values match squares */
   cornersDotOptions?: {
@@ -227,7 +128,7 @@ export type Options = {
     /** Gradient of Corners Dot */
     gradient?: Gradient;
     /** Style of Corners Dot */
-    type?: CornerDotType;
+    type?: `${CornerDotType}`;
   };
   /** QR background styling options, false to disable background */
   backgroundOptions?:
@@ -248,46 +149,79 @@ export type Options = {
     | false;
   /** `import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";` to add Kanji support */
   stringToBytesFuncs?: { [encoding: string]: (s: string) => number[] };
+}
+
+export const defaultOptions: Options = {
+  document: undefined as never,
+  shape: ShapeType.square,
+  width: undefined as never,
+  height: undefined as never,
+  data: "",
+  qrOptions: {
+    typeNumber: TypeNumber[0],
+    mode: undefined,
+    errorCorrectionLevel: ErrorCorrectionLevel.Q
+  },
+  imageOptions: {
+    hideBackgroundDots: true,
+    imageSize: 0.4,
+    crossOrigin: undefined,
+    margin: 0
+  },
+  dotsOptions: {
+    type: DotType.square,
+    color: "#000",
+    size: 10
+  }
 };
 
-export type CanvasOptions = {
-  width?: number;
-  height?: number;
-  margin?: number;
-};
+export function sanitizeOptions(options: Options): Options {
+  const newOptions = { ...options };
 
-export type FilterFunction = (i: number, j: number) => boolean;
+  newOptions.imageOptions = {
+    ...newOptions.imageOptions,
+    hideBackgroundDots: Boolean(newOptions.imageOptions.hideBackgroundDots),
+    imageSize: Math.min(1, Number(newOptions.imageOptions.imageSize)) || 1,
+    margin: Number(newOptions.imageOptions.margin)
+  };
 
-export type DrawArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-  getNeighbor?: GetNeighbor;
-};
+  newOptions.dotsOptions = {
+    ...newOptions.dotsOptions
+  };
+  if (newOptions.dotsOptions.gradient) {
+    newOptions.dotsOptions.gradient = sanitizeGradient(newOptions.dotsOptions.gradient);
+  }
+  // Ensure integer dot size
+  newOptions.dotsOptions.size = Math.round(Math.max(0, newOptions.dotsOptions.size) || 10);
 
-export type BasicFigureDrawArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-};
+  if (newOptions.cornersSquareOptions) {
+    newOptions.cornersSquareOptions = {
+      ...newOptions.cornersSquareOptions
+    };
+    if (newOptions.cornersSquareOptions.gradient) {
+      newOptions.cornersSquareOptions.gradient = sanitizeGradient(newOptions.cornersSquareOptions.gradient);
+    }
+  }
 
-export type RotateFigureArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-  draw: () => void;
-};
+  if (newOptions.cornersDotOptions) {
+    newOptions.cornersDotOptions = {
+      ...newOptions.cornersDotOptions
+    };
+    if (newOptions.cornersDotOptions.gradient) {
+      newOptions.cornersDotOptions.gradient = sanitizeGradient(newOptions.cornersDotOptions.gradient);
+    }
+  }
 
-export type GetNeighbor = (x: number, y: number) => boolean;
+  if (newOptions.backgroundOptions) {
+    newOptions.backgroundOptions = {
+      ...newOptions.backgroundOptions
+    };
+    if (newOptions.backgroundOptions.gradient) {
+      newOptions.backgroundOptions.gradient = sanitizeGradient(newOptions.backgroundOptions.gradient);
+    }
+  }
 
-export type ExtensionFunction = (svg: SVGElement, options: Options) => void;
+  if (!newOptions.document) newOptions.document = document;
 
-export enum FileExtension {
-  svg = "svg",
-  png = "png",
-  jpeg = "jpeg",
-  webp = "webp"
+  return newOptions;
 }

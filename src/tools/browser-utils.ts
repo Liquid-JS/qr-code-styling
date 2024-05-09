@@ -1,19 +1,21 @@
-import { QRCodeStyling } from "../core/QRCodeStyling.js";
-import { defaultCanvasOptions, RequiredCanvasOptions } from "../core/QROptions.js";
-import { CanvasOptions, FileExtension } from "../types/index.js";
-import { mergeDeep } from "./merge.js";
-import { sanitizeCanvasOptions } from "./sanitizeOptions.js";
+import { QRCodeStyling } from "../core/qr-code-styling.js";
+import { RecursivePartial } from "../types/helper.js";
+import { CanvasOptions, defaultCanvasOptions, sanitizeCanvasOptions } from "../utils/canvas-options.js";
+import { mergeDeep } from "../utils/merge.js";
+
+export enum FileExtension {
+  svg = "svg",
+  png = "png",
+  jpeg = "jpeg",
+  webp = "webp"
+}
 
 export function drawToCanvas(
   qrCode: QRCodeStyling,
-  options?: CanvasOptions
+  options?: RecursivePartial<CanvasOptions>
 ): { canvas: HTMLCanvasElement; canvasDrawingPromise: Promise<void> | undefined } | undefined {
-  if (!qrCode._qr) {
-    return;
-  }
-
   const { width, height, margin } = options
-    ? sanitizeCanvasOptions(mergeDeep(defaultCanvasOptions, options) as RequiredCanvasOptions)
+    ? sanitizeCanvasOptions(mergeDeep(defaultCanvasOptions, options) as CanvasOptions)
     : defaultCanvasOptions;
 
   const canvas = document.createElement("canvas");
@@ -22,11 +24,7 @@ export function drawToCanvas(
 
   const size = Math.min(width, height) - 2 * margin;
 
-  qrCode._setupSvg();
-  const canvasDrawingPromise = qrCode._svgDrawingPromise?.then(async () => {
-    if (!qrCode._svg) return;
-
-    const xml = await qrCode.serialize();
+  const canvasDrawingPromise = qrCode.serialize().then((xml) => {
     if (!xml) return;
     const svg64 = btoa(xml);
     const image64 = "data:image/svg+xml;base64," + svg64;
@@ -61,11 +59,10 @@ export function drawToCanvas(
 
 export async function download(
   qrCode: QRCodeStyling,
-  downloadOptions: FileExtension | { name?: string; extension: FileExtension },
-  options?: CanvasOptions
+  downloadOptions: `${FileExtension}` | { name?: string; extension: `${FileExtension}` },
+  options?: RecursivePartial<CanvasOptions>
 ): Promise<void> {
-  if (!qrCode._qr) throw "QR code is empty";
-  let extension = FileExtension.png;
+  let extension: `${FileExtension}` = FileExtension.png;
   let name = "qr";
 
   //TODO remove deprecated code in the v2

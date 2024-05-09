@@ -1,61 +1,62 @@
-import { DotType, GetNeighbor, DrawArgs, BasicFigureDrawArgs, RotateFigureArgs } from "../../types/index.js";
+import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
+import { DotType } from "../utils/options.js";
 
 export class QRDot {
-  _element?: SVGElement;
-  _svg: SVGElement;
-  _type: DotType;
-  _document: Document;
+  private _element?: SVGElement;
 
-  constructor({ svg, type, document }: { svg: SVGElement; type: DotType; document: Document }) {
-    this._svg = svg;
-    this._type = type;
-    this._document = document;
+  get element() {
+    return this._element;
   }
 
-  draw(x: number, y: number, size: number, getNeighbor: GetNeighbor): void {
-    const type = this._type;
+  constructor(
+    private readonly type: `${DotType}`,
+    private readonly document: Document
+  ) {}
+
+  draw(args: DrawArgs): void {
+    const type = this.type;
     let drawFunction;
 
     switch (type) {
-      case DotType.dots:
-        drawFunction = this._drawDot;
+      case DotType.dot:
+        drawFunction = this.drawDot;
         break;
-      case DotType.randomDots:
-        drawFunction = this._drawRandomDot;
+      case DotType.randomDot:
+        drawFunction = this.drawRandomDot;
         break;
       case DotType.classy:
-        drawFunction = this._drawClassy;
+        drawFunction = this.drawClassy;
         break;
       case DotType.classyRounded:
-        drawFunction = this._drawClassyRounded;
+        drawFunction = this.drawClassyRounded;
         break;
       case DotType.rounded:
-        drawFunction = this._drawRounded;
+        drawFunction = this.drawRounded;
         break;
-      case DotType.verticalLines:
-        drawFunction = this._drawVerticalLines;
+      case DotType.verticalLine:
+        drawFunction = this.drawVerticalLine;
         break;
-      case DotType.horizontalLines:
-        drawFunction = this._drawHorizontalLines;
+      case DotType.horizontalLine:
+        drawFunction = this.drawHorizontalLine;
         break;
       case DotType.extraRounded:
-        drawFunction = this._drawExtraRounded;
+        drawFunction = this.drawExtraRounded;
         break;
       case DotType.diamond:
-        drawFunction = this._drawDiamond;
+        drawFunction = this.drawDiamond;
         break;
       case DotType.smallSquare:
-        drawFunction = this._drawSmallSquare;
+        drawFunction = this.drawSmallSquare;
         break;
       case DotType.square:
       default:
-        drawFunction = this._drawSquare;
+        drawFunction = this.drawSquare;
     }
 
-    drawFunction.call(this, { x, y, size, getNeighbor });
+    drawFunction.call(this, args);
   }
 
-  _rotateFigure({ x, y, size, rotation = 0, draw }: RotateFigureArgs): void {
+  private rotateFigure({ x, y, size, rotation = 0, draw }: RotateFigureArgs): void {
     const cx = x + size / 2;
     const cy = y + size / 2;
 
@@ -63,13 +64,13 @@ export class QRDot {
     this._element?.setAttribute("transform", `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`);
   }
 
-  _basicDot(args: BasicFigureDrawArgs): void {
+  private basicDot(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "circle");
         this._element.setAttribute("cx", String(x + size / 2));
         this._element.setAttribute("cy", String(y + size / 2));
         this._element.setAttribute("r", String(size / 2));
@@ -77,13 +78,13 @@ export class QRDot {
     });
   }
 
-  _basicSquare(args: BasicFigureDrawArgs): void {
+  private basicSquare(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "rect");
         this._element.setAttribute("x", String(x));
         this._element.setAttribute("y", String(y));
         this._element.setAttribute("width", String(size));
@@ -93,13 +94,13 @@ export class QRDot {
   }
 
   //if rotation === 0 - right side is rounded
-  _basicSideRounded(args: BasicFigureDrawArgs): void {
+  private basicSideRounded(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -112,13 +113,13 @@ export class QRDot {
   }
 
   //if rotation === 0 - top right corner is rounded
-  _basicCornerRounded(args: BasicFigureDrawArgs): void {
+  private basicCornerRounded(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -132,13 +133,13 @@ export class QRDot {
   }
 
   //if rotation === 0 - top right corner is rounded
-  _basicCornerExtraRounded(args: BasicFigureDrawArgs): void {
+  private basicCornerExtraRounded(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to top left position
@@ -151,13 +152,13 @@ export class QRDot {
   }
 
   //if rotation === 0 - left bottom and right top corners are rounded
-  _basicCornersRounded(args: BasicFigureDrawArgs): void {
+  private basicCornersRounded(args: BasicFigureDrawArgs): void {
     const { size, x, y } = args;
 
-    this._rotateFigure({
+    this.rotateFigure({
       ...args,
       draw: () => {
-        this._element = this._document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
           `M ${x} ${y}` + //go to left top position
@@ -171,34 +172,34 @@ export class QRDot {
     });
   }
 
-  _drawDot({ x, y, size }: DrawArgs): void {
-    this._basicDot({ x, y, size, rotation: 0 });
+  private drawDot({ x, y, size }: DrawArgs): void {
+    this.basicDot({ x, y, size, rotation: 0 });
   }
 
-  _drawRandomDot({ x, y, size }: DrawArgs): void {
+  private drawRandomDot({ x, y, size }: DrawArgs): void {
     const randomFactor = Math.random() * (1 - 0.75) + 0.75;
-    this._basicDot({ x, y, size: size * randomFactor, rotation: 0 });
+    this.basicDot({ x, y, size: size * randomFactor, rotation: 0 });
   }
 
-  _drawSquare({ x, y, size }: DrawArgs): void {
-    this._basicSquare({ x, y, size, rotation: 0 });
+  private drawSquare({ x, y, size }: DrawArgs): void {
+    this.basicSquare({ x, y, size, rotation: 0 });
   }
 
-  _drawSmallSquare({ x, y, size }: DrawArgs): void {
+  private drawSmallSquare({ x, y, size }: DrawArgs): void {
     const originalSize = size;
 
     size = originalSize * 0.7;
     x = x + originalSize * 0.15;
     y = y + originalSize * 0.15;
 
-    this._basicSquare({ x, y, size, rotation: 0 });
+    this.basicSquare({ x, y, size, rotation: 0 });
   }
 
-  _drawDiamond({ x, y, size }: DrawArgs): void {
-    this._basicSquare({ x, y, size, rotation: Math.PI / 4 });
+  private drawDiamond({ x, y, size }: DrawArgs): void {
+    this.basicSquare({ x, y, size, rotation: Math.PI / 4 });
   }
 
-  _drawRounded({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawRounded({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -207,12 +208,12 @@ export class QRDot {
     const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
 
     if (neighborsCount === 0) {
-      this._basicDot({ x, y, size, rotation: 0 });
+      this.basicDot({ x, y, size, rotation: 0 });
       return;
     }
 
     if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
-      this._basicSquare({ x, y, size, rotation: 0 });
+      this.basicSquare({ x, y, size, rotation: 0 });
       return;
     }
 
@@ -227,7 +228,7 @@ export class QRDot {
         rotation = -Math.PI / 2;
       }
 
-      this._basicCornerRounded({ x, y, size, rotation });
+      this.basicCornerRounded({ x, y, size, rotation });
       return;
     }
 
@@ -242,12 +243,12 @@ export class QRDot {
         rotation = -Math.PI / 2;
       }
 
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
   }
 
-  _drawVerticalLines({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawVerticalLine({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -260,29 +261,29 @@ export class QRDot {
       (leftNeighbor && !(topNeighbor || bottomNeighbor)) ||
       (rightNeighbor && !(topNeighbor || bottomNeighbor))
     ) {
-      this._basicDot({ x, y, size, rotation: 0 });
+      this.basicDot({ x, y, size, rotation: 0 });
       return;
     }
 
     if (topNeighbor && bottomNeighbor) {
-      this._basicSquare({ x, y, size, rotation: 0 });
+      this.basicSquare({ x, y, size, rotation: 0 });
       return;
     }
 
     if (topNeighbor && !bottomNeighbor) {
       const rotation = Math.PI / 2;
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
 
     if (bottomNeighbor && !topNeighbor) {
       const rotation = -Math.PI / 2;
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
   }
 
-  _drawHorizontalLines({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawHorizontalLine({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -295,29 +296,29 @@ export class QRDot {
       (topNeighbor && !(leftNeighbor || rightNeighbor)) ||
       (bottomNeighbor && !(leftNeighbor || rightNeighbor))
     ) {
-      this._basicDot({ x, y, size, rotation: 0 });
+      this.basicDot({ x, y, size, rotation: 0 });
       return;
     }
 
     if (leftNeighbor && rightNeighbor) {
-      this._basicSquare({ x, y, size, rotation: 0 });
+      this.basicSquare({ x, y, size, rotation: 0 });
       return;
     }
 
     if (leftNeighbor && !rightNeighbor) {
       const rotation = 0;
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
 
     if (rightNeighbor && !leftNeighbor) {
       const rotation = Math.PI;
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
   }
 
-  _drawExtraRounded({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawExtraRounded({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -326,12 +327,12 @@ export class QRDot {
     const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
 
     if (neighborsCount === 0) {
-      this._basicDot({ x, y, size, rotation: 0 });
+      this.basicDot({ x, y, size, rotation: 0 });
       return;
     }
 
     if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
-      this._basicSquare({ x, y, size, rotation: 0 });
+      this.basicSquare({ x, y, size, rotation: 0 });
       return;
     }
 
@@ -346,7 +347,7 @@ export class QRDot {
         rotation = -Math.PI / 2;
       }
 
-      this._basicCornerExtraRounded({ x, y, size, rotation });
+      this.basicCornerExtraRounded({ x, y, size, rotation });
       return;
     }
 
@@ -361,12 +362,12 @@ export class QRDot {
         rotation = -Math.PI / 2;
       }
 
-      this._basicSideRounded({ x, y, size, rotation });
+      this.basicSideRounded({ x, y, size, rotation });
       return;
     }
   }
 
-  _drawClassy({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawClassy({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -375,24 +376,24 @@ export class QRDot {
     const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
 
     if (neighborsCount === 0) {
-      this._basicCornersRounded({ x, y, size, rotation: Math.PI / 2 });
+      this.basicCornersRounded({ x, y, size, rotation: Math.PI / 2 });
       return;
     }
 
     if (!leftNeighbor && !topNeighbor) {
-      this._basicCornerRounded({ x, y, size, rotation: -Math.PI / 2 });
+      this.basicCornerRounded({ x, y, size, rotation: -Math.PI / 2 });
       return;
     }
 
     if (!rightNeighbor && !bottomNeighbor) {
-      this._basicCornerRounded({ x, y, size, rotation: Math.PI / 2 });
+      this.basicCornerRounded({ x, y, size, rotation: Math.PI / 2 });
       return;
     }
 
-    this._basicSquare({ x, y, size, rotation: 0 });
+    this.basicSquare({ x, y, size, rotation: 0 });
   }
 
-  _drawClassyRounded({ x, y, size, getNeighbor }: DrawArgs): void {
+  private drawClassyRounded({ x, y, size, getNeighbor }: DrawArgs): void {
     const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0;
     const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0;
     const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0;
@@ -401,20 +402,20 @@ export class QRDot {
     const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor;
 
     if (neighborsCount === 0) {
-      this._basicCornersRounded({ x, y, size, rotation: Math.PI / 2 });
+      this.basicCornersRounded({ x, y, size, rotation: Math.PI / 2 });
       return;
     }
 
     if (!leftNeighbor && !topNeighbor) {
-      this._basicCornerExtraRounded({ x, y, size, rotation: -Math.PI / 2 });
+      this.basicCornerExtraRounded({ x, y, size, rotation: -Math.PI / 2 });
       return;
     }
 
     if (!rightNeighbor && !bottomNeighbor) {
-      this._basicCornerExtraRounded({ x, y, size, rotation: Math.PI / 2 });
+      this.basicCornerExtraRounded({ x, y, size, rotation: Math.PI / 2 });
       return;
     }
 
-    this._basicSquare({ x, y, size, rotation: 0 });
+    this.basicSquare({ x, y, size, rotation: 0 });
   }
 }
