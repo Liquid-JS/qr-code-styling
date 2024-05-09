@@ -209,17 +209,6 @@ export class QRSVG {
     [this._dotsMask, this._dotsMaskGroup] = this._createMask("mask-dot-color");
     this._defs.appendChild(this._dotsMask);
 
-    this._createColor({
-      options: options.dotsOptions?.gradient,
-      color: options.dotsOptions.color,
-      additionalRotation: 0,
-      x: 0,
-      y: 0,
-      height: options.height,
-      width: options.width,
-      name: "dot-color"
-    });
-
     for (let i = 0; i < count; i++) {
       for (let j = 0; j < count; j++) {
         if (filter && !filter(i, j)) {
@@ -246,12 +235,19 @@ export class QRSVG {
       }
     }
 
+    let colorX = xBeginning;
+    let colorY = yBeginning;
+    let colorCount = count;
+
     if (options.shape === ShapeType.circle) {
       const margin = (this._options.backgroundOptions && this._options.backgroundOptions.margin) || 0;
       const additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2);
       const fakeCount = count + additionalDots * 2;
       const xFakeBeginning = xBeginning - additionalDots * dotSize;
       const yFakeBeginning = yBeginning - additionalDots * dotSize;
+      colorX = xFakeBeginning;
+      colorY = yFakeBeginning;
+      colorCount = count + additionalDots * 2;
       const fakeMatrix: number[][] = [];
       const center = Math.floor(fakeCount / 2);
 
@@ -301,6 +297,17 @@ export class QRSVG {
         }
       }
     }
+
+    this._createColor({
+      options: options.dotsOptions?.gradient,
+      color: options.dotsOptions.color,
+      additionalRotation: 0,
+      x: colorX,
+      y: colorY,
+      height: colorCount * dotSize,
+      width: colorCount * dotSize,
+      name: "dot-color"
+    });
   }
 
   drawCorners(): void {
