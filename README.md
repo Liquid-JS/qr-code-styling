@@ -97,7 +97,7 @@ const qrCode = new QRCodeStyling({
 
 const svgCode = await qrCode.serialize();
 
-const { width, height } = qrCode.size || {};
+const { width, height } = qrCode.size;
 const buffers = [];
 const doc = new PDFDocument({ size: [width, height] });
 doc.on("data", (v) => buffers.push(v));
