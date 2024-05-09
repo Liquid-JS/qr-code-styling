@@ -116,6 +116,7 @@ export class QRCornerSquare {
             `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
             `h ${-2 * dotSize}` +
             `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}` +
+            `z` +
             `M ${x + 2.5 * dotSize} ${y + dotSize}` +
             `h ${2 * dotSize}` +
             `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}` +
@@ -124,7 +125,8 @@ export class QRCornerSquare {
             `h ${-2 * dotSize}` +
             `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}` +
             `v ${-2 * dotSize}` +
-            `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}`
+            `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}` +
+            `z`
         );
       }
     });
@@ -182,6 +184,7 @@ export class QRCornerSquare {
             `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
             `h ${-2 * dotSize}` +
             `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}` +
+            "z" +
             `M ${x + 2.5 * dotSize} ${y + dotSize}` +
             `h ${2 * dotSize}` +
             `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}` +
@@ -189,7 +192,8 @@ export class QRCornerSquare {
             `h ${-3.5 * dotSize}` +
             `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}` +
             `v ${-2 * dotSize}` +
-            `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}`
+            `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}` +
+            `z`
         );
       }
     });
