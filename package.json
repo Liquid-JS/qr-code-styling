@@ -1,6 +1,6 @@
 {
   "name": "@liquid-js/qr-code-styling",
-  "version": "3.0.0-0",
+  "version": "3.0.0-1",
   "description": "Generate styled QR codes on web or in Node",
   "type": "module",
   "main": "./lib/qr-code-styling-node.js",
