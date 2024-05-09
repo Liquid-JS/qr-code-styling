@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v2.4.2...v3.0.0-0) (2024-05-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* use masking for colours instead of clipping
+
+### Features
+
+* improve compatibility of generated SVG ([0ba0e8f](https://github.com/Liquid-JS/qr-code-styling/commit/0ba0e8f78759c3d069dd58ac9a0441d4e20dca85))
+
 ### [2.4.2](https://github.com/Liquid-JS/qr-code-styling/compare/v2.4.1...v2.4.2) (2024-05-08)
 
 ### [2.4.1](https://github.com/Liquid-JS/qr-code-styling/compare/v2.4.0...v2.4.1) (2024-04-30)
