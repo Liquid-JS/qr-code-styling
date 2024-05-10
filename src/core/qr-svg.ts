@@ -5,6 +5,7 @@ import { browserImageTools } from "../tools/browser-image-tools.js";
 import { Gradient, GradientType } from "../utils/gradient.js";
 import { calculateImageSize } from "../utils/image.js";
 import { Options, ShapeType } from "../utils/options.js";
+import { numToAttr } from "../utils/svg.js";
 
 const squareMask = [
   [1, 1, 1, 1, 1, 1, 1],
@@ -73,9 +74,11 @@ export class QRSVG {
   ) {
     this.document = options.document;
     this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    this._element.setAttribute("width", String(options.width));
-    this._element.setAttribute("height", String(options.height));
-    this._element.setAttribute("viewBox", `0 0 ${options.width} ${options.height}`);
+    const width = numToAttr(options.width);
+    const height = numToAttr(options.height);
+    this._element.setAttribute("width", width);
+    this._element.setAttribute("height", height);
+    this._element.setAttribute("viewBox", `0 0 ${width} ${height}`);
     this.defs = this.document.createElementNS("http://www.w3.org/2000/svg", "defs");
     this._element.appendChild(this.defs);
     this.imageTools = options.imageTools || browserImageTools;
@@ -174,11 +177,11 @@ export class QRSVG {
       [this.backgroundMask, this.backgroundMaskGroup] = this.createMask("mask-background-color");
       this.defs.appendChild(this.backgroundMask);
 
-      element.setAttribute("x", String((options.width - size) / 2));
-      element.setAttribute("y", String((options.height - size) / 2));
-      element.setAttribute("width", String(size));
-      element.setAttribute("height", String(size));
-      element.setAttribute("rx", String((size / 2) * (options.backgroundOptions.round || 0)));
+      element.setAttribute("x", numToAttr((options.width - size) / 2));
+      element.setAttribute("y", numToAttr((options.height - size) / 2));
+      element.setAttribute("width", numToAttr(size));
+      element.setAttribute("height", numToAttr(size));
+      element.setAttribute("rx", numToAttr((size / 2) * (options.backgroundOptions.round || 0)));
 
       this.backgroundMaskGroup.appendChild(element);
     }
@@ -491,10 +494,10 @@ export class QRSVG {
       }
     }
 
-    image.setAttribute("x", String(dx));
-    image.setAttribute("y", String(dy));
-    image.setAttribute("width", `${dw}px`);
-    image.setAttribute("height", `${dh}px`);
+    image.setAttribute("x", numToAttr(dx));
+    image.setAttribute("y", numToAttr(dy));
+    image.setAttribute("width", `${numToAttr(dw)}px`);
+    image.setAttribute("height", `${numToAttr(dh)}px`);
 
     this._element.appendChild(image);
   }
@@ -520,10 +523,10 @@ export class QRSVG {
   }): void {
     const size = width > height ? width : height;
     const rect = this.document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("x", String(x));
-    rect.setAttribute("y", String(y));
-    rect.setAttribute("height", String(height));
-    rect.setAttribute("width", String(width));
+    rect.setAttribute("x", numToAttr(x));
+    rect.setAttribute("y", numToAttr(y));
+    rect.setAttribute("height", numToAttr(height));
+    rect.setAttribute("width", numToAttr(width));
     rect.setAttribute("style", `mask:url(#mask-${name})`);
 
     if (options) {
@@ -532,11 +535,11 @@ export class QRSVG {
         gradient = this.document.createElementNS("http://www.w3.org/2000/svg", "radialGradient");
         gradient.setAttribute("id", name);
         gradient.setAttribute("gradientUnits", "userSpaceOnUse");
-        gradient.setAttribute("fx", String(x + width / 2));
-        gradient.setAttribute("fy", String(y + height / 2));
-        gradient.setAttribute("cx", String(x + width / 2));
-        gradient.setAttribute("cy", String(y + height / 2));
-        gradient.setAttribute("r", String(size / 2));
+        gradient.setAttribute("fx", numToAttr(x + width / 2));
+        gradient.setAttribute("fy", numToAttr(y + height / 2));
+        gradient.setAttribute("cx", numToAttr(x + width / 2));
+        gradient.setAttribute("cy", numToAttr(y + height / 2));
+        gradient.setAttribute("r", numToAttr(size / 2));
       } else {
         const rotation = ((options.rotation || 0) + additionalRotation) % (2 * Math.PI);
         const positiveRotation = (rotation + 2 * Math.PI) % (2 * Math.PI);
@@ -573,15 +576,15 @@ export class QRSVG {
         gradient = this.document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
         gradient.setAttribute("id", name);
         gradient.setAttribute("gradientUnits", "userSpaceOnUse");
-        gradient.setAttribute("x1", String(Math.round(x0)));
-        gradient.setAttribute("y1", String(Math.round(y0)));
-        gradient.setAttribute("x2", String(Math.round(x1)));
-        gradient.setAttribute("y2", String(Math.round(y1)));
+        gradient.setAttribute("x1", numToAttr(x0));
+        gradient.setAttribute("y1", numToAttr(y0));
+        gradient.setAttribute("x2", numToAttr(x1));
+        gradient.setAttribute("y2", numToAttr(y1));
       }
 
       options.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
         const stop = this.document.createElementNS("http://www.w3.org/2000/svg", "stop");
-        stop.setAttribute("offset", `${100 * offset}%`);
+        stop.setAttribute("offset", `${numToAttr(100 * offset)}%`);
         stop.setAttribute("stop-color", color);
         gradient.appendChild(stop);
       });
@@ -603,8 +606,8 @@ export class QRSVG {
     mask.setAttribute("maskUnits", "userSpaceOnUse");
     mask.setAttribute("x", "0");
     mask.setAttribute("y", "0");
-    mask.setAttribute("width", String(options.width));
-    mask.setAttribute("height", String(options.height));
+    mask.setAttribute("width", numToAttr(options.width));
+    mask.setAttribute("height", numToAttr(options.height));
 
     const group = this.document.createElementNS("http://www.w3.org/2000/svg", "g");
     group.setAttribute("fill", "#fff");

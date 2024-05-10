@@ -1,5 +1,6 @@
 import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
 import { CornerSquareType } from "../utils/options.js";
+import { numToAttr } from "../utils/svg.js";
 
 export class QRCornerSquare {
   private _element?: SVGElement;
@@ -46,7 +47,7 @@ export class QRCornerSquare {
     const cy = y + size / 2;
 
     draw();
-    this._element?.setAttribute("transform", `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`);
+    this._element?.setAttribute("transform", `rotate(${numToAttr((180 * rotation) / Math.PI)},${cx},${cy})`);
   }
 
   private basicDot(args: BasicFigureDrawArgs): void {

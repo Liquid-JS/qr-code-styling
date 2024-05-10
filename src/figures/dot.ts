@@ -1,5 +1,6 @@
 import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
 import { DotType } from "../utils/options.js";
+import { numToAttr } from "../utils/svg.js";
 
 export class QRDot {
   private _element?: SVGElement;
@@ -61,7 +62,7 @@ export class QRDot {
     const cy = y + size / 2;
 
     draw();
-    this._element?.setAttribute("transform", `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`);
+    this._element?.setAttribute("transform", `rotate(${numToAttr((180 * rotation) / Math.PI)},${cx},${cy})`);
   }
 
   private basicDot(args: BasicFigureDrawArgs): void {
@@ -71,9 +72,9 @@ export class QRDot {
       ...args,
       draw: () => {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        this._element.setAttribute("cx", String(x + size / 2));
-        this._element.setAttribute("cy", String(y + size / 2));
-        this._element.setAttribute("r", String(size / 2));
+        this._element.setAttribute("cx", numToAttr(x + size / 2));
+        this._element.setAttribute("cy", numToAttr(y + size / 2));
+        this._element.setAttribute("r", numToAttr(size / 2));
       }
     });
   }
@@ -85,10 +86,10 @@ export class QRDot {
       ...args,
       draw: () => {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        this._element.setAttribute("x", String(x));
-        this._element.setAttribute("y", String(y));
-        this._element.setAttribute("width", String(size));
-        this._element.setAttribute("height", String(size));
+        this._element.setAttribute("x", numToAttr(x));
+        this._element.setAttribute("y", numToAttr(y));
+        this._element.setAttribute("width", numToAttr(size));
+        this._element.setAttribute("height", numToAttr(size));
       }
     });
   }
