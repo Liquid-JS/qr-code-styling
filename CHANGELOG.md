@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-4](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.0-3...v3.0.0-4) (2024-05-10)
+
+
+### Features
+
+* format numbers in svg paths ([ccfeeb1](https://github.com/Liquid-JS/qr-code-styling/commit/ccfeeb142cc1d437ec5d5e8327bbec397369a599))
+
 ## [3.0.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.0-2...v3.0.0-3) (2024-05-09)
 
 
