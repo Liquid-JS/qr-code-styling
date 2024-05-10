@@ -1,6 +1,6 @@
 import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
 import { DotType } from "../utils/options.js";
-import { numToAttr } from "../utils/svg.js";
+import { numToAttr, svgPath } from "../utils/svg.js";
 
 export class QRDot {
   private _element?: SVGElement;
@@ -104,10 +104,11 @@ export class QRDot {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y}` + //go to top left position
-            `v ${size}` + //draw line to left bottom corner
-            `h ${size / 2}` + //draw line to left bottom corner + half of size right
-            `a ${size / 2} ${size / 2}, 0, 0, 0, 0 ${-size}` // draw rounded corner
+          svgPath`M ${x} ${y}
+          v ${size}
+          h ${size / 2}
+          a ${size / 2} ${size / 2}, 0, 0, 0, 0 ${-size}
+          z`
         );
       }
     });
@@ -123,11 +124,12 @@ export class QRDot {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y}` + //go to top left position
-            `v ${size}` + //draw line to left bottom corner
-            `h ${size}` + //draw line to right bottom corner
-            `v ${-size / 2}` + //draw line to right bottom corner + half of size top
-            `a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}` // draw rounded corner
+          svgPath`M ${x} ${y}
+          v ${size}
+          h ${size}
+          v ${-size / 2}
+          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
+          z`
         );
       }
     });
@@ -143,10 +145,11 @@ export class QRDot {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y}` + //go to top left position
-            `v ${size}` + //draw line to left bottom corner
-            `h ${size}` + //draw line to right bottom corner
-            `a ${size} ${size}, 0, 0, 0, ${-size} ${-size}` // draw rounded top right corner
+          svgPath`M ${x} ${y}
+          v ${size}
+          h ${size}
+          a ${size} ${size}, 0, 0, 0, ${-size} ${-size}
+          z`
         );
       }
     });
@@ -162,12 +165,13 @@ export class QRDot {
         this._element = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y}` + //go to left top position
-            `v ${size / 2}` + //draw line to left top corner + half of size bottom
-            `a ${size / 2} ${size / 2}, 0, 0, 0, ${size / 2} ${size / 2}` + // draw rounded left bottom corner
-            `h ${size / 2}` + //draw line to right bottom corner
-            `v ${-size / 2}` + //draw line to right bottom corner + half of size top
-            `a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}` // draw rounded right top corner
+          svgPath`M ${x} ${y}
+          v ${size / 2}
+          a ${size / 2} ${size / 2}, 0, 0, 0, ${size / 2} ${size / 2}
+          h ${size / 2}
+          v ${-size / 2}
+          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
+          z`
         );
       }
     });

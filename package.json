@@ -57,7 +57,7 @@
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "rollup": "^4.17.2",
-    "rollup-plugin-esformatter": "^3.1.0",
+    "rollup-plugin-html-literals": "^1.1.8",
     "rollup-plugin-replace-regex": "^1.1.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "standard-version": "^9.5.0",

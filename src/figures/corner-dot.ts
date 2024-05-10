@@ -1,6 +1,6 @@
 import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from "../types/helper.js";
 import { CornerDotType } from "../utils/options.js";
-import { numToAttr } from "../utils/svg.js";
+import { numToAttr, svgPath } from "../utils/svg.js";
 
 export class QRCornerDot {
   private _element?: SVGElement;
@@ -243,15 +243,15 @@ export class QRCornerDot {
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y + 2.5 * dotSize}` +
-            `v ${2 * dotSize}` +
-            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}` +
-            `h ${4.5 * dotSize}` +
-            `v ${-4.5 * dotSize}` +
-            `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
-            `h ${-2 * dotSize}` +
-            `H ${x}` +
-            `z`
+          svgPath`M ${x} ${y + 2.5 * dotSize}
+          v ${2 * dotSize}
+          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}
+          h ${4.5 * dotSize}
+          v ${-4.5 * dotSize}
+          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}
+          h ${-2 * dotSize}
+          H ${x}
+          z`
         );
       }
     });
@@ -268,15 +268,15 @@ export class QRCornerDot {
         this._element.setAttribute("clip-rule", "evenodd");
         this._element.setAttribute(
           "d",
-          `M ${x} ${y + dotSize / 2}` +
-            `v ${dotSize / 4}` +
-            `a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${dotSize / 4}, ${dotSize / 4}` +
-            `h ${(dotSize / 4) * 3}` +
-            `v ${(-dotSize / 4) * 3}` +
-            `a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${-dotSize / 4}, ${-dotSize / 4}` +
-            `h ${-dotSize / 2}` +
-            `a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${-dotSize / 4}, ${dotSize / 4}` +
-            `z`
+          svgPath`M ${x} ${y + dotSize / 2}
+          v ${dotSize / 4}
+          a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${dotSize / 4}, ${dotSize / 4}
+          h ${(dotSize / 4) * 3}
+          v ${(-dotSize / 4) * 3}
+          a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${-dotSize / 4}, ${-dotSize / 4}
+          h ${-dotSize / 2}
+          a ${dotSize / 4}, ${dotSize / 4} 0 0 0 ${-dotSize / 4}, ${dotSize / 4}
+          z`
         );
       }
     });

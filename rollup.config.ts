@@ -8,8 +8,28 @@ import terser from "@rollup/plugin-terser";
 import { RollupOptions } from "rollup";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
+import template from "rollup-plugin-html-literals";
 import replace from "rollup-plugin-replace-regex";
 import typescript from "rollup-plugin-typescript2";
+
+const common = () => [
+  typescript(),
+  commonjs(),
+  template({
+    options: {
+      shouldMinify: () => true
+    }
+  })
+];
+
+const bundle = () => [
+  nodeResolve(),
+  compiler({
+    language_in: "ECMASCRIPT_2020",
+    language_out: "ECMASCRIPT_2020"
+  }) as any,
+  terser()
+];
 
 const config: RollupOptions[] = [
   {
@@ -20,16 +40,7 @@ const config: RollupOptions[] = [
       format: "esm",
       name: "QRCodeStyling"
     },
-    plugins: [
-      typescript(),
-      commonjs(),
-      nodeResolve(),
-      compiler({
-        language_in: "ECMASCRIPT_2020",
-        language_out: "ECMASCRIPT_2020"
-      }) as any,
-      terser()
-    ]
+    plugins: [...common(), ...bundle()]
   },
   {
     input: "src/kanji.ts",
@@ -39,16 +50,7 @@ const config: RollupOptions[] = [
       format: "esm",
       name: "Kanji"
     },
-    plugins: [
-      typescript(),
-      commonjs(),
-      nodeResolve(),
-      compiler({
-        language_in: "ECMASCRIPT_2020",
-        language_out: "ECMASCRIPT_2020"
-      }) as any,
-      terser()
-    ]
+    plugins: [...common(), ...bundle()]
   },
   {
     input: "src/node.ts",
@@ -58,8 +60,7 @@ const config: RollupOptions[] = [
       format: "esm"
     },
     plugins: [
-      typescript(),
-      commonjs(),
+      ...common(),
       compiler({
         language_in: "ECMASCRIPT_2020",
         language_out: "ECMASCRIPT_2020",
