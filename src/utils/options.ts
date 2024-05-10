@@ -6,13 +6,13 @@ export enum DotType {
   dot = "dot",
   randomDot = "random-dot",
   rounded = "rounded",
+  extraRounded = "extra-rounded",
   verticalLine = "vertical-line",
   horizontalLine = "horizontal-line",
   classy = "classy",
   classyRounded = "classy-rounded",
   square = "square",
   smallSquare = "small-square",
-  extraRounded = "extra-rounded",
   diamond = "diamond"
 }
 
