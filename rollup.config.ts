@@ -6,16 +6,14 @@ import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import { RollupOptions } from "rollup";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-import template from "rollup-plugin-html-literals";
+import { minifyTemplateLiterals } from "rollup-plugin-minify-template-literals";
 import replace from "rollup-plugin-replace-regex";
 import typescript from "rollup-plugin-typescript2";
 
 const common = () => [
   typescript(),
   commonjs(),
-  template({
+  minifyTemplateLiterals({
     options: {
       shouldMinify: () => true
     }

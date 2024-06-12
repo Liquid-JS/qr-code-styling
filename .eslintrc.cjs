@@ -2,6 +2,7 @@ module.exports = {
   env: {
     node: true
   },
+  ignorePatterns: ["lib", "node_modules", "coverage", "docs"],
   parser: "@typescript-eslint/parser",
   extends: [
     "eslint:recommended",
