@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.2](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.1...v3.0.2) (2024-06-13)
+
+
+### Bug Fixes
+
+* duoble XML header ([e8779a7](https://github.com/Liquid-JS/qr-code-styling/commit/e8779a7edb2a0fba68ffbf0d15c47a065d3640c4))
+
 ### [3.0.1](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.0...v3.0.1) (2024-05-10)
 
 
