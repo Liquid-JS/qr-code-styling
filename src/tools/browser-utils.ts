@@ -81,8 +81,8 @@ export async function download(
   }
 
   if (extension.toLowerCase() === "svg") {
-    let source = await qrCode.serialize();
-    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+    const source = await qrCode.serialize();
+    if (!source) return;
     const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
     downloadURI(url, `${name}.svg`);
   } else {
