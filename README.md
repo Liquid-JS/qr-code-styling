@@ -70,7 +70,9 @@ Try it here <https://styled-qr.liquidjs.io/>
 
 ### Node
 
-> :warning: **Note**: make sure to install optional peer dependencies when running on Node (not needed for browser environments)
+> ⚠️ **Note**: make sure to install optional peer dependencies when running on Node (not needed for browser environments)
+>
+>     npm install @xmldom/xmldom file-type qrcode-generator sharp
 
 ```js
 import { QRCodeStyling } from "@liquid-js/qr-code-styling";
