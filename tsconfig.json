@@ -3,7 +3,7 @@
     "strictPropertyInitialization": true,
     "noUnusedParameters": true,
     "skipLibCheck": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "outDir": "./lib/",
     "sourceMap": true,
     "module": "esnext",
