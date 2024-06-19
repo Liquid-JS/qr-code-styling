@@ -53,11 +53,13 @@ export class QRCodeStyling extends _QRCodeStyling {
       ...options,
       document: options.document || dom,
       imageTools: options.imageTools || {
-        toDataURL: (url: string | Buffer | Blob): Promise<string> =>
-          loadImage(url).then(
+        toDataURL: (url: string | Buffer | Blob): Promise<string> => {
+          if (typeof url == "string" && url.startsWith("data:")) return Promise.resolve(url);
+          return loadImage(url).then(
             ({ contentType, data }) =>
               `data:${contentType?.replace("application/xml", "image/svg+xml")};base64,${data.toString("base64")}`
-          ),
+          );
+        },
         getSize: async (src: string | Blob | Buffer): Promise<{ width: number; height: number }> => {
           const { data } = Buffer.isBuffer(options.image) ? { data: options.image } : await loadImage(src);
           const meta = await sharp(data).metadata();

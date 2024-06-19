@@ -1,5 +1,6 @@
 export const browserImageTools = {
   toDataURL(url: string | Buffer | Blob): Promise<string> {
+    if (typeof url == "string" && url.startsWith("data:")) return Promise.resolve(url);
     return new Promise((resolve, reject) => {
       if (typeof url == "string") {
         const xhr = new XMLHttpRequest();
