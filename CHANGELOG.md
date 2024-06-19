@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.2...v3.1.0) (2024-06-19)
+
+
+### Features
+
+* make node dependencies optional to reduce install size for browser environments ([82e5489](https://github.com/Liquid-JS/qr-code-styling/commit/82e548928d52a5564aea8aaf79f491b517599b4e))
+
 ### [3.0.2](https://github.com/Liquid-JS/qr-code-styling/compare/v3.0.1...v3.0.2) (2024-06-13)
 
 
