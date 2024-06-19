@@ -70,6 +70,8 @@ Try it here <https://styled-qr.liquidjs.io/>
 
 ### Node
 
+> :warning: **Note**: make sure to install optional peer dependencies when running on Node (not needed for browser environments)
+
 ```js
 import { QRCodeStyling } from "@liquid-js/qr-code-styling";
 import { writeFile } from "fs/promises";
