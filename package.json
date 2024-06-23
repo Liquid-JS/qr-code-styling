@@ -78,7 +78,7 @@
     "sharp": "^0.33.4",
     "standard-version": "^9.5.0",
     "ts-jest": "^29.1.5",
-    "typedoc": "^0.25.13",
+    "typedoc": "^0.26.1",
     "typescript": "^5.5.2",
     "vite": "^5.3.1"
   },
@@ -122,7 +122,7 @@
     "url": "https://github.com/Liquid-JS/qr-code-styling/issues"
   },
   "homepage": "https://styled-qr.liquidjs.io/",
-  "packageManager": "yarn@4.3.0",
+  "packageManager": "yarn@4.3.1",
   "clean-package": {
     "remove": [
       "packageManager",
