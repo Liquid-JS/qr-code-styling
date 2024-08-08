@@ -12,7 +12,7 @@ export const browserImageTools = {
           reader.readAsDataURL(xhr.response);
         };
         xhr.onerror = xhr.onabort = xhr.ontimeout = reject;
-        xhr.open("GET", url);
+        xhr.open("GET", url, true);
         xhr.responseType = "blob";
         xhr.send();
       } else {
