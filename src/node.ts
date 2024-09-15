@@ -18,7 +18,7 @@ export const browserUtils: typeof _browserUtils | undefined = undefined;
 
 export class QRCodeStyling extends _QRCodeStyling {
   constructor(options: RecursivePartial<Options>) {
-    const dom = new DOMImplementation().createDocument(null, null);
+    const dom = new DOMImplementation().createDocument(null, "");
     const imageCache = new Map<string, Promise<{ contentType?: string | null; data: Buffer }>>();
 
     const loadImage = async function (url: string | Buffer | Blob) {
@@ -46,12 +46,15 @@ export class QRCodeStyling extends _QRCodeStyling {
       }
     };
 
-    global.XMLSerializer = XMLSerializer;
-    global.DOMParser = DOMParser;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    global.XMLSerializer = XMLSerializer as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    global.DOMParser = DOMParser as any;
 
     super({
       ...options,
-      document: options.document || dom,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      document: options.document || (dom as any),
       imageTools: options.imageTools || {
         toDataURL: (url: string | Buffer | Blob): Promise<string> => {
           if (typeof url == "string" && url.startsWith("data:")) return Promise.resolve(url);
