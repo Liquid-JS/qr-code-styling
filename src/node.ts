@@ -67,9 +67,8 @@ export class QRCodeStyling extends _QRCodeStyling {
           const { data } = Buffer.isBuffer(options.image) ? { data: options.image } : await loadImage(src);
           const meta = await sharp(data).metadata();
           return {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             width: meta.width!,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
             height: meta.height!
           };
         }

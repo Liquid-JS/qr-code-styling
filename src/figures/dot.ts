@@ -49,6 +49,9 @@ export class QRDot {
       case DotType.smallSquare:
         drawFunction = this.drawSmallSquare;
         break;
+      case DotType.tinySquare:
+        drawFunction = this.drawTinySquare;
+        break;
       case DotType.square:
       default:
         drawFunction = this.drawSquare;
@@ -196,6 +199,16 @@ export class QRDot {
     size = originalSize * 0.7;
     x = x + originalSize * 0.15;
     y = y + originalSize * 0.15;
+
+    this.basicSquare({ x, y, size, rotation: 0 });
+  }
+
+  private drawTinySquare({ x, y, size }: DrawArgs): void {
+    const originalSize = size;
+
+    size = originalSize * 0.3;
+    x = x + originalSize * 0.35;
+    y = y + originalSize * 0.35;
 
     this.basicSquare({ x, y, size, rotation: 0 });
   }

@@ -2,7 +2,7 @@ import qrcode from "qrcode-generator";
 import { RecursivePartial } from "../types/helper.js";
 import { Mode } from "../types/qrcode.js";
 import { mergeDeep } from "../utils/merge.js";
-import { Options, ShapeType, defaultOptions, sanitizeOptions } from "../utils/options.js";
+import { ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from "../utils/options.js";
 import { ErrorCorrectionPercents, getMode } from "../utils/qrcode.js";
 import { QRSVG } from "./qr-svg.js";
 
@@ -144,7 +144,9 @@ export class QRCodeStyling {
     if (!this.qr) {
       return;
     }
-    const count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * this.qr.getModuleCount());
+    let moduleCount = this.qr.getModuleCount();
+    if (this.options.imageOptions.mode == ImageMode.background) moduleCount += 2;
+    const count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * moduleCount);
     const margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
     const size = Math.ceil(this.options.dotsOptions.size * (count + 2 * margin));
     this.qrSVG = new QRSVG({

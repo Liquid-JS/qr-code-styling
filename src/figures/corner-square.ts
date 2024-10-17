@@ -4,9 +4,14 @@ import { numToAttr, svgPath } from "../utils/svg.js";
 
 export class QRCornerSquare {
   private _element?: SVGElement;
+  private _fill?: SVGElement;
 
   get element() {
     return this._element;
+  }
+
+  get fill() {
+    return this._fill;
   }
 
   constructor(
@@ -48,6 +53,7 @@ export class QRCornerSquare {
 
     draw();
     this._element?.setAttribute("transform", `rotate(${numToAttr((180 * rotation) / Math.PI)},${cx},${cy})`);
+    this._fill?.setAttribute("transform", `rotate(${numToAttr((180 * rotation) / Math.PI)},${cx},${cy})`);
   }
 
   private basicDot(args: BasicFigureDrawArgs): void {
@@ -67,6 +73,14 @@ export class QRCornerSquare {
           m 0 ${dotSize}
           a ${size / 2 - dotSize} ${size / 2 - dotSize} 0 1 1 -0.1 0
           Z`
+        );
+        this._fill = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._fill.setAttribute("clip-rule", "evenodd");
+        this._fill.setAttribute(
+          "d",
+          svgPath`M ${x + size / 2} ${y - dotSize}
+          a ${size / 2 + dotSize} ${size / 2 + dotSize} 0 1 0 0.1 0
+          z`
         );
       }
     });
@@ -94,6 +108,17 @@ export class QRCornerSquare {
           h ${-size + 2 * dotSize}
           z`
         );
+        this._fill = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._fill.setAttribute("clip-rule", "evenodd");
+        this._fill.setAttribute(
+          "d",
+          svgPath`
+          M ${x - dotSize} ${y - dotSize}
+          h ${size + 2 * dotSize}
+          v ${size + 2 * dotSize}
+          h ${-size - 2 * dotSize}
+          z`
+        );
       }
     });
   }
@@ -119,6 +144,22 @@ export class QRCornerSquare {
           h ${-2 * dotSize}
           a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}
           z
+          M ${x + 2.5 * dotSize} ${y + dotSize}
+          h ${2 * dotSize}
+          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
+          v ${2 * dotSize}
+          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${dotSize * 1.5}
+          h ${-2 * dotSize}
+          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
+          v ${-2 * dotSize}
+          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}
+          z`
+        );
+        this._fill = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._fill.setAttribute("clip-rule", "evenodd");
+        this._fill.setAttribute(
+          "d",
+          svgPath`
           M ${x + 2.5 * dotSize} ${y + dotSize}
           h ${2 * dotSize}
           a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
@@ -163,6 +204,20 @@ export class QRCornerSquare {
           v ${-3.5 * dotSize}
           z`
         );
+        this._fill = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._fill.setAttribute("clip-rule", "evenodd");
+        this._fill.setAttribute(
+          "d",
+          svgPath`
+          M ${x + 0.5 * dotSize} ${y - dotSize}
+          h ${4 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${dotSize * 3.5}
+          v ${5.5 * dotSize}
+          h ${-5.5 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          v ${-5.5 * dotSize}
+          z`
+        );
       }
     });
   }
@@ -195,6 +250,21 @@ export class QRCornerSquare {
           a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
           v ${-2 * dotSize}
           a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}
+          z`
+        );
+        this._fill = this.document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._fill.setAttribute("clip-rule", "evenodd");
+        this._fill.setAttribute(
+          "d",
+          svgPath`
+          M ${x + 0.5 * dotSize} ${y - dotSize}
+          h ${4 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${dotSize * 3.5}
+          v ${5.5 * dotSize}
+          h ${-5.5 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          v ${-2 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${-dotSize * 3.5}
           z`
         );
       }

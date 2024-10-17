@@ -13,6 +13,7 @@ export enum DotType {
   classyRounded = "classy-rounded",
   square = "square",
   smallSquare = "small-square",
+  tinySquare = "tiny-square",
   diamond = "diamond"
 }
 
@@ -38,6 +39,17 @@ export enum CornerSquareType {
 export enum ShapeType {
   square = "square",
   circle = "circle"
+}
+
+export enum ImageMode {
+  /**
+   * Place image in the center of the code
+   */
+  center = "center",
+  /**
+   * Use image as background, draw dots over it
+   */
+  background = "background"
 }
 
 export interface Options {
@@ -68,11 +80,24 @@ export interface Options {
   };
   imageOptions: {
     /**
-     * Hide all dots covered by the image
+     * Image mode
      *
-     * @default true
+     * @default ImageMode.center
      */
-    hideBackgroundDots: boolean;
+    mode: `${ImageMode}`;
+    /**
+     * Fill blank areas of the code with selected color
+     */
+    fill: {
+      /**
+       * Color of QR dots
+       *
+       * @default "rgba(255,255,255,0.75)"
+       */
+      color: string;
+      /** Gradient of Corners Dot */
+      gradient?: Gradient;
+    };
     /**
      * Coefficient of the image size
      *
@@ -163,10 +188,13 @@ export const defaultOptions: Options = {
     errorCorrectionLevel: ErrorCorrectionLevel.Q
   },
   imageOptions: {
-    hideBackgroundDots: true,
+    mode: ImageMode.center,
     imageSize: 0.4,
     crossOrigin: undefined,
-    margin: 0
+    margin: 0,
+    fill: {
+      color: "rgba(255,255,255,1)"
+    }
   },
   dotsOptions: {
     type: DotType.square,
@@ -180,10 +208,17 @@ export function sanitizeOptions(options: Options): Options {
 
   newOptions.imageOptions = {
     ...newOptions.imageOptions,
-    hideBackgroundDots: Boolean(newOptions.imageOptions.hideBackgroundDots),
     imageSize: Math.min(1, Number(newOptions.imageOptions.imageSize)) || 1,
-    margin: Number(newOptions.imageOptions.margin)
+    margin: Number(newOptions.imageOptions.margin),
+    fill: {
+      ...newOptions.imageOptions.fill
+    }
   };
+
+  if (newOptions.imageOptions.mode == ImageMode.background) newOptions.imageOptions.margin = 0;
+  if (newOptions.imageOptions.fill.gradient) {
+    newOptions.imageOptions.fill.gradient = sanitizeGradient(newOptions.imageOptions.fill.gradient);
+  }
 
   newOptions.dotsOptions = {
     ...newOptions.dotsOptions

@@ -4,7 +4,7 @@ import { QRDot } from "../figures/dot.js";
 import { browserImageTools } from "../tools/browser-image-tools.js";
 import { Gradient, GradientType } from "../utils/gradient.js";
 import { calculateImageSize } from "../utils/image.js";
-import { Options, ShapeType } from "../utils/options.js";
+import { DotType, ImageMode, Options, ShapeType } from "../utils/options.js";
 import { numToAttr } from "../utils/svg.js";
 
 const squareMask = [
@@ -37,6 +37,49 @@ const alignmentCount = [
   [1, 1]
 ];
 
+const PATTERN_POSITION_TABLE = [
+  [],
+  [6, 18],
+  [6, 22],
+  [6, 26],
+  [6, 30],
+  [6, 34],
+  [6, 22, 38],
+  [6, 24, 42],
+  [6, 26, 46],
+  [6, 28, 50],
+  [6, 30, 54],
+  [6, 32, 58],
+  [6, 34, 62],
+  [6, 26, 46, 66],
+  [6, 26, 48, 70],
+  [6, 26, 50, 74],
+  [6, 30, 54, 78],
+  [6, 30, 56, 82],
+  [6, 30, 58, 86],
+  [6, 34, 62, 90],
+  [6, 28, 50, 72, 94],
+  [6, 26, 50, 74, 98],
+  [6, 30, 54, 78, 102],
+  [6, 28, 54, 80, 106],
+  [6, 32, 58, 84, 110],
+  [6, 30, 58, 86, 114],
+  [6, 34, 62, 90, 118],
+  [6, 26, 50, 74, 98, 122],
+  [6, 30, 54, 78, 102, 126],
+  [6, 26, 52, 78, 104, 130],
+  [6, 30, 56, 82, 108, 134],
+  [6, 34, 60, 86, 112, 138],
+  [6, 30, 58, 86, 114, 142],
+  [6, 34, 62, 90, 118, 146],
+  [6, 30, 54, 78, 102, 126, 150],
+  [6, 24, 50, 76, 102, 128, 154],
+  [6, 28, 54, 80, 106, 132, 158],
+  [6, 32, 58, 84, 110, 136, 162],
+  [6, 26, 54, 82, 110, 138, 166],
+  [6, 30, 58, 86, 114, 142, 170]
+];
+
 export class QRSVG {
   private _element: SVGElement;
 
@@ -51,6 +94,9 @@ export class QRSVG {
 
   private dotsMask?: SVGElement;
   private dotsMaskGroup?: SVGElement;
+
+  private lightDotsMask?: SVGElement;
+  private lightDotsMaskGroup?: SVGElement;
 
   private qr?: QRCode;
   private document: Document;
@@ -109,23 +155,51 @@ export class QRSVG {
       //We need it to get image size
       const size = await this.imageTools.getSize(this.options.image, this.options.imageOptions.crossOrigin);
       const { imageOptions, errorCorrectionPercent } = this.options;
-      const coverLevel = imageOptions.imageSize * errorCorrectionPercent;
-      const alignment = alignmentCount.find((v) => v[0] <= typeNumber) || [0, 0];
-      const maxHiddenDots = Math.floor(coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment[1] * 25));
 
-      drawImageSize = calculateImageSize({
-        originalWidth: size.width,
-        originalHeight: size.height,
-        maxHiddenDots,
-        maxHiddenAxisDots: count - 14,
-        dotSize,
-        margin: imageOptions.margin
-      });
+      if (imageOptions.mode == ImageMode.background) {
+        const maxWidth = this.options.width * imageOptions.imageSize;
+        const maxHeight = this.options.height * imageOptions.imageSize;
+        let { width, height } = size;
+
+        height = (height / width) * maxWidth;
+        width = maxWidth;
+
+        if (height > maxHeight) {
+          width = (width / height) * maxHeight;
+          height = maxHeight;
+        }
+
+        drawImageSize = {
+          hideXDots: 0,
+          hideYDots: 0,
+          width,
+          height
+        };
+      } else {
+        const coverLevel = imageOptions.imageSize * errorCorrectionPercent;
+        const alignment = alignmentCount.find((v) => v[0] <= typeNumber) || [0, 0];
+        const maxHiddenDots = Math.floor(
+          coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment[1] * 25)
+        );
+
+        drawImageSize = calculateImageSize({
+          originalWidth: size.width,
+          originalHeight: size.height,
+          maxHiddenDots,
+          maxHiddenAxisDots: count - 14,
+          dotSize,
+          margin: imageOptions.margin
+        });
+      }
+    }
+
+    if (this.options.image && drawImageSize.width > 0 && drawImageSize.height > 0) {
+      await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
     }
 
     this.drawBackground();
     this.drawDots((i: number, j: number): boolean => {
-      if (this.options.imageOptions.hideBackgroundDots) {
+      if (this.options.imageOptions.mode == ImageMode.center) {
         if (
           i >= (count - drawImageSize.hideXDots) / 2 &&
           i < (count + drawImageSize.hideXDots) / 2 &&
@@ -136,21 +210,11 @@ export class QRSVG {
         }
       }
 
-      if (squareMask[i]?.[j] || squareMask[i - count + 7]?.[j] || squareMask[i]?.[j - count + 7]) {
-        return false;
-      }
-
-      if (dotMask[i]?.[j] || dotMask[i - count + 7]?.[j] || dotMask[i]?.[j - count + 7]) {
-        return false;
-      }
+      if ((i < 8 && j < 8) || (i >= count - 8 && j < 8) || (j >= count - 8 && i < 8)) return false;
 
       return true;
     });
     this.drawCorners();
-
-    if (this.options.image && drawImageSize.width > 0 && drawImageSize.height > 0) {
-      await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
-    }
   }
 
   drawBackground(): void {
@@ -203,98 +267,150 @@ export class QRSVG {
     const dotSize = this.options.dotsOptions.size;
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
     const yBeginning = Math.floor((options.height - count * dotSize) / 2);
-    const dot = new QRDot(options.dotsOptions.type, this.document);
+    let dot = new QRDot(options.dotsOptions.type, this.document);
+    const overlayDot = new QRDot(DotType.tinySquare, this.document);
+    const markerDot = new QRDot(DotType.square, this.document);
 
     [this.dotsMask, this.dotsMaskGroup] = this.createMask("mask-dot-color");
     this.defs.appendChild(this.dotsMask);
 
-    for (let i = 0; i < count; i++) {
-      for (let j = 0; j < count; j++) {
-        if (filter && !filter(i, j)) {
+    if (options.imageOptions.mode == ImageMode.background) {
+      [this.lightDotsMask, this.lightDotsMaskGroup] = this.createMask("mask-light-dot-color");
+      this.defs.appendChild(this.lightDotsMask);
+    }
+
+    let margin = 0;
+    let additionalDots = 0;
+    let fakeCount = count;
+
+    if (options.shape === ShapeType.circle) {
+      margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
+      additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2);
+      fakeCount = count + additionalDots * 2;
+    }
+
+    const xFakeBeginning = xBeginning - additionalDots * dotSize;
+    const yFakeBeginning = yBeginning - additionalDots * dotSize;
+    const colorX = xFakeBeginning;
+    const colorY = yFakeBeginning;
+    const colorCount = count + additionalDots * 2;
+    const fakeMatrix: (boolean | undefined)[][] = new Array(fakeCount);
+    const center = Math.floor(fakeCount / 2);
+
+    for (let i = 0; i < fakeCount; i++) {
+      fakeMatrix[i] = new Array(fakeCount);
+      for (let j = 0; j < fakeCount; j++) {
+        if (
+          i > additionalDots - 1 &&
+          i < fakeCount - additionalDots &&
+          j > additionalDots - 1 &&
+          j < fakeCount - additionalDots
+        ) {
+          const ii = i - additionalDots;
+          const jj = j - additionalDots;
+          if (filter && !filter(ii, jj)) fakeMatrix[i][j] = undefined;
+          else fakeMatrix[i][j] = !!this.qr.isDark(jj, ii);
           continue;
         }
-        if (!this.qr?.isDark(j, i)) {
+
+        if (
+          options.shape === ShapeType.circle &&
+          Math.sqrt((i - center) * (i - center) + (j - center) * (j - center)) > center
+        ) {
+          fakeMatrix[i][j] = undefined;
+          continue;
+        }
+
+        if (
+          i == additionalDots - 1 ||
+          i == fakeCount - additionalDots ||
+          j == additionalDots - 1 ||
+          j == fakeCount - additionalDots
+        ) {
+          if (
+            (j == additionalDots - 1 && (i < additionalDots + 8 || i > fakeCount - additionalDots - 9)) ||
+            (j == fakeCount - additionalDots && i < additionalDots + 8) ||
+            (i == additionalDots - 1 && (j < additionalDots + 8 || j > fakeCount - additionalDots - 9)) ||
+            (i == fakeCount - additionalDots && j < additionalDots + 8)
+          )
+            fakeMatrix[i][j] = undefined;
+          else fakeMatrix[i][j] = false;
+          continue;
+        }
+
+        if (this.lightDotsMask) continue;
+
+        // Get random dots from QR code to show it outside of QR code
+        fakeMatrix[i][j] = this.qr.isDark(
+          j - 2 * additionalDots < 0 ? j : j >= count ? j - 2 * additionalDots : j - additionalDots,
+          i - 2 * additionalDots < 0 ? i : i >= count ? i - 2 * additionalDots : i - additionalDots
+        );
+      }
+    }
+
+    const typeNr = (count - 17) / 4;
+    const alignment = PATTERN_POSITION_TABLE[typeNr - 1];
+
+    for (let i = 0; i < fakeCount; i++) {
+      const iAlign = alignment.find((v) => i - additionalDots > v - 3 && i - additionalDots < v + 3);
+      for (let j = 0; j < fakeCount; j++) {
+        const jAlign = alignment.find((v) => j - additionalDots > v - 3 && j - additionalDots < v + 3);
+        if (fakeMatrix[i][j] == undefined) continue;
+
+        if (this.lightDotsMask) {
+          dot =
+            iAlign &&
+            jAlign &&
+            ((iAlign != alignment[0] && jAlign != alignment[0]) ||
+              (jAlign != alignment[0] && jAlign != alignment[alignment.length - 1]) ||
+              (iAlign != alignment[0] && iAlign != alignment[alignment.length - 1]))
+              ? markerDot
+              : overlayDot;
+        }
+
+        if (!fakeMatrix[i][j]) {
+          if (this.lightDotsMask) {
+            dot.draw({
+              x: xFakeBeginning + i * dotSize,
+              y: yFakeBeginning + j * dotSize,
+              size: dotSize,
+              getNeighbor: (xOffset: number, yOffset: number): boolean => {
+                return fakeMatrix[i + xOffset]?.[j + yOffset] === false;
+              }
+            });
+
+            if (dot.element && this.lightDotsMaskGroup) {
+              this.lightDotsMaskGroup.appendChild(dot.element);
+            }
+          }
           continue;
         }
 
         dot.draw({
-          x: xBeginning + i * dotSize,
-          y: yBeginning + j * dotSize,
+          x: xFakeBeginning + i * dotSize,
+          y: yFakeBeginning + j * dotSize,
           size: dotSize,
           getNeighbor: (xOffset: number, yOffset: number): boolean => {
-            if (i + xOffset < 0 || j + yOffset < 0 || i + xOffset >= count || j + yOffset >= count) return false;
-            if (filter && !filter(i + xOffset, j + yOffset)) return false;
-            return !!this.qr && this.qr.isDark(j + yOffset, i + xOffset);
+            return fakeMatrix[i + xOffset]?.[j + yOffset] === true;
           }
         });
-
-        if (dot.element && this.dotsMask) {
+        if (dot.element && this.dotsMaskGroup) {
           this.dotsMaskGroup.appendChild(dot.element);
         }
       }
     }
 
-    let colorX = xBeginning;
-    let colorY = yBeginning;
-    let colorCount = count;
-
-    if (options.shape === ShapeType.circle) {
-      const margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
-      const additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2);
-      const fakeCount = count + additionalDots * 2;
-      const xFakeBeginning = xBeginning - additionalDots * dotSize;
-      const yFakeBeginning = yBeginning - additionalDots * dotSize;
-      colorX = xFakeBeginning;
-      colorY = yFakeBeginning;
-      colorCount = count + additionalDots * 2;
-      const fakeMatrix: number[][] = [];
-      const center = Math.floor(fakeCount / 2);
-
-      for (let i = 0; i < fakeCount; i++) {
-        fakeMatrix[i] = [];
-        for (let j = 0; j < fakeCount; j++) {
-          if (
-            i >= additionalDots - 1 &&
-            i <= fakeCount - additionalDots &&
-            j >= additionalDots - 1 &&
-            j <= fakeCount - additionalDots
-          ) {
-            fakeMatrix[i][j] = 0;
-            continue;
-          }
-
-          if (Math.sqrt((i - center) * (i - center) + (j - center) * (j - center)) > center) {
-            fakeMatrix[i][j] = 0;
-            continue;
-          }
-
-          //Get random dots from QR code to show it outside of QR code
-          fakeMatrix[i][j] = this.qr.isDark(
-            j - 2 * additionalDots < 0 ? j : j >= count ? j - 2 * additionalDots : j - additionalDots,
-            i - 2 * additionalDots < 0 ? i : i >= count ? i - 2 * additionalDots : i - additionalDots
-          )
-            ? 1
-            : 0;
-        }
-      }
-
-      for (let i = 0; i < fakeCount; i++) {
-        for (let j = 0; j < fakeCount; j++) {
-          if (!fakeMatrix[i][j]) continue;
-
-          dot.draw({
-            x: xFakeBeginning + i * dotSize,
-            y: yFakeBeginning + j * dotSize,
-            size: dotSize,
-            getNeighbor: (xOffset: number, yOffset: number): boolean => {
-              return !!fakeMatrix[i + xOffset]?.[j + yOffset];
-            }
-          });
-          if (dot.element && this.dotsMask) {
-            this.dotsMaskGroup.appendChild(dot.element);
-          }
-        }
-      }
+    if (this.lightDotsMask) {
+      this.createColor({
+        options: options.imageOptions.fill.gradient,
+        color: options.imageOptions.fill.color,
+        additionalRotation: 0,
+        x: colorX - dotSize,
+        y: colorY - dotSize,
+        height: (colorCount + 2) * dotSize,
+        width: (colorCount + 2) * dotSize,
+        name: "light-dot-color"
+      });
     }
 
     this.createColor({
@@ -371,12 +487,29 @@ export class QRSVG {
         if (cornersSquare.element && cornersSquareMaskGroup) {
           cornersSquareMaskGroup.appendChild(cornersSquare.element);
         }
+
+        if (cornersSquare.fill && this.lightDotsMaskGroup) {
+          this.lightDotsMaskGroup.appendChild(cornersSquare.fill);
+        }
       } else {
         const dot = new QRDot(options.dotsOptions.type, this.document);
 
         for (let i = 0; i < squareMask.length; i++) {
           for (let j = 0; j < squareMask[i].length; j++) {
             if (!squareMask[i]?.[j]) {
+              if (this.lightDotsMask && !dotMask[i]?.[j]) {
+                dot.draw({
+                  x: x + i * dotSize,
+                  y: y + j * dotSize,
+                  size: dotSize,
+                  getNeighbor: (xOffset: number, yOffset: number): boolean =>
+                    !squareMask[i + xOffset]?.[j + yOffset] && !dotMask[i + xOffset]?.[j + yOffset]
+                });
+
+                if (dot.element && this.lightDotsMaskGroup) {
+                  this.lightDotsMaskGroup.appendChild(dot.element);
+                }
+              }
               continue;
             }
 
@@ -392,6 +525,28 @@ export class QRSVG {
             }
           }
         }
+
+        if (this.lightDotsMask)
+          for (let i = -1; i < 8; i++) {
+            for (let j = -1; j < 8; j++) {
+              if (i == -1 || i == 7 || j == -1 || j == 7) {
+                dot.draw({
+                  x: x + i * dotSize,
+                  y: y + j * dotSize,
+                  size: dotSize,
+                  getNeighbor: (xOffset: number, yOffset: number): boolean => {
+                    const ii = i + xOffset;
+                    const jj = j + yOffset;
+                    return ii >= -1 && ii <= 7 && jj >= -1 && jj <= 7 && (ii == -1 || ii == 7 || jj == -1 || jj == 7);
+                  }
+                });
+
+                if (dot.element && this.lightDotsMaskGroup) {
+                  this.lightDotsMaskGroup.appendChild(dot.element);
+                }
+              }
+            }
+          }
       }
 
       if (options.cornersDotOptions?.gradient || options.cornersDotOptions?.color) {
