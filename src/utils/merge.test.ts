@@ -1,62 +1,72 @@
+import { suite, test } from "@testdeck/mocha";
+import { expect } from "chai";
 import { mergeDeep } from "./merge.js";
 
-describe("Test getMode function", () => {
-  const simpleObject = {
-    str: "foo"
-  };
+const simpleObject = {
+  str: "foo"
+};
 
-  const objectWithArray = {
+const objectWithArray = {
+  arr: [1, 2]
+};
+
+const nestedObject = {
+  obj: {
+    foo: "foo"
+  }
+};
+
+const nestedObjectWithArray = {
+  obj: {
     arr: [1, 2]
-  };
+  }
+};
 
-  const nestedObject = {
-    obj: {
-      foo: "foo"
-    }
-  };
+@suite("Test merge function")
+export class TestMarge {
+  @test("Merge two objects")
+  mergeTwo() {
+    expect(mergeDeep(simpleObject, { str: "bar" })).to.deep.equal({ str: "bar" });
+  }
 
-  const nestedObjectWithArray = {
-    obj: {
-      arr: [1, 2]
-    }
-  };
+  @test("Merge two objects with arrays")
+  objectWithArray() {
+    expect(mergeDeep(objectWithArray, { arr: [3, 4] })).to.deep.equal({ arr: [3, 4] });
+  }
 
-  it("Merge two objects", () => {
-    expect(mergeDeep(simpleObject, { str: "bar" })).toEqual({ str: "bar" });
-  });
+  @test("Merge two objects with nested objects")
+  nested() {
+    expect(mergeDeep(nestedObject, { obj: { bar: "bar" } })).to.deep.equal({ obj: { foo: "foo", bar: "bar" } });
+  }
 
-  it("Merge two objects with arrays", () => {
-    expect(mergeDeep(objectWithArray, { arr: [3, 4] })).toEqual({ arr: [3, 4] });
-  });
-
-  it("Merge two objects with nested objects", () => {
-    expect(mergeDeep(nestedObject, { obj: { bar: "bar" } })).toEqual({ obj: { foo: "foo", bar: "bar" } });
-  });
-
-  it("Merge three objects with nested objects", () => {
-    expect(mergeDeep(nestedObjectWithArray, nestedObject, { obj: { arr: [3, 4] } })).toEqual({
+  @test("Merge three objects with nested objects")
+  multiNested() {
+    expect(mergeDeep(nestedObjectWithArray, nestedObject, { obj: { arr: [3, 4] } })).to.deep.equal({
       obj: {
         foo: "foo",
         arr: [3, 4]
       }
     });
-  });
+  }
 
-  it("Don't mutate target", () => {
+  @test("Don't mutate target")
+  immutable() {
     const target = {
       str: "foo"
     };
 
-    expect(mergeDeep(target, { str: "bar" })).not.toBe(target);
-  });
+    expect(mergeDeep(target, { str: "bar" })).to.not.equal(target);
+  }
 
-  it("Skip undefined sources", () => {
-    expect(mergeDeep(simpleObject, undefined)).toBe(simpleObject);
-  });
+  @test("Skip undefined sources")
+  skipUndefined() {
+    expect(mergeDeep(simpleObject, undefined)).to.equal(simpleObject);
+  }
 
-  it("Skip undefined sources dfs", () => {
+  @test("Merge array items")
+  mergeArray() {
     const simpleArray = [1, 2];
 
-    expect(mergeDeep(simpleArray, [3, 4])).toEqual(simpleArray);
-  });
-});
+    expect(mergeDeep(simpleArray, [3, 4])).to.deep.equal(simpleArray);
+  }
+}

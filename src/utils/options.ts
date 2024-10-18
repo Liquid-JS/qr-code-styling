@@ -1,5 +1,5 @@
+import { ErrorCorrectionLevel, Mode, TypeNumber } from "@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js";
 import { browserImageTools } from "../tools/browser-image-tools.js";
-import { ErrorCorrectionLevel, TypeNumber } from "../types/qrcode.js";
 import { Gradient, sanitizeGradient } from "./gradient.js";
 
 export enum DotType {
@@ -71,7 +71,7 @@ export interface Options {
    * @default ShapeType.square
    */
   shape: `${ShapeType}`;
-  /** Options will be passed to `qrcode-generator` lib */
+  /** Options will be passed to `@liquid-js/qrcode-generator` lib */
   qrOptions: {
     typeNumber: TypeNumber;
     mode?: `${Mode}`;

@@ -1,3 +1,5 @@
+import { QRCodeMinimal } from "@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js";
+import { QRUtil } from "@liquid-js/qrcode-generator/lib/qrcode/QRUtil.js";
 import { QRCornerDot } from "../figures/corner-dot.js";
 import { QRCornerSquare } from "../figures/corner-square.js";
 import { QRDot } from "../figures/dot.js";
@@ -27,59 +29,6 @@ const dotMask = [
   [0, 0, 0, 0, 0, 0, 0]
 ];
 
-const alignmentCount = [
-  [35, 49],
-  [28, 36],
-  [21, 25],
-  [14, 16],
-  [7, 9],
-  [2, 4],
-  [1, 1]
-];
-
-const PATTERN_POSITION_TABLE = [
-  [],
-  [6, 18],
-  [6, 22],
-  [6, 26],
-  [6, 30],
-  [6, 34],
-  [6, 22, 38],
-  [6, 24, 42],
-  [6, 26, 46],
-  [6, 28, 50],
-  [6, 30, 54],
-  [6, 32, 58],
-  [6, 34, 62],
-  [6, 26, 46, 66],
-  [6, 26, 48, 70],
-  [6, 26, 50, 74],
-  [6, 30, 54, 78],
-  [6, 30, 56, 82],
-  [6, 30, 58, 86],
-  [6, 34, 62, 90],
-  [6, 28, 50, 72, 94],
-  [6, 26, 50, 74, 98],
-  [6, 30, 54, 78, 102],
-  [6, 28, 54, 80, 106],
-  [6, 32, 58, 84, 110],
-  [6, 30, 58, 86, 114],
-  [6, 34, 62, 90, 118],
-  [6, 26, 50, 74, 98, 122],
-  [6, 30, 54, 78, 102, 126],
-  [6, 26, 52, 78, 104, 130],
-  [6, 30, 56, 82, 108, 134],
-  [6, 34, 60, 86, 112, 138],
-  [6, 30, 58, 86, 114, 142],
-  [6, 34, 62, 90, 118, 146],
-  [6, 30, 54, 78, 102, 126, 150],
-  [6, 24, 50, 76, 102, 128, 154],
-  [6, 28, 54, 80, 106, 132, 158],
-  [6, 32, 58, 84, 110, 136, 162],
-  [6, 26, 54, 82, 110, 138, 166],
-  [6, 30, 58, 86, 114, 142, 170]
-];
-
 export class QRSVG {
   private _element: SVGElement;
 
@@ -98,7 +47,7 @@ export class QRSVG {
   private lightDotsMask?: SVGElement;
   private lightDotsMaskGroup?: SVGElement;
 
-  private qr?: QRCode;
+  private qr?: QRCodeMinimal;
   private document: Document;
   private imageTools: typeof browserImageTools;
 
@@ -138,7 +87,7 @@ export class QRSVG {
     return this.options.height;
   }
 
-  async drawQR(qr: QRCode): Promise<void> {
+  async drawQR(qr: QRCodeMinimal): Promise<void> {
     const count = qr.getModuleCount();
     const typeNumber = parseInt(((count - 17) / 4).toFixed(0), 10);
     const dotSize = this.options.dotsOptions.size;
@@ -177,9 +126,9 @@ export class QRSVG {
         };
       } else {
         const coverLevel = imageOptions.imageSize * errorCorrectionPercent;
-        const alignment = alignmentCount.find((v) => v[0] <= typeNumber) || [0, 0];
+        const alignment = QRUtil.getPatternPosition(typeNumber);
         const maxHiddenDots = Math.floor(
-          coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment[1] * 25)
+          coverLevel * (count * count - 3 * 8 * 8 - 2 * (count - 16) - alignment.length ** 2 * 25)
         );
 
         drawImageSize = calculateImageSize({
@@ -349,7 +298,7 @@ export class QRSVG {
     }
 
     const typeNr = (count - 17) / 4;
-    const alignment = PATTERN_POSITION_TABLE[typeNr - 1];
+    const alignment = QRUtil.getPatternPosition(typeNr);
 
     for (let i = 0; i < fakeCount; i++) {
       const iAlign = alignment.find((v) => i - additionalDots > v - 3 && i - additionalDots < v + 3);

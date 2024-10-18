@@ -1,17 +1,19 @@
-import qrcode from "qrcode-generator";
+import { QRCodeMinimal } from "@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js";
+import { stringToBytes_UTF8 } from "@liquid-js/qrcode-generator/lib/text/stringToBytes_UTF8.js";
 import { RecursivePartial } from "../types/helper.js";
-import { Mode } from "../types/qrcode.js";
 import { mergeDeep } from "../utils/merge.js";
 import { ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from "../utils/options.js";
 import { ErrorCorrectionPercents, getMode } from "../utils/qrcode.js";
 import { QRSVG } from "./qr-svg.js";
+
+Object.assign(QRCodeMinimal.stringToBytesFuncs, stringToBytes_UTF8);
 
 export type ExtensionFunction = (svg: SVGElement, options: RecursivePartial<Options>) => void;
 
 export class QRCodeStyling {
   private options: Options;
   private container?: HTMLElement;
-  private qr?: QRCode;
+  private qr?: QRCodeMinimal;
   private extension?: ExtensionFunction;
   private svgDrawingPromise?: Promise<void>;
   private qrSVG?: QRSVG;
@@ -43,18 +45,12 @@ export class QRCodeStyling {
     }
 
     if (this.options.stringToBytesFuncs) {
-      Object.assign(qrcode.stringToBytesFuncs, this.options.stringToBytesFuncs);
+      Object.assign(QRCodeMinimal.stringToBytesFuncs, this.options.stringToBytesFuncs);
       delete this.options.stringToBytesFuncs;
     }
 
-    this.qr = qrcode(this.options.qrOptions.typeNumber, this.options.qrOptions.errorCorrectionLevel);
-    let mode = this.options.qrOptions.mode || getMode(this.options.data);
-    if (mode == Mode.unicode) {
-      qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
-      mode = Mode.byte;
-    } else {
-      qrcode.stringToBytes = qrcode.stringToBytesFuncs["default"];
-    }
+    this.qr = new QRCodeMinimal(this.options.qrOptions.typeNumber, this.options.qrOptions.errorCorrectionLevel);
+    const mode = this.options.qrOptions.mode || getMode(this.options.data);
     this.qr.addData(this.options.data, mode);
     this.qr.make();
 

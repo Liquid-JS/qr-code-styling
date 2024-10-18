@@ -1,7 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["jest"]
+    "types": ["jsdom"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
-  "include": ["./src/**/*", "**/*.test.js", "**/*.test.ts"]
+  "include": ["./src/**/*", "**/*.test.js", "**/*.test.ts"],
+  "exclude": []
 }

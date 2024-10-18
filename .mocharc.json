@@ -1,0 +1,13 @@
+{
+  "diff": true,
+  "opts": false,
+  "package": "./package.json",
+  "reporter": "spec",
+  "slow": 75,
+  "timeout": 0,
+  "ui": "bdd",
+  "require": "./test/register.cjs",
+  "recursive": true,
+  "watch-files": ["./src/**/*.ts"],
+  "spec": "src/**/*.test.ts"
+}

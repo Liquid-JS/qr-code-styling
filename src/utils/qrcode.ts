@@ -1,4 +1,4 @@
-import { ErrorCorrectionLevel, Mode } from "../types/qrcode.js";
+import { ErrorCorrectionLevel, Mode } from "@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js";
 
 export const ErrorCorrectionPercents = {
   [ErrorCorrectionLevel.L]: 0.07,

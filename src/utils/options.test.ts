@@ -1,14 +1,19 @@
+import { suite, test } from "@testdeck/mocha";
+import { expect } from "chai";
 import { defaultOptions } from "./options.js";
 
-describe("Test default QROptions", () => {
-  it("The export of the module should be an object", () => {
-    expect(typeof defaultOptions).toBe("object");
-  });
+@suite("Test default QROptions")
+export class OptionsTest {
+  @test("The export of the module should be an object")
+  isObject() {
+    expect(typeof defaultOptions).to.equal("object");
+  }
 
-  describe("Test the content of options", () => {
+  @test("Test the content of options")
+  keys() {
     const optionsKeys = ["data", "qrOptions", "imageOptions", "dotsOptions"];
-    it.each(optionsKeys)("The options should contain particular keys", (key) => {
-      expect(Object.keys(defaultOptions)).toContain(key);
+    optionsKeys.forEach((key) => {
+      expect(Object.keys(defaultOptions)).to.contain(key, "The options should contain particular keys");
     });
-  });
-});
+  }
+}
