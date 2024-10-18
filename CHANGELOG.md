@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-1...v4.0.0-2) (2024-10-18)
+
+
+### Bug Fixes
+
+* export image mode ([c69d710](https://github.com/Liquid-JS/qr-code-styling/commit/c69d710b8b8aba934a0df720cdcc962f059d59ff))
+
 ## [4.0.0-1](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-0...v4.0.0-1) (2024-10-18)
 
 
