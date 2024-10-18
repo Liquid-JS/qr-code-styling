@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-2...v4.0.0-3) (2024-10-18)
+
+
+### Bug Fixes
+
+* add overlay image mode to align with `hideBackgroundDots: false` ([ca0cbac](https://github.com/Liquid-JS/qr-code-styling/commit/ca0cbac88cffa041b39e47697ce555830d5efd2d))
+
 ## [4.0.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-1...v4.0.0-2) (2024-10-18)
 
 
