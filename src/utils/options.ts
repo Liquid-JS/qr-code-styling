@@ -47,6 +47,10 @@ export enum ImageMode {
    */
   center = "center",
   /**
+   * Place image over the center of the code
+   */
+  overlay = "overlay",
+  /**
    * Use image as background, draw dots over it
    */
   background = "background"

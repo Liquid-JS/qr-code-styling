@@ -144,7 +144,12 @@ export class QRSVG {
 
     this.drawBackground();
 
-    if (this.options.image && drawImageSize.width > 0 && drawImageSize.height > 0) {
+    if (
+      this.options.imageOptions.mode != ImageMode.overlay &&
+      this.options.image &&
+      drawImageSize.width > 0 &&
+      drawImageSize.height > 0
+    ) {
       await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
     }
 
@@ -164,6 +169,16 @@ export class QRSVG {
 
       return true;
     });
+
+    if (
+      this.options.imageOptions.mode == ImageMode.overlay &&
+      this.options.image &&
+      drawImageSize.width > 0 &&
+      drawImageSize.height > 0
+    ) {
+      await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
+    }
+
     this.drawCorners();
   }
 
