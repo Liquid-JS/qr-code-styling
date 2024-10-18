@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v3.1.3...v4.0.0-0) (2024-10-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* requires `@liquid-js/qrcode-generator` for node support
+* replace `hideBackgroundDots` for `ImageMode`
+
+### Features
+
+* background image ([3011efe](https://github.com/Liquid-JS/qr-code-styling/commit/3011efee1d9d90e8ea663f863a94837a4ee3772f))
+* switch to `@liquid-js/qrcode-generator` for smaller size and better type support ([7b1ce11](https://github.com/Liquid-JS/qr-code-styling/commit/7b1ce114c0d39abb6054b5fedfd1e5a6af350a56))
+
 ### [3.1.3](https://github.com/Liquid-JS/qr-code-styling/compare/v3.1.2...v3.1.3) (2024-09-15)
 
 ### [3.1.2](https://github.com/Liquid-JS/qr-code-styling/compare/v3.1.1...v3.1.2) (2024-08-11)
