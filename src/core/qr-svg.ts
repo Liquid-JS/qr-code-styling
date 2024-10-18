@@ -142,11 +142,12 @@ export class QRSVG {
       }
     }
 
+    this.drawBackground();
+
     if (this.options.image && drawImageSize.width > 0 && drawImageSize.height > 0) {
       await this.drawImage({ width: drawImageSize.width, height: drawImageSize.height, count, dotSize });
     }
 
-    this.drawBackground();
     this.drawDots((i: number, j: number): boolean => {
       if (this.options.imageOptions.mode == ImageMode.center) {
         if (
