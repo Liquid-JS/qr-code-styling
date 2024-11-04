@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-5](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-4...v4.0.0-5) (2024-11-04)
+
+
+### Bug Fixes
+
+* overlay mode no margin ([eea63d6](https://github.com/Liquid-JS/qr-code-styling/commit/eea63d6292dc6906e7d23704e6994051dc862761))
+
 ## [4.0.0-4](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-3...v4.0.0-4) (2024-11-04)
 
 
