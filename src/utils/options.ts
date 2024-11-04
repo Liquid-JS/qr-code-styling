@@ -219,7 +219,7 @@ export function sanitizeOptions(options: Options): Options {
     }
   };
 
-  //if (newOptions.imageOptions.mode == ImageMode.background) newOptions.imageOptions.margin = 0;
+  if (newOptions.imageOptions.mode == ImageMode.overlay) newOptions.imageOptions.margin = 0;
   if (newOptions.imageOptions.fill.gradient) {
     newOptions.imageOptions.fill.gradient = sanitizeGradient(newOptions.imageOptions.fill.gradient);
   }
