@@ -106,8 +106,9 @@ export class QRSVG {
       const { imageOptions, errorCorrectionPercent } = this.options;
 
       if (imageOptions.mode == ImageMode.background) {
-        const maxWidth = this.options.width * imageOptions.imageSize;
-        const maxHeight = this.options.height * imageOptions.imageSize;
+        const margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
+        const maxWidth = (this.options.width - 2 * margin * dotSize) * imageOptions.imageSize;
+        const maxHeight = (this.options.height - 2 * margin * dotSize) * imageOptions.imageSize;
         let { width, height } = size;
 
         height = (height / width) * maxWidth;
@@ -228,8 +229,9 @@ export class QRSVG {
       throw "The canvas is too small.";
     }
 
-    const minSize = Math.min(options.width, options.height);
     const dotSize = this.options.dotsOptions.size;
+    let minSize = Math.min(options.width, options.height);
+    if (options.imageOptions.mode == ImageMode.background) minSize -= 2 * dotSize * (options.imageOptions.margin || 0);
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
     const yBeginning = Math.floor((options.height - count * dotSize) / 2);
     let dot = new QRDot(options.dotsOptions.type, this.document);
@@ -251,6 +253,9 @@ export class QRSVG {
     if (options.shape === ShapeType.circle) {
       margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
       additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2);
+      fakeCount = count + additionalDots * 2;
+    } else if (options.imageOptions.mode == ImageMode.background) {
+      additionalDots = 1;
       fakeCount = count + additionalDots * 2;
     }
 
@@ -303,7 +308,7 @@ export class QRSVG {
           continue;
         }
 
-        if (this.lightDotsMask) continue;
+        // if (this.lightDotsMask) continue;
 
         // Get random dots from QR code to show it outside of QR code
         fakeMatrix[i][j] = this.qr.isDark(
@@ -370,10 +375,10 @@ export class QRSVG {
         options: options.imageOptions.fill.gradient,
         color: options.imageOptions.fill.color,
         additionalRotation: 0,
-        x: colorX - dotSize,
-        y: colorY - dotSize,
-        height: (colorCount + 2) * dotSize,
-        width: (colorCount + 2) * dotSize,
+        x: colorX,
+        y: colorY,
+        height: colorCount * dotSize,
+        width: colorCount * dotSize,
         name: "light-dot-color"
       });
     }
@@ -582,7 +587,8 @@ export class QRSVG {
     const options = this.options;
     const xBeginning = Math.floor((options.width - count * dotSize) / 2);
     const yBeginning = Math.floor((options.height - count * dotSize) / 2);
-    const margin = options.imageOptions.margin * dotSize;
+    let margin = options.imageOptions.margin * dotSize;
+    if (options.imageOptions.mode == ImageMode.background) margin = 0;
     const dx = xBeginning + margin + (count * dotSize - width) / 2;
     const dy = yBeginning + margin + (count * dotSize - height) / 2;
     const dw = width - margin * 2;

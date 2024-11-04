@@ -141,9 +141,12 @@ export class QRCodeStyling {
       return;
     }
     let moduleCount = this.qr.getModuleCount();
-    if (this.options.imageOptions.mode == ImageMode.background) moduleCount += 2;
-    const count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * moduleCount);
-    const margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
+    if (this.options.imageOptions.mode == ImageMode.background && this.options.shape != ShapeType.circle)
+      moduleCount += 2;
+    let count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * moduleCount);
+    if (count % 2 == 0) count -= 1;
+    let margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0;
+    if (this.options.imageOptions.mode == ImageMode.background) margin += this.options.imageOptions.margin || 0;
     const size = Math.ceil(this.options.dotsOptions.size * (count + 2 * margin));
     this.qrSVG = new QRSVG({
       ...this.options,
