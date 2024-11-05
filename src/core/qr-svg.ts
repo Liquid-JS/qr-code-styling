@@ -308,8 +308,6 @@ export class QRSVG {
           continue;
         }
 
-        // if (this.lightDotsMask) continue;
-
         // Get random dots from QR code to show it outside of QR code
         fakeMatrix[i][j] = this.qr.isDark(
           j - 2 * additionalDots < 0 ? j : j >= count ? j - 2 * additionalDots : j - additionalDots,

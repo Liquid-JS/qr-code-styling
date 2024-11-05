@@ -24,7 +24,7 @@
     "lib"
   ],
   "peerDependencies": {
-    "@liquid-js/qrcode-generator": "^1.0.0-8",
+    "@liquid-js/qrcode-generator": "^1.0.1",
     "@xmldom/xmldom": "^0.9.0",
     "file-type": "^19.0.0",
     "sharp": ">0.32.1 <1.0.0"
@@ -47,7 +47,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.14.0",
-    "@liquid-js/qrcode-generator": "^1.0.0-8",
+    "@liquid-js/qrcode-generator": "^1.0.1",
     "@liquid-js/rollup-plugin-closure-compiler": "^0.27.1",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
@@ -72,6 +72,7 @@
     "husky": "^9.1.6",
     "jsdom": "^25.0.1",
     "jsdom-global": "^3.0.2",
+    "mocha": "^10.8.2",
     "npm-check-updates": "^17.1.10",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
@@ -136,8 +137,5 @@
       "devDependencies",
       "clean-package"
     ]
-  },
-  "dependencies": {
-    "mocha": "^10.8.2"
   }
 }

@@ -59,19 +59,13 @@ export function drawToCanvas(
 
 export async function download(
   qrCode: QRCodeStyling,
-  downloadOptions: `${FileExtension}` | { name?: string; extension: `${FileExtension}` },
+  downloadOptions?: { name?: string; extension: `${FileExtension}` },
   options?: RecursivePartial<CanvasOptions>
 ): Promise<void> {
   let extension: `${FileExtension}` = FileExtension.png;
   let name = "qr";
 
-  //TODO remove deprecated code in the v2
-  if (typeof downloadOptions === "string") {
-    extension = downloadOptions;
-    console.warn(
-      "Extension is deprecated as argument for 'download' method, please pass object { name: '...', extension: '...' } as argument"
-    );
-  } else if (typeof downloadOptions === "object" && downloadOptions !== null) {
+  if (downloadOptions) {
     if (downloadOptions.name) {
       name = downloadOptions.name;
     }
