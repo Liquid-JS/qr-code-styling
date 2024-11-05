@@ -4,6 +4,7 @@ import { QRCornerDot } from "../figures/corner-dot.js";
 import { QRCornerSquare } from "../figures/corner-square.js";
 import { QRDot } from "../figures/dot.js";
 import { browserImageTools } from "../tools/browser-image-tools.js";
+import { parseColor } from "../utils/color.js";
 import { Gradient, GradientType } from "../utils/gradient.js";
 import { calculateImageSize } from "../utils/image.js";
 import { DotType, ImageMode, Options, ShapeType } from "../utils/options.js";
@@ -614,7 +615,10 @@ export class QRSVG {
       if (data) {
         const container = new DOMParser().parseFromString(data, "text/xml");
         const rootEl = Array.from(container.getElementsByTagName("svg"));
-        if (rootEl.length) image = rootEl[0];
+        if (rootEl.length) {
+          image = rootEl[0];
+          image.setAttribute("overflow", "visible");
+        }
       }
     }
 
@@ -709,14 +713,19 @@ export class QRSVG {
       options.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
         const stop = this.document.createElementNS("http://www.w3.org/2000/svg", "stop");
         stop.setAttribute("offset", `${numToAttr(100 * offset)}%`);
-        stop.setAttribute("stop-color", color);
+
+        const parsed = parseColor(color);
+        stop.setAttribute("stop-color", parsed.value);
+        if (parsed.alpha < 1) stop.setAttribute("stop-opacity", parsed.alpha.toFixed(7));
         gradient.appendChild(stop);
       });
 
       rect.setAttribute("fill", `url(#${name})`);
       this.defs.appendChild(gradient);
     } else if (color) {
-      rect.setAttribute("fill", color);
+      const parsed = parseColor(color);
+      rect.setAttribute("fill", parsed.value);
+      if (parsed.alpha < 1) rect.setAttribute("opacity", parsed.alpha.toFixed(7));
     }
 
     this._element.appendChild(rect);
