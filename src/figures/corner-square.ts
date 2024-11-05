@@ -160,15 +160,15 @@ export class QRCornerSquare {
         this._fill.setAttribute(
           "d",
           svgPath`
-          M ${x + 2.5 * dotSize} ${y + dotSize}
-          h ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
+          M ${x - dotSize} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${dotSize * 1.5}
-          h ${-2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${dotSize * 3.5} ${dotSize * 3.5}
+          h ${2 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${dotSize * 3.5} ${-dotSize * 3.5}
           v ${-2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          h ${-2 * dotSize}
+          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${-dotSize * 3.5} ${dotSize * 3.5}
           z`
         );
       }
