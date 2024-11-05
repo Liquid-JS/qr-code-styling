@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.1...v4.0.2) (2024-11-05)
+
+
+### Bug Fixes
+
+* svg color opacity support in AI ([13b66e5](https://github.com/Liquid-JS/qr-code-styling/commit/13b66e561bfefae29e3541ec2f836440067edc36))
+
 ### [4.0.1](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0...v4.0.1) (2024-11-05)
 
 ## [4.0.0](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-5...v4.0.0) (2024-11-05)
