@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-5...v4.0.0) (2024-11-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* use `{ extension: 'png' }` instead of `'png'`
+
+* remove deprecated extension in download util ([4e52117](https://github.com/Liquid-JS/qr-code-styling/commit/4e52117544861585f80c1d39260bef1bda313ecf))
+
 ## [4.0.0-5](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.0-4...v4.0.0-5) (2024-11-04)
 
 
