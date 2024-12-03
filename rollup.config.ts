@@ -10,6 +10,18 @@ import { minifyTemplateLiterals } from "rollup-plugin-minify-template-literals";
 import replace from "rollup-plugin-replace-regex";
 import typescript from "rollup-plugin-typescript2";
 
+const repl = replace({
+  regexValues: {
+    "\\$([a-zA-Z0-9_]*(\\$\\d+)?)(\\$[\\w$]*?)?\\$\\$": (_, m) => {
+      return m.replace(/\$([a-zA-Z0-9_]*(\$\d+)?)(\$[\w$]*?)?\$\$/, "$1");
+    }
+  },
+  preventAssignment: false,
+  delimiters: ["", ""]
+});
+// @ts-expect-error hidden api
+repl.renderChunk = repl.__renderChunk;
+
 const common = () => [
   typescript(),
   commonjs(),
@@ -65,15 +77,7 @@ const config: RollupOptions[] = [
         formatting: "PRETTY_PRINT",
         debug: "true"
       }) as any,
-      replace({
-        regexValues: {
-          "\\$([a-zA-Z0-9_]*(\\$\\d+)?)(\\$[\\w$]*?)?\\$\\$": (_, m) => {
-            return m.replace(/\$([a-zA-Z0-9_]*(\$\d+)?)(\$[\w$]*?)?\$\$/, "$1");
-          }
-        },
-        preventAssignment: false,
-        delimiters: ["", ""]
-      }),
+      repl,
       terser({ mangle: false, ecma: 2020, output: { beautify: true } })
     ]
   }
