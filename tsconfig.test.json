@@ -5,6 +5,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": ["./src/**/*", "**/*.test.js", "**/*.test.ts"],
+  "include": ["./src/**/*", "**/*.test.js", "**/*.test.ts", "rollup.config.ts"],
   "exclude": []
 }

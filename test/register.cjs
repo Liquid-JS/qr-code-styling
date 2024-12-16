@@ -2,7 +2,7 @@
 const { pathToFileURL } = require("url");
 const { register } = require("module");
 process.env.TS_NODE_PROJECT = "tsconfig.test.json";
-register("ts-node/esm", pathToFileURL("./"));
+register("ts-node-maintained/esm", pathToFileURL("./"));
 
 require("source-map-support/register.js");
 require("jsdom-global")(undefined, { resources: "usable", pretendToBeVisual: true });
