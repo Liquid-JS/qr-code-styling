@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0 # Fetch all tags
 
       - name: Create release for tag
-        uses: Liquid-JS/release-tag@main
+        uses: Liquid-JS/release-tag@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
