@@ -1,6 +1,8 @@
 # QR Code Styling
 
-[![Version](https://img.shields.io/npm/v/@liquid-js/qr-code-styling.svg)](https://www.npmjs.org/package/@liquid-js/qr-code-styling)
+[![GitHub license](https://img.shields.io/github/license/Liquid-JS/qr-code-styling.svg)](https://github.com/Liquid-JS/qr-code-styling/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/dm/@liquid-js/qr-code-styling.svg)](https://www.npmjs.com/package/@liquid-js/qr-code-styling)
+[![scope](https://img.shields.io/npm/v/@liquid-js/qr-code-styling.svg)](https://www.npmjs.com/package/@liquid-js/qr-code-styling)
 
 JavaScript library for generating QR codes with customizable styling.
 
