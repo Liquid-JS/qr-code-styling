@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [4.0.7](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.6...v4.0.7) (2025-01-09)
+
+
+### Bug Fixes
+
+* eslint ([9701fb0](https://github.com/Liquid-JS/qr-code-styling/commit/9701fb0fe4e9faeb3cde0bf2e7f5e1b85320408e))
 
 ### [4.0.6](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.5...v4.0.6) (2024-12-16)
 
