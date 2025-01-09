@@ -204,7 +204,6 @@ export default config(
             'constructor-super': 'error',
             'curly': 'off',
             'eqeqeq': 'off',
-            'guard-for-in': 'error',
             'id-match': 'off',
             'max-classes-per-file': 'off',
             'no-bitwise': 'off',
