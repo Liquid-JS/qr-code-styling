@@ -11,54 +11,54 @@
     <button type="button"
         id="download">Download</button>
     <script type="module">
-        import { QRCodeStyling, browserUtils } from "./index.ts";
+        import { QRCodeStyling, browserUtils } from './index.ts'
 
         const options = {
-            shape: "circle",
-            type: "svg",
-            data: "h",
-            image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+            shape: 'circle',
+            type: 'svg',
+            data: 'h',
+            image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
             dotsOptions: {
-                type: "extra-rounded",
+                type: 'extra-rounded',
                 gradient: {
-                    type: "linear", //radial,
+                    type: 'linear', //radial,
                     rotation: Math.PI / 2,
                     colorStops: [
-                        { offset: 0, color: "blue" },
-                        { offset: 0.5, color: "red" },
-                        { offset: 1, color: "green" }
+                        { offset: 0, color: 'blue' },
+                        { offset: 0.5, color: 'red' },
+                        { offset: 1, color: 'green' }
                     ]
                 }
             },
             cornersSquareOptions: {
-                type: "dot",
+                type: 'dot',
                 gradient: {
-                    type: "linear",
+                    type: 'linear',
                     rotation: Math.PI * 0.2,
                     colorStops: [
                         {
                             offset: 0,
-                            color: "blue"
+                            color: 'blue'
                         },
                         {
                             offset: 1,
-                            color: "red"
+                            color: 'red'
                         }
                     ]
                 }
             },
             imageOptions: {
-                crossOrigin: "anonymous",
+                crossOrigin: 'anonymous',
                 imageSize: 0.5,
                 margin: 1
             }
-        };
-        const qrCode = new QRCodeStyling(options);
+        }
+        const qrCode = new QRCodeStyling(options)
 
-        qrCode.append(document.getElementById("canvas"));
-        document.getElementById("download").addEventListener("click", () => {
-            browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
-        });
+        qrCode.append(document.getElementById('canvas'))
+        document.getElementById('download').addEventListener('click', () => {
+            browserUtils.download(qrCode, { extension: 'png' }, { width: 1200, height: 1200 })
+        })
     </script>
 </body>
 

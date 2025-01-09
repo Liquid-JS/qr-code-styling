@@ -8,8 +8,7 @@
     "include": [
         "./src/**/*",
         "**/*.test.js",
-        "**/*.test.ts",
-        "rollup.config.ts"
+        "**/*.test.ts"
     ],
     "exclude": []
 }

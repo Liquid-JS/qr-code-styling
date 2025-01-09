@@ -11,7 +11,7 @@ import { config, parser } from 'typescript-eslint'
 
 export default config(
     {
-        ignores: ['lib', 'node_modules', 'coverage', 'docs', '.yarn', '.husky']
+        ignores: ['lib', 'node_modules', 'coverage', 'docs', '.yarn', '.husky', 'tmp']
     },
     {
         files: ['**/*.ts', '**/*.js', '**/*.cjs'],
@@ -26,7 +26,10 @@ export default config(
         languageOptions: {
             parser,
             parserOptions: {
-                project: 'tsconfig.json'
+                project: 'tsconfig.json',
+                projectService: {
+                    allowDefaultProject: ['.*']
+                }
             }
         },
         rules: {
@@ -280,9 +283,9 @@ export default config(
         files: ['**/*.test.ts', '**/*.test.js', '**/*.config.js', '**/*.config.ts', '**/*.config.cjs', 'test/*.cjs'],
         rules: {
             '@import/no-extraneous-dependencies': [
-                'off',
+                'error',
                 {
-                    devDependencies: false
+                    devDependencies: true
                 }
             ]
         }

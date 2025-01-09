@@ -42,32 +42,32 @@ Try it here <https://styled-qr.liquidjs.io/>
     <button type="button"
         id="dl">Download</button>
     <script type="module">
-        import { QRCodeStyling, browserUtils } from "https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js";
+        import { QRCodeStyling, browserUtils } from 'https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js'
 
         const qrCode = new QRCodeStyling({
-            data: "https://www.facebook.com/",
-            image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+            data: 'https://www.facebook.com/',
+            image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
             dotsOptions: {
-                color: "#4267b2",
-                type: "rounded",
+                color: '#4267b2',
+                type: 'rounded',
                 size: 10
             },
             backgroundOptions: {
-                color: "#e9ebee",
+                color: '#e9ebee',
                 margin: 1
             },
             imageOptions: {
-                crossOrigin: "anonymous",
+                crossOrigin: 'anonymous',
                 margin: 1,
                 imageSize: 0.5
             }
-        });
+        })
 
-        qrCode.append(document.getElementById("canvas"));
+        qrCode.append(document.getElementById('canvas'))
 
-        document.getElementById("dl").addEventListener("click", () => {
-            browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
-        });
+        document.getElementById('dl').addEventListener('click', () => {
+            browserUtils.download(qrCode, { extension: 'png' }, { width: 1200, height: 1200 })
+        })
     </script>
 </body>
 
