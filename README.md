@@ -31,94 +31,98 @@ Try it here <https://styled-qr.liquidjs.io/>
 ```HTML
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>QR Code Styling</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="canvas"></div>
-    <button type="button" id="dl">Download</button>
+    <button type="button"
+        id="dl">Download</button>
     <script type="module">
-      import { QRCodeStyling, browserUtils } from "https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js";
+        import { QRCodeStyling, browserUtils } from "https://unpkg.com/@liquid-js/qr-code-styling/lib/qr-code-styling.js";
 
-      const qrCode = new QRCodeStyling({
-        data: "https://www.facebook.com/",
-        image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-        dotsOptions: {
-          color: "#4267b2",
-          type: "rounded",
-          size: 10
-        },
-        backgroundOptions: {
-          color: "#e9ebee",
-          margin: 1
-        },
-        imageOptions: {
-          crossOrigin: "anonymous",
-          margin: 1,
-          imageSize: 0.5
-        }
-      });
+        const qrCode = new QRCodeStyling({
+            data: "https://www.facebook.com/",
+            image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+            dotsOptions: {
+                color: "#4267b2",
+                type: "rounded",
+                size: 10
+            },
+            backgroundOptions: {
+                color: "#e9ebee",
+                margin: 1
+            },
+            imageOptions: {
+                crossOrigin: "anonymous",
+                margin: 1,
+                imageSize: 0.5
+            }
+        });
 
-      qrCode.append(document.getElementById("canvas"));
+        qrCode.append(document.getElementById("canvas"));
 
-      document.getElementById("dl").addEventListener("click", () => {
-        browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
-      });
+        document.getElementById("dl").addEventListener("click", () => {
+            browserUtils.download(qrCode, { extension: "png" }, { width: 1200, height: 1200 });
+        });
     </script>
-  </body>
+</body>
+
 </html>
 ```
 
 ### Node
 
-> ⚠️ **Note**: make sure to install optional peer dependencies when running on Node (not needed for browser environments)
+> ⚠️ **Note**: make sure to install peer dependencies when running on Node (not needed for browser environments)
 >
->     npm install @xmldom/xmldom file-type @liquid-js/qrcode-generator sharp
+>     npm install @liquid-js/qrcode-generator @xmldom/xmldom file-type sharp
 
 ```js
-import { QRCodeStyling } from "@liquid-js/qr-code-styling";
-import { writeFile } from "fs/promises";
-import PDFDocument from "pdfkit";
-import SVGtoPDF from "svg-to-pdfkit";
+import { QRCodeStyling } from '@liquid-js/qr-code-styling'
+import { writeFile } from 'fs/promises'
+import PDFDocument from 'pdfkit'
+import SVGtoPDF from 'svg-to-pdfkit'
 
 const qrCode = new QRCodeStyling({
-  data: "https://www.facebook.com/",
-  image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-  dotsOptions: {
-    color: "#4267b2",
-    type: "rounded",
-    size: 10
-  },
-  backgroundOptions: {
-    color: "#e9ebee",
-    margin: 1
-  },
-  imageOptions: {
-    crossOrigin: "anonymous",
-    margin: 1,
-    imageSize: 0.5
-  }
-});
+    data: 'https://www.facebook.com/',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
+    dotsOptions: {
+        color: '#4267b2',
+        type: 'rounded',
+        size: 10
+    },
+    backgroundOptions: {
+        color: '#e9ebee',
+        margin: 1
+    },
+    imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 1,
+        imageSize: 0.5
+    }
+})
 
-const svgCode = await qrCode.serialize();
+const svgCode = await qrCode.serialize()
 
-const { width, height } = qrCode.size;
-const buffers = [];
-const doc = new PDFDocument({ size: [width, height] });
-doc.on("data", (v) => buffers.push(v));
+const { width, height } = qrCode.size
+const buffers = []
+const doc = new PDFDocument({ size: [width, height] })
+doc.on('data', (v) => buffers.push(v))
 const buffer = await new Promise((resolve) => {
-  doc.on("end", () => {
-    resolve(Buffer.concat(buffers));
-  });
-  SVGtoPDF(doc, svgCode, 0, 0, {
-    width,
-    height,
-    assumePt: true
-  });
-  doc.end();
-});
-await writeFile("qr.pdf", buffer);
+    doc.on('end', () => {
+        resolve(Buffer.concat(buffers))
+    })
+    SVGtoPDF(doc, svgCode, 0, 0, {
+        width,
+        height,
+        assumePt: true
+    })
+    doc.end()
+})
+await writeFile('qr.pdf', buffer)
 ```
 
 ### Kanji support
@@ -126,16 +130,16 @@ await writeFile("qr.pdf", buffer);
 For Kanji mode to work, import `stringToBytesFuncs` from `@liquid-js/qr-code-styling/kanji` and inclue it with config.
 
 ```js
-import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";
+import { stringToBytesFuncs } from '@liquid-js/qr-code-styling/kanji'
 
 const qrCode = new QRCodeStyling({
-  data: "漢字",
-  qrOptions: {
-    mode: Mode.kanji
-  },
-  stringToBytesFuncs
-  // ...other options
-});
+    data: '漢字',
+    qrOptions: {
+        mode: Mode.kanji
+    },
+    stringToBytesFuncs
+    // ...other options
+})
 ```
 
 ## License

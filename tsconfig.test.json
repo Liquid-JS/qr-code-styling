@@ -1,10 +1,15 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["jsdom"],
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  },
-  "include": ["./src/**/*", "**/*.test.js", "**/*.test.ts", "rollup.config.ts"],
-  "exclude": []
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": [
+            "jsdom"
+        ]
+    },
+    "include": [
+        "./src/**/*",
+        "**/*.test.js",
+        "**/*.test.ts",
+        "rollup.config.ts"
+    ],
+    "exclude": []
 }

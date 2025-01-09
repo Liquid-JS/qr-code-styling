@@ -1,142 +1,130 @@
 {
-  "name": "@liquid-js/qr-code-styling",
-  "version": "4.0.6",
-  "description": "Generate styled QR codes on web or in Node",
-  "type": "module",
-  "main": "./lib/qr-code-styling-node.js",
-  "browser": "./lib/qr-code-styling.js",
-  "types": "./lib/index.d.ts",
-  "exports": {
-    "./package.json": {
-      "default": "./package.json"
+    "name": "@liquid-js/qr-code-styling",
+    "version": "4.0.6",
+    "description": "Generate styled QR codes on web or in Node",
+    "type": "module",
+    "main": "./lib/qr-code-styling-node.js",
+    "browser": "./lib/qr-code-styling.js",
+    "types": "./lib/index.d.ts",
+    "exports": {
+        "./package.json": {
+            "default": "./package.json"
+        },
+        ".": {
+            "node": "./lib/qr-code-styling-node.js",
+            "types": "./lib/index.d.ts",
+            "default": "./lib/qr-code-styling.js"
+        },
+        "./kanji": {
+            "types": "./lib/kanji.d.ts",
+            "default": "./lib/kanji.js"
+        }
     },
-    ".": {
-      "node": "./lib/qr-code-styling-node.js",
-      "types": "./lib/index.d.ts",
-      "default": "./lib/qr-code-styling.js"
+    "files": [
+        "lib"
+    ],
+    "peerDependencies": {
+        "@liquid-js/qrcode-generator": "^1.0.2",
+        "@xmldom/xmldom": "^0.9.0",
+        "file-type": "^19.0.0",
+        "sharp": ">0.32.1 <1.0.0"
     },
-    "./kanji": {
-      "types": "./lib/kanji.d.ts",
-      "default": "./lib/kanji.js"
+    "devDependencies": {
+        "@commitlint/cli": "^19.6.1",
+        "@commitlint/config-conventional": "^19.6.0",
+        "@eslint/js": "^9.17.0",
+        "@liquid-js/qrcode-generator": "^1.0.2",
+        "@liquid-js/rollup-plugin-closure-compiler": "^0.27.6",
+        "@rollup/plugin-commonjs": "^28.0.2",
+        "@rollup/plugin-node-resolve": "^16.0.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-typescript": "^12.1.2",
+        "@stylistic/eslint-plugin": "^2.12.1",
+        "@testdeck/mocha": "^0.3.3",
+        "@types/chai": "^5.0.1",
+        "@types/eslint__js": "^8.42.3",
+        "@types/jsdom": "^21.1.7",
+        "@types/jsdom-global": "^3.0.7",
+        "@types/mocha": "^10",
+        "@types/node": "<23.0.0",
+        "@types/sharp": "^0.32.0",
+        "@types/source-map-support": "^0",
+        "@xmldom/xmldom": "^0.9.6",
+        "canvas": "^3.0.1",
+        "chai": "^5.1.2",
+        "clean-package": "^2.2.0",
+        "eslint": "^9.17.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jsdoc": "^50.6.1",
+        "eslint-plugin-prefer-arrow-functions": "^3.4.2",
+        "eslint-plugin-unused-imports": "^4.1.4",
+        "file-type": "^19.6.0",
+        "google-closure-compiler": "^20240317.0.0",
+        "husky": "^9.1.7",
+        "jsdom": "^26.0.0",
+        "jsdom-global": "^3.0.2",
+        "mocha": "^11.0.1",
+        "npm-check-updates": "^17.1.13",
+        "rimraf": "^6.0.1",
+        "rollup": "^4.30.1",
+        "rollup-plugin-minify-template-literals": "^1.1.7",
+        "rollup-plugin-replace-regex": "^1.1.0",
+        "sharp": "^0.33.5",
+        "source-map-support": "^0.5.21",
+        "standard-version": "^9.5.0",
+        "ts-node-maintained": "^10.9.4",
+        "typedoc": "^0.27.6",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.19.1",
+        "vite": "^6.0.7"
+    },
+    "scripts": {
+        "build": "rimraf lib && rollup -c rollup.config.ts --configPlugin \"@rollup/plugin-typescript={tsconfig:'tsconfig.test.json'}\"",
+        "test": "mocha -p",
+        "start": "vite src",
+        "lint": "eslint . --fix",
+        "prepublishOnly": "npm run build",
+        "prepare": "husky",
+        "release": "git diff --exit-code && standard-version && git push --follow-tags origin",
+        "docs": "typedoc",
+        "prepack": "clean-package",
+        "postpack": "clean-package restore"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Liquid-JS/qr-code-styling.git"
+    },
+    "keywords": [
+        "qr",
+        "qrcode",
+        "qr-code",
+        "js",
+        "qrjs",
+        "qrstyling",
+        "styling",
+        "qrbranding",
+        "branding",
+        "qrimage",
+        "image",
+        "qrlogo",
+        "logo",
+        "design",
+        "node",
+        "nodejs"
+    ],
+    "author": "HitkoDev <development@hitko.si>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Liquid-JS/qr-code-styling/issues"
+    },
+    "homepage": "https://styled-qr.liquidjs.io/",
+    "packageManager": "yarn@4.6.0",
+    "clean-package": {
+        "remove": [
+            "packageManager",
+            "scripts",
+            "devDependencies",
+            "clean-package"
+        ]
     }
-  },
-  "files": [
-    "lib"
-  ],
-  "peerDependencies": {
-    "@liquid-js/qrcode-generator": "^1.0.2",
-    "@xmldom/xmldom": "^0.9.0",
-    "file-type": "^19.0.0",
-    "sharp": ">0.32.1 <1.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@liquid-js/qrcode-generator": {
-      "optional": true
-    },
-    "@xmldom/xmldom": {
-      "optional": true
-    },
-    "file-type": {
-      "optional": true
-    },
-    "sharp": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
-    "@eslint/js": "^9.17.0",
-    "@liquid-js/qrcode-generator": "^1.0.2",
-    "@liquid-js/rollup-plugin-closure-compiler": "^0.27.6",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@testdeck/mocha": "^0.3.3",
-    "@types/chai": "^5.0.1",
-    "@types/eslint__js": "^8.42.3",
-    "@types/jsdom": "^21.1.7",
-    "@types/jsdom-global": "^3.0.7",
-    "@types/mocha": "^10",
-    "@types/node": "<23.0.0",
-    "@types/sharp": "^0.32.0",
-    "@types/source-map-support": "^0",
-    "@xmldom/xmldom": "^0.9.6",
-    "canvas": "^3.0.0-rc2",
-    "chai": "^5.1.2",
-    "clean-package": "^2.2.0",
-    "eslint": "^9.17.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "file-type": "^19.6.0",
-    "google-closure-compiler": "^20240317.0.0",
-    "husky": "^9.1.7",
-    "jsdom": "^25.0.1",
-    "jsdom-global": "^3.0.2",
-    "mocha": "^11.0.1",
-    "npm-check-updates": "^17.1.11",
-    "prettier": "^3.4.2",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.28.1",
-    "rollup-plugin-minify-template-literals": "^1.1.7",
-    "rollup-plugin-replace-regex": "^1.1.0",
-    "sharp": "^0.33.5",
-    "source-map-support": "^0.5.21",
-    "standard-version": "^9.5.0",
-    "ts-node-maintained": "^10.9.4",
-    "typedoc": "^0.27.5",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.0",
-    "vite": "^6.0.3"
-  },
-  "scripts": {
-    "build": "rimraf lib && rollup -c rollup.config.ts --configPlugin \"@rollup/plugin-typescript={tsconfig:'tsconfig.test.json'}\"",
-    "test": "mocha -p",
-    "start": "vite src",
-    "lint": "prettier -w . && eslint . --fix",
-    "prepublishOnly": "npm run build",
-    "prepare": "husky",
-    "release": "git diff --exit-code && standard-version && git push --follow-tags origin",
-    "docs": "typedoc",
-    "prepack": "clean-package",
-    "postpack": "clean-package restore"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Liquid-JS/qr-code-styling.git"
-  },
-  "keywords": [
-    "qr",
-    "qrcode",
-    "qr-code",
-    "js",
-    "qrjs",
-    "qrstyling",
-    "styling",
-    "qrbranding",
-    "branding",
-    "qrimage",
-    "image",
-    "qrlogo",
-    "logo",
-    "design",
-    "node",
-    "nodejs"
-  ],
-  "author": "HitkoDev <development@hitko.si>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Liquid-JS/qr-code-styling/issues"
-  },
-  "homepage": "https://styled-qr.liquidjs.io/",
-  "packageManager": "yarn@4.5.3",
-  "clean-package": {
-    "remove": [
-      "packageManager",
-      "scripts",
-      "devDependencies",
-      "clean-package"
-    ]
-  }
 }

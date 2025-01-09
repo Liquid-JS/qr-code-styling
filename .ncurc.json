@@ -1,6 +1,8 @@
 {
-  "dep": "prod,dev,bundle,optional,peer",
-  "upgrade": true,
-  "interactive": true,
-  "reject": ["@types/node"]
+    "dep": "prod,dev,bundle,optional,peer",
+    "upgrade": true,
+    "interactive": true,
+    "reject": [
+        "@types/node"
+    ]
 }
