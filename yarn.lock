@@ -910,7 +910,7 @@ __metadata:
     eslint: "npm:^9.17.0"
     eslint-plugin-import: "npm:^2.31.0"
     eslint-plugin-jsdoc: "npm:^50.6.1"
-    eslint-plugin-prefer-arrow-functions: "npm:^3.4.2"
+    eslint-plugin-prefer-arrow-functions: "npm:^3.6.0"
     eslint-plugin-unused-imports: "npm:^4.1.4"
     file-type: "npm:^19.6.0"
     google-closure-compiler: "npm:^20240317.0.0"
@@ -3312,12 +3312,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prefer-arrow-functions@npm:^3.4.2":
-  version: 3.4.2
-  resolution: "eslint-plugin-prefer-arrow-functions@npm:3.4.2"
+"eslint-plugin-prefer-arrow-functions@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "eslint-plugin-prefer-arrow-functions@npm:3.6.0"
+  dependencies:
+    "@typescript-eslint/types": "npm:8.19.1"
+    "@typescript-eslint/utils": "npm:8.19.1"
   peerDependencies:
-    eslint: ">=8.0.0"
-  checksum: 10/da42f37ad08117e5e04a15dbc2c4125479939c0e0c66127da4cb930eb77a94f9d473434e87e82ec2b2e185933b6c734af2bbc159006ba9b6491556d52b1c9f35
+    eslint: 9.17.0
+  checksum: 10/975651d68815f23d6ca3528b97a4370c58d3e912d394d89d83259881837647b1e15dfea214e608008796814e90d8b43491f2bebaf801c6dad6fd10570b3eebab
   languageName: node
   linkType: hard
 
@@ -3918,8 +3921,8 @@ __metadata:
   linkType: hard
 
 "glob@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "glob@npm:11.0.0"
+  version: 11.0.1
+  resolution: "glob@npm:11.0.1"
   dependencies:
     foreground-child: "npm:^3.1.0"
     jackspeak: "npm:^4.0.1"
@@ -3929,7 +3932,7 @@ __metadata:
     path-scurry: "npm:^2.0.0"
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 10/e66939201d11ae30fe97e3364ac2be5c59d6c9bfce18ac633edfad473eb6b46a7553f6f73658f67caaf6cccc1df1ae336298a45e9021fa5695fd78754cc1603e
+  checksum: 10/57b12a05cc25f1c38f3b24cf6ea7a8bacef11e782c4b9a8c5b0bef3e6c5bcb8c4548cb31eb4115592e0490a024c1bde7359c470565608dd061d3b21179740457
   languageName: node
   linkType: hard
 

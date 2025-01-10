@@ -4,10 +4,14 @@ import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin'
 // @ts-ignore
 import importPlugin from 'eslint-plugin-import'
 import jsdocPlugin from 'eslint-plugin-jsdoc'
-// @ts-ignore
-import preferArrowPlugin from 'eslint-plugin-prefer-arrow-functions'
+import _preferArrowPlugin from 'eslint-plugin-prefer-arrow-functions'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
 import { config, parser } from 'typescript-eslint'
+
+/** @type {any} */
+const preferArrowPlugin = 'default' in _preferArrowPlugin
+    ? _preferArrowPlugin['default']
+    : _preferArrowPlugin
 
 export default config(
     {
