@@ -1,19 +1,14 @@
 // @ts-check
 import stylisticPlugin from '@stylistic/eslint-plugin'
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin'
-// @ts-ignore
 import importPlugin from 'eslint-plugin-import'
 import jsdocPlugin from 'eslint-plugin-jsdoc'
-import _preferArrowPlugin from 'eslint-plugin-prefer-arrow-functions'
+import preferArrowPlugin from 'eslint-plugin-prefer-arrow-functions'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
-import { config, parser } from 'typescript-eslint'
+import { parser } from 'typescript-eslint'
+import { defineConfig } from 'eslint/config'
 
-/** @type {any} */
-const preferArrowPlugin = 'default' in _preferArrowPlugin
-    ? _preferArrowPlugin['default']
-    : _preferArrowPlugin
-
-export default config(
+export default defineConfig(
     {
         ignores: ['lib', 'node_modules', 'coverage', 'docs', '.yarn', '.husky', 'tmp']
     },
@@ -23,6 +18,7 @@ export default config(
             '@typescript-eslint': typescriptEslintPlugin,
             '@import': importPlugin,
             '@jsdoc': jsdocPlugin,
+            // @ts-ignore
             '@prefer-arrow-functions': preferArrowPlugin,
             '@unused-imports': unusedImportsPlugin,
             '@stylistic': stylisticPlugin

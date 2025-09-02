@@ -35,8 +35,8 @@ const common = () => [
 const bundle = () => [
     nodeResolve(),
     compiler({
-        language_in: 'ECMASCRIPT_2020',
-        language_out: 'ECMASCRIPT_2020'
+        language_in: 'ECMASCRIPT_NEXT',
+        language_out: 'ECMASCRIPT_NEXT'
     }),
     terser()
 ]
@@ -72,13 +72,13 @@ export default new Array<RollupOptions>(
         plugins: [
             ...common(),
             compiler({
-                language_in: 'ECMASCRIPT_2020',
-                language_out: 'ECMASCRIPT_2020',
+                language_in: 'ECMASCRIPT_NEXT',
+                language_out: 'ECMASCRIPT_NEXT',
                 formatting: 'PRETTY_PRINT',
                 debug: 'true'
             }),
             repl,
-            terser({ mangle: false, ecma: 2020, output: { beautify: true } })
+            terser({ mangle: false, ecma: 2024 as any, output: { beautify: true } })
         ]
     }
 )
