@@ -14,7 +14,8 @@ export enum DotType {
     square = 'square',
     smallSquare = 'small-square',
     tinySquare = 'tiny-square',
-    diamond = 'diamond'
+    diamond = 'diamond',
+    wave = 'wave'
 }
 
 export enum CornerDotType {

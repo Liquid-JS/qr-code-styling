@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>QR Styling Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="module">
+      // Import the ESM build. Your lib/ listing shows qr-code-styling.js exists.
+      import * as QR from "../../lib/qr-code-styling.js";
+
+      // Different builds export differently; this normalization covers the common cases.
+      const QRCodeStyling = QR.default ?? QR.QRCodeStyling ?? QR;
+
+      console.log("Module keys:", Object.keys(QR));
+      console.log("Ctor:", QRCodeStyling);
+
+      const qr = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        data: "https://naigc.org",
+        dotsOptions: { type: "wave", color: "#0b3d62" },
+        backgroundOptions: { color: "#ffffff" }
+      });
+
+      qr.append(document.getElementById("app"));
+    </script>
+  </body>
+</html>
