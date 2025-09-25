@@ -52,9 +52,13 @@ export class QRDot {
             case DotType.tinySquare:
                 drawFunction = this.drawTinySquare
                 break
+            case DotType.wave:
+                drawFunction = this.drawWave
+                break
             case DotType.square:
             default:
                 drawFunction = this.drawSquare
+                break
         }
 
         drawFunction.call(this, args)
@@ -104,15 +108,15 @@ export class QRDot {
         this.rotateFigure({
             ...args,
             draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
+                const el = this.document.createElementNS('http://www.w3.org/2000/svg', 'path') as SVGPathElement
+                el.setAttribute(                    
                     'd',
                     svgPath`M ${x} ${y}
           v ${size}
           h ${size / 2}
           a ${size / 2} ${size / 2}, 0, 0, 0, 0 ${-size}
-          z`
-                )
+          z`)
+                this._element = el
             }
         })
     }
@@ -124,16 +128,16 @@ export class QRDot {
         this.rotateFigure({
             ...args,
             draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
+                const el = this.document.createElementNS('http://www.w3.org/2000/svg', 'path') as SVGPathElement
+                el.setAttribute(                    
                     'd',
                     svgPath`M ${x} ${y}
           v ${size}
           h ${size}
           v ${-size / 2}
           a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
-          z`
-                )
+          z`)
+                this._element = el
             }
         })
     }
@@ -145,15 +149,15 @@ export class QRDot {
         this.rotateFigure({
             ...args,
             draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
+                const el = this.document.createElementNS('http://www.w3.org/2000/svg', 'path') as SVGPathElement
+                el.setAttribute(                    
                     'd',
                     svgPath`M ${x} ${y}
           v ${size}
           h ${size}
           a ${size} ${size}, 0, 0, 0, ${-size} ${-size}
-          z`
-                )
+          z`)
+                this._element = el
             }
         })
     }
@@ -165,8 +169,8 @@ export class QRDot {
         this.rotateFigure({
             ...args,
             draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
+                const el = this.document.createElementNS('http://www.w3.org/2000/svg', 'path') as SVGPathElement
+                el.setAttribute(                    
                     'd',
                     svgPath`M ${x} ${y}
           v ${size / 2}
@@ -174,11 +178,64 @@ export class QRDot {
           h ${size / 2}
           v ${-size / 2}
           a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
-          z`
-                )
+          z`)
+                this._element = el
             }
         })
     }
+
+    // rotation === 0: the filled neighbor is BELOW this cell.
+    // Base is the bottom edge P1↔P2. Crest P3 lies on the top edge at x + 0.2*size.
+    // Other orientations are produced by rotateFigure.
+    private basicWave(args: BasicFigureDrawArgs): void {
+      const { size, x, y } = args
+
+      // Node positions (neighbor BELOW case)
+      const P1x = x,           P1y = y + size          // bottom-left corner
+      const P2x = x + size,    P2y = y + size          // bottom-right corner
+      const P3x = x + size*0.05, P3y = y                // 20% along the top edge
+
+      // Bézier handle lengths as a fraction of cell size.
+      // Tune 0.50–0.65 to adjust "pointiness" (bigger = sharper crest).
+      const L23 = size * 0.65  // for segment P2→P3 (both ends)
+      const L31 = size * 0.5  // for segment P3→P1 (both ends)
+
+      // Polar offset helper (angles in degrees; +x right, +y down)
+      const off = (px: number, py: number, deg: number, r: number) => {
+        const t = (deg * Math.PI) / 180
+        return [px + r * Math.cos(t), py + r * Math.sin(t)] as const
+      }
+
+      // === Segment P2 → P3: cubic with your angles
+      // leave P2 at -90° (vertical up)
+      const [C12x, C12y] = off(P2x, P2y, -90, L23)
+      // arrive P3 at +5° (5° below horizontal right)
+      const [C23x, C23y] = off(P3x, P3y, 5,  L23)
+
+      // === Segment P3 → P1: cubic with your angles
+      // leave P3 at +70° (20° right of vertical down)
+      const [C31x, C31y] = off(P3x, P3y, 65,  L31)
+      // arrive P1 at -55° (35° right of vertical up)
+      const [C1x,  C1y ] = off(P1x, P1y, -90,  L31)
+
+      this.rotateFigure({
+        ...args,
+        draw: () => {
+          const el = this.document.createElementNS('http://www.w3.org/2000/svg', 'path') as SVGPathElement
+          el.setAttribute(
+            'd',
+            svgPath`
+              M ${P1x} ${P1y}
+              L ${P2x} ${P2y}
+              C ${C12x} ${C12y} ${C23x} ${C23y} ${P3x} ${P3y}
+              C ${C31x} ${C31y} ${C1x}  ${C1y}  ${P1x} ${P1y}
+              z`
+          )
+          this._element = el
+        }
+      })
+    }
+
 
     private drawDot({ x, y, size }: DrawArgs): void {
         this.basicDot({ x, y, size, rotation: 0 })
@@ -436,4 +493,57 @@ export class QRDot {
 
         this.basicSquare({ x, y, size, rotation: 0 })
     }
+
+    private drawWave({ x, y, size, getNeighbor }: DrawArgs): void {
+      const leftNeighbor   = getNeighbor ? +getNeighbor(-1, 0) : 0
+      const rightNeighbor  = getNeighbor ? +getNeighbor(1, 0)  : 0
+      const topNeighbor    = getNeighbor ? +getNeighbor(0, -1) : 0
+      const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1)  : 0
+
+      const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
+
+      // 0 neighbors → circle
+      if (neighborsCount === 0) {
+        this.basicDot({ x, y, size, rotation: 0 })
+        return
+      }
+
+      // Opposite sides (N+S or E+W) OR 3–4 neighbors → square
+      if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+        this.basicSquare({ x, y, size, rotation: 0 })
+        return
+      }
+
+      // Exactly 2 neighbors, and they're adjacent → round the far corner
+      if (neighborsCount === 2) {
+        let rotation = 0
+        if (leftNeighbor && topNeighbor) {
+          rotation = Math.PI / 2          // rounds the bottom-right corner (far from L+T)
+        } else if (topNeighbor && rightNeighbor) {
+          rotation = Math.PI               // rounds the bottom-left corner
+        } else if (rightNeighbor && bottomNeighbor) {
+          rotation = -Math.PI / 2          // rounds the top-left corner
+        }
+        this.basicCornerRounded({ x, y, size, rotation })
+        return
+      }
+
+      // Exactly 1 neighbor → "wave"
+      if (neighborsCount === 1) {
+        let rotation = 0
+        if (rightNeighbor) {
+          rotation = -Math.PI / 2
+        } else if (bottomNeighbor) {
+          rotation = 0
+        } else if (leftNeighbor) {
+          rotation = Math.PI / 2
+        } else if (topNeighbor) {
+          rotation = Math.PI
+        }
+        this.basicWave({ x, y, size, rotation })
+        return
+      }
+
+    }
+
 }
