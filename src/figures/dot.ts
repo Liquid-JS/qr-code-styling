@@ -12,7 +12,7 @@ export class QRDot {
     constructor(
         private readonly type: `${DotType}`,
         private readonly document: Document
-    ) {}
+    ) { }
 
     draw(args: DrawArgs): void {
         const type = this.type
@@ -276,8 +276,8 @@ export class QRDot {
 
         if (
             neighborsCount === 0 ||
-      (leftNeighbor && !(topNeighbor || bottomNeighbor)) ||
-      (rightNeighbor && !(topNeighbor || bottomNeighbor))
+            (leftNeighbor && !(topNeighbor || bottomNeighbor)) ||
+            (rightNeighbor && !(topNeighbor || bottomNeighbor))
         ) {
             this.basicDot({ x, y, size, rotation: 0 })
             return
@@ -311,8 +311,8 @@ export class QRDot {
 
         if (
             neighborsCount === 0 ||
-      (topNeighbor && !(leftNeighbor || rightNeighbor)) ||
-      (bottomNeighbor && !(leftNeighbor || rightNeighbor))
+            (topNeighbor && !(leftNeighbor || rightNeighbor)) ||
+            (bottomNeighbor && !(leftNeighbor || rightNeighbor))
         ) {
             this.basicDot({ x, y, size, rotation: 0 })
             return

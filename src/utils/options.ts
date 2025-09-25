@@ -83,11 +83,11 @@ export interface Options {
         errorCorrectionLevel: `${ErrorCorrectionLevel}`
     }
     imageOptions: {
-    /**
-     * Image mode
-     *
-     * @default ImageMode.center
-     */
+        /**
+         * Image mode
+         *
+         * @default ImageMode.center
+         */
         mode: `${ImageMode}`
         /**
          * Fill blank areas of the code with selected color
@@ -120,11 +120,11 @@ export interface Options {
         crossOrigin?: string
     }
     dotsOptions: {
-    /**
-     * QR dot size (in pixels)
-     *
-     * @default 10
-     */
+        /**
+         * QR dot size (in pixels)
+         *
+         * @default 10
+         */
         size: number
         /**
          * Color of QR dots
@@ -143,25 +143,24 @@ export interface Options {
     }
     /** Corners Square options, omitted values match dots */
     cornersSquareOptions?: {
-    /** Color of Corners Square */
+        /** Color of Corners Square */
         color?: string
         /** Gradient of Corners Square */
         gradient?: Gradient
         /** Style of Corners Square */
-        type?: `${CornerSquareType}`
+        type?: `${CornerSquareType | DotType}`
     }
     /** Corners Dot options, omitted values match squares */
     cornersDotOptions?: {
-    /** Color of Corners Dot */
+        /** Color of Corners Dot */
         color?: string
         /** Gradient of Corners Dot */
         gradient?: Gradient
         /** Style of Corners Dot */
-        type?: `${CornerDotType}`
+        type?: `${CornerDotType | DotType}`
     }
     /** QR background styling options, false to disable background */
-    backgroundOptions?:
-    | {
+    backgroundOptions?: {
         /** Background roundnes, from 0 (square) to 1 (circle) */
         round?: number
         /** Background color */
@@ -174,8 +173,7 @@ export interface Options {
          * @default 0
          */
         margin?: number
-    }
-    | false
+    } | false
     /** `import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";` to add Kanji support */
     stringToBytesFuncs?: { [encoding: string]: (s: string) => number[] }
 }

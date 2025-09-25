@@ -12,7 +12,7 @@ export class QRCornerDot {
     constructor(
         private readonly type: `${CornerDotType}`,
         private readonly document: Document
-    ) {}
+    ) { }
 
     draw(args: DrawArgs): void {
         const type = this.type

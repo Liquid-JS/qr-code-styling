@@ -7,7 +7,7 @@ import { browserImageTools } from '../tools/browser-image-tools.js'
 import { parseColor } from '../utils/color.js'
 import { Gradient, GradientType } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
-import { DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
+import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { numToAttr } from '../utils/svg.js'
 
 const squareMask = [
@@ -20,6 +20,11 @@ const squareMask = [
     [1, 1, 1, 1, 1, 1, 1]
 ]
 
+const cornerSquareTypes = new Set<string>(Object.values(CornerSquareType))
+function isCornerSquareType(val?: string): val is `${CornerSquareType}` {
+    return !!(val && cornerSquareTypes.has(val))
+}
+
 const dotMask = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -29,6 +34,11 @@ const dotMask = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0]
 ]
+
+const cornerDotTypes = new Set<string>(Object.values(CornerDotType))
+function isCornerDotType(val?: string): val is `${CornerDotType}` {
+    return !!(val && cornerDotTypes.has(val))
+}
 
 export class QRSVG {
     private _element: SVGElement
@@ -438,7 +448,7 @@ export class QRSVG {
                 })
             }
 
-            if (options.cornersSquareOptions?.type) {
+            if (isCornerSquareType(options.cornersSquareOptions?.type)) {
                 const cornersSquare = new QRCornerSquare(options.cornersSquareOptions.type, this.document)
 
                 cornersSquare.draw({
@@ -456,7 +466,7 @@ export class QRSVG {
                     this.lightDotsMaskGroup.appendChild(cornersSquare.fill)
                 }
             } else {
-                const dot = new QRDot(options.dotsOptions.type, this.document)
+                const dot = new QRDot(options.cornersSquareOptions?.type || options.dotsOptions.type, this.document)
 
                 for (let i = 0; i < squareMask.length; i++) {
                     for (let j = 0; j < squareMask[i].length; j++) {
@@ -529,7 +539,7 @@ export class QRSVG {
                 })
             }
 
-            if (options.cornersDotOptions?.type) {
+            if (isCornerDotType(options.cornersDotOptions?.type)) {
                 const cornersDot = new QRCornerDot(options.cornersDotOptions.type, this.document)
 
                 cornersDot.draw({
@@ -543,7 +553,7 @@ export class QRSVG {
                     cornersDotMaskGroup.appendChild(cornersDot.element)
                 }
             } else {
-                const dot = new QRDot(options.dotsOptions.type, this.document)
+                const dot = new QRDot(options.cornersDotOptions?.type || options.dotsOptions.type, this.document)
 
                 for (let i = 0; i < dotMask.length; i++) {
                     for (let j = 0; j < dotMask[i].length; j++) {

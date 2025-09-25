@@ -1,12 +1,9 @@
 const isObject = (obj: Record<string, unknown> | undefined): boolean =>
     !!obj && typeof obj === 'object' && !Array.isArray(obj)
 
-export type UnknownObject =
-  | {
-
-      [key: string]: any
-  }
-  | undefined
+export type UnknownObject = {
+    [key: string]: any
+} | undefined
 
 export function mergeDeep(target: UnknownObject, ...sources: UnknownObject[]): UnknownObject {
     if (!sources.length) return target
@@ -20,7 +17,7 @@ export function mergeDeep(target: UnknownObject, ...sources: UnknownObject[]): U
         if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
             target[key] = sourceValue
         } else if (isObject(targetValue) && isObject(sourceValue)) {
-            target[key] = mergeDeep({ ...targetValue}, sourceValue)
+            target[key] = mergeDeep({ ...targetValue }, sourceValue)
         } else {
             target[key] = sourceValue
         }

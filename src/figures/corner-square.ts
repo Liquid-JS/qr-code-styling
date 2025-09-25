@@ -17,7 +17,7 @@ export class QRCornerSquare {
     constructor(
         private readonly type: `${CornerSquareType}`,
         private readonly document: Document
-    ) {}
+    ) { }
 
     draw(args: DrawArgs): void {
         const type = this.type
