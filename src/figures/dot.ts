@@ -52,9 +52,13 @@ export class QRDot {
             case DotType.tinySquare:
                 drawFunction = this.drawTinySquare
                 break
+            case DotType.wave:
+                drawFunction = this.drawWave
+                break
             case DotType.square:
             default:
                 drawFunction = this.drawSquare
+                break
         }
 
         drawFunction.call(this, args)
@@ -174,6 +178,35 @@ export class QRDot {
           h ${size / 2}
           v ${-size / 2}
           a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
+          z`
+                )
+            }
+        })
+    }
+
+    private basicWave(args: BasicFigureDrawArgs): void {
+        const { size, x, y } = args
+
+        const a1 = 5 * Math.PI / 180
+        const a2 = 65 * Math.PI / 180
+        const s1 = 0.95
+        const s2 = 0.65
+
+        const c23x = size * (s1 - s2 * Math.cos(a1))
+        const c23y = size * (1 - s2 * Math.sin(a1))
+
+        const c31x = -size * Math.cos(a2) / 2
+        const c31y = -size * Math.sin(a2) / 2
+
+        this.rotateFigure({
+            ...args,
+            draw: () => {
+                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
+                this._element.setAttribute(
+                    'd',
+                    svgPath`M ${x} ${y}
+          c 0 ${size * s2} ${c23x} ${c23y} ${size * s1} ${size}
+          c ${c31x} ${c31y} ${size * (1 - s1)} ${-size / 2} ${size * (1 - s1)} ${-size}
           z`
                 )
             }
@@ -435,5 +468,54 @@ export class QRDot {
         }
 
         this.basicSquare({ x, y, size, rotation: 0 })
+    }
+
+    private drawWave({ x, y, size, getNeighbor }: DrawArgs): void {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
+
+        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
+
+        if (neighborsCount === 0) {
+            this.basicDot({ x, y, size, rotation: 0 })
+            return
+        }
+
+        if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+            this.basicSquare({ x, y, size, rotation: 0 })
+            return
+        }
+
+        if (neighborsCount === 2) {
+            let rotation = 0
+
+            if (leftNeighbor && topNeighbor) {
+                rotation = Math.PI / 2
+            } else if (topNeighbor && rightNeighbor) {
+                rotation = Math.PI
+            } else if (rightNeighbor && bottomNeighbor) {
+                rotation = -Math.PI / 2
+            }
+
+            this.basicCornerExtraRounded({ x, y, size, rotation })
+            return
+        }
+
+        if (neighborsCount === 1) {
+            let rotation = 0
+
+            if (rightNeighbor) {
+                rotation = Math.PI / 2
+            } else if (bottomNeighbor) {
+                rotation = Math.PI
+            } else if (leftNeighbor) {
+                rotation = -Math.PI / 2
+            }
+
+            this.basicWave({ x, y, size, rotation })
+            return
+        }
     }
 }
