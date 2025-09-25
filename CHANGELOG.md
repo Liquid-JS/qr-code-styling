@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.1.0](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.8...v4.1.0) (2025-09-25)
+
+
+### Features
+
+* allow dot types when drawing corners ([1f70d6e](https://github.com/Liquid-JS/qr-code-styling/commit/1f70d6e4672f349b2bb1c4cbd5aa2ad207951638))
+* **dots:** add 'wave' dot type (neighbor-aware crest; opposite-corner rounding) ([08f2f05](https://github.com/Liquid-JS/qr-code-styling/commit/08f2f05a3f710a2c4c9cd68a3d2a2defd8382eeb))
+
 ## [4.0.8](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.7...v4.0.8) (2025-09-02)
 
 ## [4.0.7](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.6...v4.0.7) (2025-01-09)
