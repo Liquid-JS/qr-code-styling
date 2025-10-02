@@ -1,256 +1,278 @@
-import { BasicFigureDrawArgs, DrawArgs, RotateFigureArgs } from '../types/helper.js'
+import { DrawArgs } from '../types/helper.js'
 import { DotType } from '../utils/options.js'
-import { numToAttr, svgPath } from '../utils/svg.js'
+import { rotateFigure } from '../utils/svg.js'
+import { DotElements } from './dot-elements.js'
 
-export class QRDot {
-    private _element?: SVGElement
+const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
+    [DotType.dot]: args => DotElements.dot(args),
+    [DotType.randomDot]: ({ size, ...args }) => {
+        const randomFactor = Math.random() * (1 - 0.75) + 0.75
+        return DotElements.dot({
+            ...args,
+            size: size * randomFactor
+        })
+    },
+    [DotType.rounded]: ({ x, y, size, document, getNeighbor }) => {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
 
-    get element() {
-        return this._element
-    }
+        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
 
-    constructor(
-        private readonly type: `${DotType}`,
-        private readonly document: Document
-    ) { }
+        if (neighborsCount === 0) {
+            return DotElements.dot({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+            return DotElements.square({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount === 2) {
+            let rotation = 0
 
-    draw(args: DrawArgs): void {
-        const type = this.type
-        let drawFunction
+            if (leftNeighbor && topNeighbor) {
+                rotation = Math.PI / 2
+            } else if (topNeighbor && rightNeighbor) {
+                rotation = Math.PI
+            } else if (rightNeighbor && bottomNeighbor) {
+                rotation = -Math.PI / 2
+            }
 
-        switch (type) {
-            case DotType.dot:
-                drawFunction = this.drawDot
-                break
-            case DotType.randomDot:
-                drawFunction = this.drawRandomDot
-                break
-            case DotType.classy:
-                drawFunction = this.drawClassy
-                break
-            case DotType.classyRounded:
-                drawFunction = this.drawClassyRounded
-                break
-            case DotType.rounded:
-                drawFunction = this.drawRounded
-                break
-            case DotType.verticalLine:
-                drawFunction = this.drawVerticalLine
-                break
-            case DotType.horizontalLine:
-                drawFunction = this.drawHorizontalLine
-                break
-            case DotType.extraRounded:
-                drawFunction = this.drawExtraRounded
-                break
-            case DotType.diamond:
-                drawFunction = this.drawDiamond
-                break
-            case DotType.smallSquare:
-                drawFunction = this.drawSmallSquare
-                break
-            case DotType.tinySquare:
-                drawFunction = this.drawTinySquare
-                break
-            case DotType.wave:
-                drawFunction = this.drawWave
-                break
-            case DotType.square:
-            default:
-                drawFunction = this.drawSquare
-                break
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.cornerRounded
+            })
+        } else {
+            let rotation = 0
+
+            if (topNeighbor) {
+                rotation = Math.PI / 2
+            } else if (rightNeighbor) {
+                rotation = Math.PI
+            } else if (bottomNeighbor) {
+                rotation = -Math.PI / 2
+            }
+
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
+        }
+    },
+    [DotType.extraRounded]: ({ x, y, size, document, getNeighbor }) => {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
+
+        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
+
+        if (neighborsCount === 0) {
+            return DotElements.dot({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+            return DotElements.square({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount === 2) {
+            let rotation = 0
+
+            if (leftNeighbor && topNeighbor) {
+                rotation = Math.PI / 2
+            } else if (topNeighbor && rightNeighbor) {
+                rotation = Math.PI
+            } else if (rightNeighbor && bottomNeighbor) {
+                rotation = -Math.PI / 2
+            }
+
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.cornerExtraRounded
+            })
+        } else {
+            let rotation = 0
+
+            if (topNeighbor) {
+                rotation = Math.PI / 2
+            } else if (rightNeighbor) {
+                rotation = Math.PI
+            } else if (bottomNeighbor) {
+                rotation = -Math.PI / 2
+            }
+
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
+        }
+    },
+    [DotType.verticalLine]: ({ x, y, size, document, getNeighbor }) => {
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
+
+        if (topNeighbor && bottomNeighbor) {
+            return DotElements.square({
+                x, y, size,
+                document
+            })
+        } else if (topNeighbor && !bottomNeighbor) {
+            const rotation = Math.PI / 2
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
+        } else if (bottomNeighbor && !topNeighbor) {
+            const rotation = -Math.PI / 2
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
         }
 
-        drawFunction.call(this, args)
-    }
-
-    private rotateFigure({ x, y, size, rotation = 0, draw }: RotateFigureArgs): void {
-        const cx = x + size / 2
-        const cy = y + size / 2
-
-        draw()
-        this._element?.setAttribute('transform', `rotate(${numToAttr((180 * rotation) / Math.PI)},${cx},${cy})`)
-    }
-
-    private basicDot(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
-
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-                this._element.setAttribute('cx', numToAttr(x + size / 2))
-                this._element.setAttribute('cy', numToAttr(y + size / 2))
-                this._element.setAttribute('r', numToAttr(size / 2))
-            }
+        return DotElements.dot({
+            x, y, size,
+            document
         })
-    }
+    },
+    [DotType.horizontalLine]: ({ x, y, size, document, getNeighbor }) => {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
 
-    private basicSquare(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
+        if (leftNeighbor && rightNeighbor) {
+            return DotElements.square({
+                x, y, size,
+                document
+            })
+        } else if (leftNeighbor && !rightNeighbor) {
+            const rotation = 0
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
+        } else if (rightNeighbor && !leftNeighbor) {
+            const rotation = Math.PI
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.sideRounded
+            })
+        }
 
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-                this._element.setAttribute('x', numToAttr(x))
-                this._element.setAttribute('y', numToAttr(y))
-                this._element.setAttribute('width', numToAttr(size))
-                this._element.setAttribute('height', numToAttr(size))
-            }
+        return DotElements.dot({
+            x, y, size,
+            document
         })
-    }
+    },
+    [DotType.classy]: ({ x, y, size, document, getNeighbor }) => {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
 
-    //if rotation === 0 - right side is rounded
-    private basicSideRounded(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
+        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
 
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y}
-          v ${size}
-          h ${size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, 0 ${-size}
-          z`
-                )
-            }
+        if (neighborsCount === 0) {
+            return rotateFigure({
+                x, y, size, rotation: Math.PI / 2,
+                document,
+                draw: DotElements.cornersRounded
+            })
+        } else if (!leftNeighbor && !topNeighbor) {
+            return rotateFigure({
+                x, y, size, rotation: -Math.PI / 2,
+                document,
+                draw: DotElements.cornerRounded
+            })
+        } else if (!rightNeighbor && !bottomNeighbor) {
+            return rotateFigure({
+                x, y, size, rotation: Math.PI / 2,
+                document,
+                draw: DotElements.cornerRounded
+            })
+        }
+
+        return DotElements.square({
+            x, y, size,
+            document
         })
-    }
+    },
+    [DotType.classyRounded]: ({ x, y, size, document, getNeighbor }) => {
+        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
+        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
+        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
+        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
 
-    //if rotation === 0 - top right corner is rounded
-    private basicCornerRounded(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
+        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
 
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y}
-          v ${size}
-          h ${size}
-          v ${-size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
-          z`
-                )
-            }
+        if (neighborsCount === 0) {
+            return rotateFigure({
+                x, y, size, rotation: Math.PI / 2,
+                document,
+                draw: DotElements.cornersRounded
+            })
+        } else if (!leftNeighbor && !topNeighbor) {
+            return rotateFigure({
+                x, y, size, rotation: -Math.PI / 2,
+                document,
+                draw: DotElements.cornerExtraRounded
+            })
+        } else if (!rightNeighbor && !bottomNeighbor) {
+            return rotateFigure({
+                x, y, size, rotation: Math.PI / 2,
+                document,
+                draw: DotElements.cornerExtraRounded
+            })
+        }
+
+        return DotElements.square({
+            x, y, size,
+            document
         })
-    }
-
-    //if rotation === 0 - top right corner is rounded
-    private basicCornerExtraRounded(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
-
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y}
-          v ${size}
-          h ${size}
-          a ${size} ${size}, 0, 0, 0, ${-size} ${-size}
-          z`
-                )
-            }
-        })
-    }
-
-    //if rotation === 0 - left bottom and right top corners are rounded
-    private basicCornersRounded(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
-
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y}
-          v ${size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${size / 2} ${size / 2}
-          h ${size / 2}
-          v ${-size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
-          z`
-                )
-            }
-        })
-    }
-
-    private basicWave(args: BasicFigureDrawArgs): void {
-        const { size, x, y } = args
-
-        const a1 = 5 * Math.PI / 180
-        const a2 = 65 * Math.PI / 180
-        const s1 = 0.95
-        const s2 = 0.65
-
-        const c23x = size * (s1 - s2 * Math.cos(a1))
-        const c23y = size * (1 - s2 * Math.sin(a1))
-
-        const c31x = -size * Math.cos(a2) / 2
-        const c31y = -size * Math.sin(a2) / 2
-
-        this.rotateFigure({
-            ...args,
-            draw: () => {
-                this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                this._element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y}
-          c 0 ${size * s2} ${c23x} ${c23y} ${size * s1} ${size}
-          c ${c31x} ${c31y} ${size * (1 - s1)} ${-size / 2} ${size * (1 - s1)} ${-size}
-          z`
-                )
-            }
-        })
-    }
-
-    private drawDot({ x, y, size }: DrawArgs): void {
-        this.basicDot({ x, y, size, rotation: 0 })
-    }
-
-    private drawRandomDot({ x, y, size }: DrawArgs): void {
-        const randomFactor = Math.random() * (1 - 0.75) + 0.75
-        this.basicDot({ x, y, size: size * randomFactor, rotation: 0 })
-    }
-
-    private drawSquare({ x, y, size }: DrawArgs): void {
-        this.basicSquare({ x, y, size, rotation: 0 })
-    }
-
-    private drawSmallSquare({ x, y, size }: DrawArgs): void {
+    },
+    [DotType.square]: args => DotElements.square(args),
+    [DotType.smallSquare]: ({ x, y, size, document }) => {
         const originalSize = size
 
         size = originalSize * 0.7
         x = x + originalSize * 0.15
         y = y + originalSize * 0.15
 
-        this.basicSquare({ x, y, size, rotation: 0 })
-    }
-
-    private drawTinySquare({ x, y, size }: DrawArgs): void {
+        return DotElements.square({
+            x, y, size,
+            document
+        })
+    },
+    [DotType.tinySquare]: ({ x, y, size, document }) => {
         const originalSize = size
 
         size = originalSize * 0.3
         x = x + originalSize * 0.35
         y = y + originalSize * 0.35
 
-        this.basicSquare({ x, y, size, rotation: 0 })
-    }
-
-    private drawDiamond({ x, y, size }: DrawArgs): void {
-        this.basicSquare({ x, y, size, rotation: Math.PI / 4 })
-    }
-
-    private drawRounded({ x, y, size, getNeighbor }: DrawArgs): void {
+        return DotElements.square({
+            x, y, size,
+            document
+        })
+    },
+    [DotType.diamond]: args => rotateFigure({
+        ...args,
+        rotation: Math.PI / 4,
+        draw: DotElements.square
+    }),
+    [DotType.wave]: ({ x, y, size, document, getNeighbor }) => {
         const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
         const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
         const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
@@ -259,16 +281,16 @@ export class QRDot {
         const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
 
         if (neighborsCount === 0) {
-            this.basicDot({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
-            this.basicSquare({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount === 2) {
+            return DotElements.dot({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+            return DotElements.square({
+                x, y, size,
+                document
+            })
+        } else if (neighborsCount === 2) {
             let rotation = 0
 
             if (leftNeighbor && topNeighbor) {
@@ -279,231 +301,12 @@ export class QRDot {
                 rotation = -Math.PI / 2
             }
 
-            this.basicCornerRounded({ x, y, size, rotation })
-            return
-        }
-
-        if (neighborsCount === 1) {
-            let rotation = 0
-
-            if (topNeighbor) {
-                rotation = Math.PI / 2
-            } else if (rightNeighbor) {
-                rotation = Math.PI
-            } else if (bottomNeighbor) {
-                rotation = -Math.PI / 2
-            }
-
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-    }
-
-    private drawVerticalLine({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (
-            neighborsCount === 0 ||
-            (leftNeighbor && !(topNeighbor || bottomNeighbor)) ||
-            (rightNeighbor && !(topNeighbor || bottomNeighbor))
-        ) {
-            this.basicDot({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (topNeighbor && bottomNeighbor) {
-            this.basicSquare({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (topNeighbor && !bottomNeighbor) {
-            const rotation = Math.PI / 2
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-
-        if (bottomNeighbor && !topNeighbor) {
-            const rotation = -Math.PI / 2
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-    }
-
-    private drawHorizontalLine({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (
-            neighborsCount === 0 ||
-            (topNeighbor && !(leftNeighbor || rightNeighbor)) ||
-            (bottomNeighbor && !(leftNeighbor || rightNeighbor))
-        ) {
-            this.basicDot({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (leftNeighbor && rightNeighbor) {
-            this.basicSquare({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (leftNeighbor && !rightNeighbor) {
-            const rotation = 0
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-
-        if (rightNeighbor && !leftNeighbor) {
-            const rotation = Math.PI
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-    }
-
-    private drawExtraRounded({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (neighborsCount === 0) {
-            this.basicDot({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
-            this.basicSquare({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount === 2) {
-            let rotation = 0
-
-            if (leftNeighbor && topNeighbor) {
-                rotation = Math.PI / 2
-            } else if (topNeighbor && rightNeighbor) {
-                rotation = Math.PI
-            } else if (rightNeighbor && bottomNeighbor) {
-                rotation = -Math.PI / 2
-            }
-
-            this.basicCornerExtraRounded({ x, y, size, rotation })
-            return
-        }
-
-        if (neighborsCount === 1) {
-            let rotation = 0
-
-            if (topNeighbor) {
-                rotation = Math.PI / 2
-            } else if (rightNeighbor) {
-                rotation = Math.PI
-            } else if (bottomNeighbor) {
-                rotation = -Math.PI / 2
-            }
-
-            this.basicSideRounded({ x, y, size, rotation })
-            return
-        }
-    }
-
-    private drawClassy({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (neighborsCount === 0) {
-            this.basicCornersRounded({ x, y, size, rotation: Math.PI / 2 })
-            return
-        }
-
-        if (!leftNeighbor && !topNeighbor) {
-            this.basicCornerRounded({ x, y, size, rotation: -Math.PI / 2 })
-            return
-        }
-
-        if (!rightNeighbor && !bottomNeighbor) {
-            this.basicCornerRounded({ x, y, size, rotation: Math.PI / 2 })
-            return
-        }
-
-        this.basicSquare({ x, y, size, rotation: 0 })
-    }
-
-    private drawClassyRounded({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (neighborsCount === 0) {
-            this.basicCornersRounded({ x, y, size, rotation: Math.PI / 2 })
-            return
-        }
-
-        if (!leftNeighbor && !topNeighbor) {
-            this.basicCornerExtraRounded({ x, y, size, rotation: -Math.PI / 2 })
-            return
-        }
-
-        if (!rightNeighbor && !bottomNeighbor) {
-            this.basicCornerExtraRounded({ x, y, size, rotation: Math.PI / 2 })
-            return
-        }
-
-        this.basicSquare({ x, y, size, rotation: 0 })
-    }
-
-    private drawWave({ x, y, size, getNeighbor }: DrawArgs): void {
-        const leftNeighbor = getNeighbor ? +getNeighbor(-1, 0) : 0
-        const rightNeighbor = getNeighbor ? +getNeighbor(1, 0) : 0
-        const topNeighbor = getNeighbor ? +getNeighbor(0, -1) : 0
-        const bottomNeighbor = getNeighbor ? +getNeighbor(0, 1) : 0
-
-        const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
-
-        if (neighborsCount === 0) {
-            this.basicDot({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
-            this.basicSquare({ x, y, size, rotation: 0 })
-            return
-        }
-
-        if (neighborsCount === 2) {
-            let rotation = 0
-
-            if (leftNeighbor && topNeighbor) {
-                rotation = Math.PI / 2
-            } else if (topNeighbor && rightNeighbor) {
-                rotation = Math.PI
-            } else if (rightNeighbor && bottomNeighbor) {
-                rotation = -Math.PI / 2
-            }
-
-            this.basicCornerExtraRounded({ x, y, size, rotation })
-            return
-        }
-
-        if (neighborsCount === 1) {
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.cornerExtraRounded
+            })
+        } else {
             let rotation = 0
 
             if (rightNeighbor) {
@@ -514,8 +317,15 @@ export class QRDot {
                 rotation = -Math.PI / 2
             }
 
-            this.basicWave({ x, y, size, rotation })
-            return
+            return rotateFigure({
+                x, y, size, rotation,
+                document,
+                draw: DotElements.wave
+            })
         }
     }
+}
+
+export function getQrDotFigure(type: `${DotType}`) {
+    return qrDotFigures[type] || qrDotFigures[DotType.square]
 }

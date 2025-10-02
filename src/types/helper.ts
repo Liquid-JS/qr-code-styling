@@ -6,25 +6,19 @@ export type RecursivePartial<T> = {
             : T[P];
 }
 
-export interface DrawArgs {
+export interface BasicFigureDrawArgs {
+    document: Document
     x: number
     y: number
     size: number
+}
+
+export interface DrawArgs extends BasicFigureDrawArgs {
     rotation?: number
     getNeighbor?: (x: number, y: number) => boolean
 }
 
-export interface BasicFigureDrawArgs {
-    x: number
-    y: number
-    size: number
+export interface RotateFigureArgs<T extends SVGElement | ReadonlyArray<SVGElement>> extends BasicFigureDrawArgs {
     rotation?: number
-}
-
-export interface RotateFigureArgs {
-    x: number
-    y: number
-    size: number
-    rotation?: number
-    draw: () => void
+    draw: (args: BasicFigureDrawArgs) => T
 }

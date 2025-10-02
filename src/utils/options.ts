@@ -24,8 +24,8 @@ export enum CornerDotType {
     heart = 'heart',
     extraRounded = 'extra-rounded',
     classy = 'classy',
-    outpoint = 'outpoint',
-    inpoint = 'inpoint'
+    inpoint = 'inpoint',
+    outpoint = 'outpoint'
 }
 
 export enum CornerSquareType {
@@ -33,8 +33,8 @@ export enum CornerSquareType {
     square = 'square',
     extraRounded = 'extra-rounded',
     classy = 'classy',
-    outpoint = 'outpoint',
-    inpoint = 'inpoint'
+    inpoint = 'inpoint',
+    outpoint = 'outpoint'
 }
 
 export enum ShapeType {

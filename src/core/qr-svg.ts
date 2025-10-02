@@ -1,8 +1,8 @@
 import { QRCodeMinimal } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js'
 import { QRUtil } from '@liquid-js/qrcode-generator/lib/qrcode/QRUtil.js'
-import { QRCornerDot } from '../figures/corner-dot.js'
-import { QRCornerSquare } from '../figures/corner-square.js'
-import { QRDot } from '../figures/dot.js'
+import { getQrCornerDotFigure } from '../figures/corner-dot.js'
+import { getQrCornerSquareFigure } from '../figures/corner-square.js'
+import { getQrDotFigure } from '../figures/dot.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
 import { parseColor } from '../utils/color.js'
 import { Gradient, GradientType } from '../utils/gradient.js'
@@ -244,9 +244,7 @@ export class QRSVG {
         if (options.imageOptions.mode == ImageMode.background) minSize -= 2 * dotSize * (options.imageOptions.margin || 0)
         const xBeginning = Math.floor((options.width - count * dotSize) / 2)
         const yBeginning = Math.floor((options.height - count * dotSize) / 2)
-        let dot = new QRDot(options.dotsOptions.type, this.document)
-        const overlayDot = new QRDot(DotType.tinySquare, this.document)
-        const markerDot = new QRDot(DotType.square, this.document);
+        let draw = getQrDotFigure(options.dotsOptions.type);
 
         [this.dotsMask, this.dotsMaskGroup] = this.createMask('mask-dot-color')
         this.defs.appendChild(this.dotsMask)
@@ -336,40 +334,39 @@ export class QRSVG {
                 if (fakeMatrix[i][j] == undefined) continue
 
                 if (this.lightDotsMask) {
-                    dot =
+                    draw =
                         iAlign &&
                             jAlign &&
                             ((iAlign != alignment[0] && jAlign != alignment[0]) ||
                                 (jAlign != alignment[0] && jAlign != alignment[alignment.length - 1]) ||
                                 (iAlign != alignment[0] && iAlign != alignment[alignment.length - 1]))
-                            ? markerDot
-                            : overlayDot
+                            ? getQrDotFigure(DotType.square)
+                            : getQrDotFigure(DotType.tinySquare)
                 }
 
                 if (!fakeMatrix[i][j]) {
                     if (this.lightDotsMask) {
-                        dot.draw({
-                            x: xFakeBeginning + i * dotSize,
-                            y: yFakeBeginning + j * dotSize,
-                            size: dotSize,
-                            getNeighbor: (xOffset: number, yOffset: number): boolean => fakeMatrix[i + xOffset]?.[j + yOffset] === false
-                        })
-
-                        if (dot.element && this.lightDotsMaskGroup) {
-                            this.lightDotsMaskGroup.appendChild(dot.element)
+                        if (this.lightDotsMaskGroup) {
+                            this.lightDotsMaskGroup.appendChild(draw({
+                                x: xFakeBeginning + i * dotSize,
+                                y: yFakeBeginning + j * dotSize,
+                                size: dotSize,
+                                document: this.options.document,
+                                getNeighbor: (xOffset: number, yOffset: number): boolean => fakeMatrix[i + xOffset]?.[j + yOffset] === false
+                            }))
                         }
                     }
                     continue
                 }
 
-                dot.draw({
-                    x: xFakeBeginning + i * dotSize,
-                    y: yFakeBeginning + j * dotSize,
-                    size: dotSize,
-                    getNeighbor: (xOffset: number, yOffset: number): boolean => fakeMatrix[i + xOffset]?.[j + yOffset] === true
-                })
-                if (dot.element && this.dotsMaskGroup) {
-                    this.dotsMaskGroup.appendChild(dot.element)
+                if (this.dotsMaskGroup) {
+                    this.dotsMaskGroup.appendChild(draw({
+                        x: xFakeBeginning + i * dotSize,
+                        y: yFakeBeginning + j * dotSize,
+                        size: dotSize,
+                        document: this.options.document,
+                        getNeighbor: (xOffset: number, yOffset: number): boolean => fakeMatrix[i + xOffset]?.[j + yOffset] === true
+                    }))
                 }
             }
         }
@@ -449,53 +446,52 @@ export class QRSVG {
             }
 
             if (isCornerSquareType(options.cornersSquareOptions?.type)) {
-                const cornersSquare = new QRCornerSquare(options.cornersSquareOptions.type, this.document)
+                const draw = getQrCornerSquareFigure(options.cornersSquareOptions.type)
 
-                cornersSquare.draw({
+                const [cornerElement, cornerFill] = draw({
                     x,
                     y,
                     size: cornersSquareSize,
+                    document: this.options.document,
                     rotation
                 })
 
-                if (cornersSquare.element && cornersSquareMaskGroup) {
-                    cornersSquareMaskGroup.appendChild(cornersSquare.element)
+                if (cornersSquareMaskGroup) {
+                    cornersSquareMaskGroup.appendChild(cornerElement)
                 }
 
-                if (cornersSquare.fill && this.lightDotsMaskGroup) {
-                    this.lightDotsMaskGroup.appendChild(cornersSquare.fill)
+                if (this.lightDotsMaskGroup) {
+                    this.lightDotsMaskGroup.appendChild(cornerFill)
                 }
             } else {
-                const dot = new QRDot(options.cornersSquareOptions?.type || options.dotsOptions.type, this.document)
+                const draw = getQrDotFigure(options.cornersSquareOptions?.type || options.dotsOptions.type)
 
                 for (let i = 0; i < squareMask.length; i++) {
                     for (let j = 0; j < squareMask[i].length; j++) {
                         if (!squareMask[i]?.[j]) {
                             if (this.lightDotsMask && !dotMask[i]?.[j]) {
-                                dot.draw({
-                                    x: x + i * dotSize,
-                                    y: y + j * dotSize,
-                                    size: dotSize,
-                                    getNeighbor: (xOffset: number, yOffset: number): boolean =>
-                                        !squareMask[i + xOffset]?.[j + yOffset] && !dotMask[i + xOffset]?.[j + yOffset]
-                                })
-
-                                if (dot.element && this.lightDotsMaskGroup) {
-                                    this.lightDotsMaskGroup.appendChild(dot.element)
+                                if (this.lightDotsMaskGroup) {
+                                    this.lightDotsMaskGroup.appendChild(draw({
+                                        x: x + i * dotSize,
+                                        y: y + j * dotSize,
+                                        size: dotSize,
+                                        document: this.options.document,
+                                        getNeighbor: (xOffset: number, yOffset: number): boolean =>
+                                            !squareMask[i + xOffset]?.[j + yOffset] && !dotMask[i + xOffset]?.[j + yOffset]
+                                    }))
                                 }
                             }
                             continue
                         }
 
-                        dot.draw({
-                            x: x + i * dotSize,
-                            y: y + j * dotSize,
-                            size: dotSize,
-                            getNeighbor: (xOffset: number, yOffset: number): boolean => !!squareMask[i + xOffset]?.[j + yOffset]
-                        })
-
-                        if (dot.element && cornersSquareMaskGroup) {
-                            cornersSquareMaskGroup.appendChild(dot.element)
+                        if (cornersSquareMaskGroup) {
+                            cornersSquareMaskGroup.appendChild(draw({
+                                x: x + i * dotSize,
+                                y: y + j * dotSize,
+                                size: dotSize,
+                                document: this.options.document,
+                                getNeighbor: (xOffset: number, yOffset: number): boolean => !!squareMask[i + xOffset]?.[j + yOffset]
+                            }))
                         }
                     }
                 }
@@ -504,19 +500,18 @@ export class QRSVG {
                     for (let i = -1; i < 8; i++) {
                         for (let j = -1; j < 8; j++) {
                             if (i == -1 || i == 7 || j == -1 || j == 7) {
-                                dot.draw({
-                                    x: x + i * dotSize,
-                                    y: y + j * dotSize,
-                                    size: dotSize,
-                                    getNeighbor: (xOffset: number, yOffset: number): boolean => {
-                                        const ii = i + xOffset
-                                        const jj = j + yOffset
-                                        return ii >= -1 && ii <= 7 && jj >= -1 && jj <= 7 && (ii == -1 || ii == 7 || jj == -1 || jj == 7)
-                                    }
-                                })
-
-                                if (dot.element && this.lightDotsMaskGroup) {
-                                    this.lightDotsMaskGroup.appendChild(dot.element)
+                                if (this.lightDotsMaskGroup) {
+                                    this.lightDotsMaskGroup.appendChild(draw({
+                                        x: x + i * dotSize,
+                                        y: y + j * dotSize,
+                                        size: dotSize,
+                                        document: this.options.document,
+                                        getNeighbor: (xOffset: number, yOffset: number): boolean => {
+                                            const ii = i + xOffset
+                                            const jj = j + yOffset
+                                            return ii >= -1 && ii <= 7 && jj >= -1 && jj <= 7 && (ii == -1 || ii == 7 || jj == -1 || jj == 7)
+                                        }
+                                    }))
                                 }
                             }
                         }
@@ -540,20 +535,19 @@ export class QRSVG {
             }
 
             if (isCornerDotType(options.cornersDotOptions?.type)) {
-                const cornersDot = new QRCornerDot(options.cornersDotOptions.type, this.document)
+                const draw = getQrCornerDotFigure(options.cornersDotOptions.type)
 
-                cornersDot.draw({
-                    x: x + dotSize * 2,
-                    y: y + dotSize * 2,
-                    size: cornersDotSize,
-                    rotation
-                })
-
-                if (cornersDot.element && cornersDotMaskGroup) {
-                    cornersDotMaskGroup.appendChild(cornersDot.element)
+                if (cornersDotMaskGroup) {
+                    cornersDotMaskGroup.appendChild(draw({
+                        x: x + dotSize * 2,
+                        y: y + dotSize * 2,
+                        size: cornersDotSize,
+                        document: this.document,
+                        rotation
+                    }))
                 }
             } else {
-                const dot = new QRDot(options.cornersDotOptions?.type || options.dotsOptions.type, this.document)
+                const draw = getQrDotFigure(options.cornersDotOptions?.type || options.dotsOptions.type)
 
                 for (let i = 0; i < dotMask.length; i++) {
                     for (let j = 0; j < dotMask[i].length; j++) {
@@ -561,15 +555,14 @@ export class QRSVG {
                             continue
                         }
 
-                        dot.draw({
-                            x: x + i * dotSize,
-                            y: y + j * dotSize,
-                            size: dotSize,
-                            getNeighbor: (xOffset: number, yOffset: number): boolean => !!dotMask[i + xOffset]?.[j + yOffset]
-                        })
-
-                        if (dot.element && cornersDotMaskGroup) {
-                            cornersDotMaskGroup.appendChild(dot.element)
+                        if (cornersDotMaskGroup) {
+                            cornersDotMaskGroup.appendChild(draw({
+                                x: x + i * dotSize,
+                                y: y + j * dotSize,
+                                size: dotSize,
+                                document: this.options.document,
+                                getNeighbor: (xOffset: number, yOffset: number): boolean => !!dotMask[i + xOffset]?.[j + yOffset]
+                            }))
                         }
                     }
                 }
