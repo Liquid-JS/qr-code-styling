@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.0.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v4.1.0...v5.0.0-0) (2025-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Convert figures from OOP to functional pattern to improve reuse and reduce code
+
+* optimise figure rendering ([0b324ea](https://github.com/Liquid-JS/qr-code-styling/commit/0b324ea098f4aa601cf581db281853c4e5a9f684))
+
 ## [4.1.0](https://github.com/Liquid-JS/qr-code-styling/compare/v4.0.8...v4.1.0) (2025-09-25)
 
 
