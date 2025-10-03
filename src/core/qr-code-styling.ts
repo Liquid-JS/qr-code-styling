@@ -157,7 +157,11 @@ export class QRCodeStyling {
 
         this.svgDrawingPromise = this.qrSVG.drawQR(this.qr).then(() => {
             if (!this.qrSVG?.element) return
-            this.extension?.(this.qrSVG.element, this.options)
+            this.extension?.(this.qrSVG.element, {
+                ...this.options,
+                width: size,
+                height: size
+            })
         })
     }
 }
