@@ -647,7 +647,13 @@ export class QRSVG {
         width: number
         name: string
     }): void {
-        const size = width > height ? width : height
+        const gradientSize = width > height ? width : height
+
+        x -= this.options.dotsOptions.size
+        y -= this.options.dotsOptions.size
+        width += 2 * this.options.dotsOptions.size
+        height += 2 * this.options.dotsOptions.size
+
         const rect = this.document.createElementNS('http://www.w3.org/2000/svg', 'rect')
         rect.setAttribute('x', numToAttr(x))
         rect.setAttribute('y', numToAttr(y))
@@ -665,7 +671,7 @@ export class QRSVG {
                 gradient.setAttribute('fy', numToAttr(y + height / 2))
                 gradient.setAttribute('cx', numToAttr(x + width / 2))
                 gradient.setAttribute('cy', numToAttr(y + height / 2))
-                gradient.setAttribute('r', numToAttr(size / 2))
+                gradient.setAttribute('r', numToAttr(gradientSize / 2))
             } else {
                 const rotation = ((options.rotation || 0) + additionalRotation) % (2 * Math.PI)
                 const positiveRotation = (rotation + 2 * Math.PI) % (2 * Math.PI)

@@ -19,7 +19,8 @@ const qrCornerSquareFigures: { [type in CornerSquareType]: (args: DrawArgs) => r
         ...args,
         rotation: (rotation || 0) + Math.PI,
         draw: SquareElements.inpoint
-    })
+    }),
+    [CornerSquareType.centerCircle]: args => SquareElements.centerCircle(args)
 }
 
 export function getQrCornerSquareFigure(type: `${CornerSquareType}`) {

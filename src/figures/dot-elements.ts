@@ -12,29 +12,29 @@ export const DotElements = {
 
         return element
     },
-    square: (args: BasicFigureDrawArgs) => {
-        const { size, x, y, document } = args
+    square: (args: BasicFigureDrawArgs, { width = args.size, height = args.size } = {}) => {
+        const { x, y, size, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-        element.setAttribute('x', numToAttr(x))
-        element.setAttribute('y', numToAttr(y))
-        element.setAttribute('width', numToAttr(size))
-        element.setAttribute('height', numToAttr(size))
+        element.setAttribute('x', numToAttr(x + (size - width) / 2))
+        element.setAttribute('y', numToAttr(y + (size - height) / 2))
+        element.setAttribute('width', numToAttr(width))
+        element.setAttribute('height', numToAttr(height))
 
         return element
     },
     //if rotation === 0 - right side is rounded
-    sideRounded: (args: BasicFigureDrawArgs) => {
+    sideRounded: (args: BasicFigureDrawArgs, { height = args.size } = {}) => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
-                  v ${size}
-                  h ${size / 2}
-                  a ${size / 2} ${size / 2}, 0, 0, 0, 0 ${-size}
-                  z`
+            svgPath`M ${x} ${y + (size - height) / 2}
+          v ${height}
+          h ${size / 2}
+          a ${height / 2} ${height / 2} 0 0 0 0 ${-height}
+          z`
         )
 
         return element
@@ -50,7 +50,7 @@ export const DotElements = {
           v ${size}
           h ${size}
           v ${-size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
+          a ${size / 2} ${size / 2} 0 0 0 ${-size / 2} ${-size / 2}
           z`
         )
 
@@ -66,7 +66,7 @@ export const DotElements = {
             svgPath`M ${x} ${y}
           v ${size}
           h ${size}
-          a ${size} ${size}, 0, 0, 0, ${-size} ${-size}
+          a ${size} ${size} 0 0 0 ${-size} ${-size}
           z`
         )
 
@@ -81,10 +81,10 @@ export const DotElements = {
             'd',
             svgPath`M ${x} ${y}
           v ${size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${size / 2} ${size / 2}
+          a ${size / 2} ${size / 2} 0 0 0 ${size / 2} ${size / 2}
           h ${size / 2}
           v ${-size / 2}
-          a ${size / 2} ${size / 2}, 0, 0, 0, ${-size / 2} ${-size / 2}
+          a ${size / 2} ${size / 2} 0 0 0 ${-size / 2} ${-size / 2}
           z`
         )
 
@@ -98,18 +98,18 @@ export const DotElements = {
         const s1 = 0.95
         const s2 = 0.65
 
-        const c23x = size * (s1 - s2 * Math.cos(a1))
-        const c23y = size * (1 - s2 * Math.sin(a1))
+        const c23x = size * (1 - s2 * Math.sin(a1))
+        const c23y = -size * (s1 - s2 * Math.cos(a1))
 
-        const c31x = -size * Math.cos(a2) / 2
-        const c31y = -size * Math.sin(a2) / 2
+        const c31x = -size * Math.sin(a2) / 2
+        const c31y = size * Math.cos(a2) / 2
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
-          c 0 ${size * s2} ${c23x} ${c23y} ${size * s1} ${size}
-          c ${c31x} ${c31y} ${size * (1 - s1)} ${-size / 2} ${size * (1 - s1)} ${-size}
+            svgPath`M ${x} ${y + size}
+          c ${size * s2} 0 ${c23x} ${c23y} ${size} ${-size * s1}
+          c ${c31x} ${c31y} ${-size / 2} ${size * (s1 - 1)} ${-size} ${size * (s1 - 1)} 
           z`
         )
 
@@ -195,10 +195,10 @@ export const DotElements = {
             'd',
             svgPath`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
           v ${-4.5 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${-dotSize * 2.5}
           h ${-2 * dotSize}
           H ${x}
           z`
@@ -214,12 +214,62 @@ export const DotElements = {
             'd',
             svgPath`M ${x} ${y + size / 2}
           v ${size / 4}
-          a ${size / 4}, ${size / 4} 0 0 0 ${size / 4}, ${size / 4}
+          a ${size / 4} ${size / 4} 0 0 0 ${size / 4} ${size / 4}
           h ${(size / 4) * 3}
           v ${(-size / 4) * 3}
-          a ${size / 4}, ${size / 4} 0 0 0 ${-size / 4}, ${-size / 4}
+          a ${size / 4} ${size / 4} 0 0 0 ${-size / 4} ${-size / 4}
           h ${-size / 2}
-          a ${size / 4}, ${size / 4} 0 0 0 ${-size / 4}, ${size / 4}
+          a ${size / 4} ${size / 4} 0 0 0 ${-size / 4} ${size / 4}
+          z`
+        )
+
+        return element
+    },
+    star: (args: BasicFigureDrawArgs, {
+        spikes = 5,
+        outerRadius = args.size / 2,
+        innerRadius = args.size / 4
+    } = {}) => {
+        const { size, x, y, document } = args
+        const cx = x + size / 2
+        const cy = y + size / 2
+
+        const angle = Math.PI / spikes
+
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        element.setAttribute(
+            'd',
+            Array(2 * spikes).fill(0).map((_, i) => {
+                const radius = i % 2 === 0 ? outerRadius : innerRadius
+                const xPoint = cx + radius * Math.sin(i * angle)
+                const yPoint = cy - radius * Math.cos(i * angle)
+                return svgPath`${i === 0 ? 'M' : 'L'} ${xPoint} ${yPoint} `
+            }).join(' ')
+        )
+
+        return element
+    },
+    weave: (args: BasicFigureDrawArgs) => {
+        const { size, x, y, document } = args
+
+        const thickness = size * 0.6
+        const notch = (size - thickness) / 2
+
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        element.setAttribute(
+            'd',
+            svgPath`M ${x + notch} ${y}
+          l ${thickness} 0
+          l 0 ${notch}
+          l ${notch} 0
+          l 0 ${thickness}
+          l ${-notch} 0
+          l 0 ${notch}
+          l ${-thickness} 0
+          l 0 ${-notch}
+          l ${-notch} 0
+          l 0 ${-thickness}
+          l ${notch} 0
           z`
         )
 

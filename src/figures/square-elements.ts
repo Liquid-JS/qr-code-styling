@@ -55,8 +55,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`
-          M ${x - dotSize} ${y - dotSize}
+            svgPath`M ${x - dotSize} ${y - dotSize}
           h ${size + 2 * dotSize}
           v ${size + 2 * dotSize}
           h ${-size - 2 * dotSize}
@@ -76,23 +75,23 @@ export const SquareElements = {
             'd',
             svgPath`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${-dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${-dotSize * 2.5}
           v ${-2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${-dotSize * 2.5}
           h ${-2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${dotSize * 2.5}
           z
           M ${x + 2.5 * dotSize} ${y + dotSize}
           h ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${dotSize * 1.5} ${dotSize * 1.5}
           v ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${-dotSize * 1.5} ${dotSize * 1.5}
           h ${-2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${-dotSize * 1.5} ${-dotSize * 1.5}
           v ${-2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${dotSize * 1.5} ${-dotSize * 1.5}
           z`
         )
 
@@ -103,13 +102,13 @@ export const SquareElements = {
             svgPath`
           M ${x - dotSize} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${dotSize * 3.5} ${dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 0 ${dotSize * 3.5} ${dotSize * 3.5}
           h ${2 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${dotSize * 3.5} ${-dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 0 ${dotSize * 3.5} ${-dotSize * 3.5}
           v ${-2 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 0 ${-dotSize * 3.5} ${-dotSize * 3.5}
           h ${-2 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 0, ${-dotSize * 3.5} ${dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 0 ${-dotSize * 3.5} ${dotSize * 3.5}
           z`
         )
 
@@ -126,19 +125,19 @@ export const SquareElements = {
             'd',
             svgPath`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
           v ${-4.5 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${-dotSize * 2.5}
           h ${-2 * dotSize}
           H ${x}
           z
           M ${x + 2.5 * dotSize} ${y + dotSize}
           h ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${dotSize * 1.5} ${dotSize * 1.5}
           v ${3.5 * dotSize}
           h ${-3.5 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${-dotSize * 1.5} ${-dotSize * 1.5}
           v ${-3.5 * dotSize}
           z`
         )
@@ -150,10 +149,10 @@ export const SquareElements = {
             svgPath`
           M ${x + 0.5 * dotSize} ${y - dotSize}
           h ${4 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${dotSize * 3.5} ${dotSize * 3.5}
           v ${5.5 * dotSize}
           h ${-5.5 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${-dotSize * 3.5} ${-dotSize * 3.5}
           v ${-5.5 * dotSize}
           z`
         )
@@ -171,21 +170,21 @@ export const SquareElements = {
             'd',
             svgPath`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
           v ${-4.5 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${-dotSize * 2.5}
           h ${-2 * dotSize}
-          a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${dotSize * 2.5}
+          a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${-dotSize * 2.5} ${dotSize * 2.5}
           z
           M ${x + 2.5 * dotSize} ${y + dotSize}
           h ${2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${dotSize * 1.5} ${dotSize * 1.5}
           v ${3.5 * dotSize}
           h ${-3.5 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${-dotSize * 1.5} ${-dotSize * 1.5}
           v ${-2 * dotSize}
-          a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${-dotSize * 1.5}
+          a ${1.5 * dotSize} ${1.5 * dotSize} 0 0 1 ${dotSize * 1.5} ${-dotSize * 1.5}
           z`
         )
 
@@ -196,12 +195,86 @@ export const SquareElements = {
             svgPath`
           M ${x + 0.5 * dotSize} ${y - dotSize}
           h ${4 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${dotSize * 3.5} ${dotSize * 3.5}
           v ${5.5 * dotSize}
           h ${-5.5 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${-dotSize * 3.5} ${-dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${-dotSize * 3.5} ${-dotSize * 3.5}
           v ${-2 * dotSize}
-          a ${3.5 * dotSize} ${3.5 * dotSize}, 0, 0, 1, ${dotSize * 3.5} ${-dotSize * 3.5}
+          a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${dotSize * 3.5} ${-dotSize * 3.5}
+          z`
+        )
+
+        return [element, fill] as const
+    },
+    centerCircle: (args: BasicFigureDrawArgs) => {
+        const { x, y, size } = args
+
+        const circleRadius = size / 2.5
+        const cx = x + size / 2
+        const cy = y + size / 2
+        const dotSize = size / 7
+
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        element.setAttribute('clip-rule', 'evenodd')
+        element.setAttribute(
+            'd',
+            svgPath`M ${x} ${y}
+          h ${size}
+          v ${size}
+          h ${-size}
+          z
+          M ${cx - circleRadius} ${cy}
+          a ${circleRadius} ${circleRadius} 0 1 0 ${circleRadius * 2} 0
+          a ${circleRadius} ${circleRadius} 0 1 0 ${-circleRadius * 2} 0
+          z`
+        )
+
+        const fill = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        fill.setAttribute('clip-rule', 'evenodd')
+        fill.setAttribute(
+            'd',
+            svgPath`M ${x - dotSize} ${y - dotSize}
+          h ${size + 2 * dotSize}
+          v ${size + 2 * dotSize}
+          h ${-size - 2 * dotSize}
+          z`
+        )
+
+        return [element, fill] as const
+    },
+    cornerCut: (args: BasicFigureDrawArgs) => {
+        const { x, y, size } = args
+
+        const dotSize = size / 8
+
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        element.setAttribute('clip-rule', 'evenodd')
+        element.setAttribute(
+            'd',
+            `
+            M ${x} ${y}
+            L ${x + size} ${y}
+            L ${x + size} ${y + size - dotSize}
+            Q ${x + size} ${y + size} ${x + size - dotSize} ${y + size}
+            L ${x + dotSize} ${y + size}
+            Q ${x} ${y + size - dotSize} ${x} ${y + size - dotSize}
+            Z
+            M ${x + dotSize} ${y + dotSize}
+            L ${x + size - dotSize} ${y + dotSize}
+            L ${x + size - dotSize} ${y + size - dotSize}
+            L ${x + dotSize} ${y + size - dotSize}
+            Z
+          `
+        )
+
+        const fill = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        fill.setAttribute('clip-rule', 'evenodd')
+        fill.setAttribute(
+            'd',
+            svgPath`M ${x - dotSize} ${y - dotSize}
+          h ${size + 2 * dotSize}
+          v ${size + 2 * dotSize}
+          h ${-size - 2 * dotSize}
           z`
         )
 

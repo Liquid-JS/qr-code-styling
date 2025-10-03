@@ -29,6 +29,22 @@ const qrCornerDotFigures: { [type in CornerDotType]: (args: DrawArgs) => SVGElem
         ...args,
         rotation: (args.rotation || 0) + Math.PI,
         draw: DotElements.inpoint
+    }),
+    [CornerDotType.star]: args => DotElements.star(args),
+    [CornerDotType.pentagon]: args => DotElements.star(args, {
+        spikes: 2.5,
+        outerRadius: args.size / 2,
+        innerRadius: args.size / 2
+    }),
+    [CornerDotType.hexagon]: args => DotElements.star(args, {
+        spikes: 3,
+        outerRadius: args.size / 2,
+        innerRadius: args.size / 2
+    }),
+    [CornerDotType.diamond]: args => rotateFigure({
+        ...args,
+        rotation: Math.PI / 4,
+        draw: args2 => DotElements.square(args2, { width: args2.size * 0.85, height: args2.size * 0.85 })
     })
 }
 

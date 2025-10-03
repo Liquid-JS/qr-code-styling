@@ -15,7 +15,14 @@ export enum DotType {
     smallSquare = 'small-square',
     tinySquare = 'tiny-square',
     diamond = 'diamond',
-    wave = 'wave'
+    wave = 'wave',
+    heart = 'heart',
+    star = 'star',
+    weave = 'weave',
+    pentagon = 'pentagon',
+    hexagon = 'hexagon',
+    zebraHorizontal = 'zebra-horizontal',
+    zebraVertical = 'zebra-vertical'
 }
 
 export enum CornerDotType {
@@ -25,7 +32,11 @@ export enum CornerDotType {
     extraRounded = 'extra-rounded',
     classy = 'classy',
     inpoint = 'inpoint',
-    outpoint = 'outpoint'
+    outpoint = 'outpoint',
+    star = 'star',
+    pentagon = 'pentagon',
+    hexagon = 'hexagon',
+    diamond = 'diamond'
 }
 
 export enum CornerSquareType {
@@ -34,7 +45,8 @@ export enum CornerSquareType {
     extraRounded = 'extra-rounded',
     classy = 'classy',
     inpoint = 'inpoint',
-    outpoint = 'outpoint'
+    outpoint = 'outpoint',
+    centerCircle = 'center-circle'
 }
 
 export enum ShapeType {
