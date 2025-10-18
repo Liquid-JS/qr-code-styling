@@ -53,3 +53,18 @@ export function scalePath(path: Array<string | number>, { x, y, size }: {
         })
         .join(' ')
 }
+
+export function extendSVG(svg: SVGSVGElement, padding: number) {
+    svg.setAttribute('width', numToAttr(parseFloat(svg.getAttribute('width') || '0') + 2 * padding))
+    svg.setAttribute('height', numToAttr(parseFloat(svg.getAttribute('height') || '0') + 2 * padding))
+    const vb = (svg.getAttribute('viewBox') || '').split(' ').map((v, i) => parseFloat(v) + (i < 2 ? -1 : 2) * padding)
+    svg.setAttribute('viewBox', vb.map(numToAttr).join(' '))
+    if (vb.length < 4)
+        return undefined
+    return {
+        left: vb[0],
+        right: vb[2],
+        top: vb[1],
+        bottom: vb[3]
+    }
+}
