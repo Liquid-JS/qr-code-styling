@@ -241,43 +241,5 @@ export const SquareElements = {
         )
 
         return [element, fill] as const
-    },
-    cornerCut: (args: BasicFigureDrawArgs) => {
-        const { x, y, size } = args
-
-        const dotSize = size / 8
-
-        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-        element.setAttribute('clip-rule', 'evenodd')
-        element.setAttribute(
-            'd',
-            `
-            M ${x} ${y}
-            L ${x + size} ${y}
-            L ${x + size} ${y + size - dotSize}
-            Q ${x + size} ${y + size} ${x + size - dotSize} ${y + size}
-            L ${x + dotSize} ${y + size}
-            Q ${x} ${y + size - dotSize} ${x} ${y + size - dotSize}
-            Z
-            M ${x + dotSize} ${y + dotSize}
-            L ${x + size - dotSize} ${y + dotSize}
-            L ${x + size - dotSize} ${y + size - dotSize}
-            L ${x + dotSize} ${y + size - dotSize}
-            Z
-          `
-        )
-
-        const fill = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-        fill.setAttribute('clip-rule', 'evenodd')
-        fill.setAttribute(
-            'd',
-            svgPath`M ${x - dotSize} ${y - dotSize}
-          h ${size + 2 * dotSize}
-          v ${size + 2 * dotSize}
-          h ${-size - 2 * dotSize}
-          z`
-        )
-
-        return [element, fill] as const
     }
 }
