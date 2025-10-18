@@ -125,13 +125,9 @@ const buffer = await new Promise((resolve) => {
 await writeFile('qr.pdf', buffer)
 ```
 
-### Plugins
+### Plugins <img align="right" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/border.png" width="240" />
 
 Version `5.0.0` of the library introduces plugin support, enabling you to further customize the shape of dots and corners. Additionally, plugins can apply effects, such as adding borders, to enhance the final QR code output.
-
-<p float="left">
-<img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/border.png" width="240" />
-</p>
 
 #### Plugin development
 
@@ -165,7 +161,7 @@ const qrCode = new QRCodeStyling({
 })
 ```
 
-See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/tree/master/src/plugins/border.js) for further reference.
+See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/blob/master/src/plugins/border.ts) and [figures](https://github.com/Liquid-JS/qr-code-styling/tree/master/src/figures) for further reference.
 
 ### Kanji support
 
