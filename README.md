@@ -125,6 +125,48 @@ const buffer = await new Promise((resolve) => {
 await writeFile('qr.pdf', buffer)
 ```
 
+### Plugins
+
+Version `5.0.0` of the library introduces plugin support, enabling you to further customize the shape of dots and corners. Additionally, plugins can apply effects, such as adding borders, to enhance the final QR code output.
+
+<p float="left">
+<img style="display:inline-block" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/border.png" width="240" />
+</p>
+
+#### Plugin development
+
+A simple plugin example to customize QR code dots:
+
+```ts
+import { svgPath, DrawArgs } from '@liquid-js/qr-code-styling/plugin-utils'
+
+const qrCode = new QRCodeStyling({
+    plugins: [
+        {
+            drawDot: (args: DrawArgs): SVGElement | undefined => {
+                const { size, x, y, document } = args
+
+                const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')                
+                // Insert your own SVG path definition, or implement neighbour-aware logic through args.getNeighbor()
+                element.setAttribute(
+                    'd',
+                    svgPath`M ${x} ${y + (size - size) / 2}
+                  v ${size}
+                  h ${size / 2}
+                  a ${size / 2} ${size / 2} 0 0 0 0 ${-size}
+                  z`
+                )
+
+                return element
+            }
+        },
+    ]
+    // ...other options
+})
+```
+
+See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/tree/master/src/plugins/border.js) for further reference.
+
 ### Kanji support
 
 For Kanji mode to work, import `stringToBytesFuncs` from `@liquid-js/qr-code-styling/kanji` and inclue it with config.

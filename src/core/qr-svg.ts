@@ -566,7 +566,7 @@ export class QRSVG {
                 const draw = getQrCornerDotFigure(options.cornersDotOptions.type)
 
                 if (cornersDotMaskGroup) {
-                    cornersDotMaskGroup.appendChild(draw(squareArgs))
+                    cornersDotMaskGroup.appendChild(draw(dotArgs))
                 }
             } else {
                 const draw = getQrDotFigure(options.cornersDotOptions?.type || options.dotsOptions.type, options.plugins)

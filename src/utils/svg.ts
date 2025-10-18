@@ -63,8 +63,8 @@ export function extendSVG(svg: SVGSVGElement, padding: number) {
         return undefined
     return {
         left: vb[0],
-        right: vb[2],
+        right: vb[2] + vb[0],
         top: vb[1],
-        bottom: vb[3]
+        bottom: vb[3] + vb[1]
     }
 }

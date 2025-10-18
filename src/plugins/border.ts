@@ -46,14 +46,14 @@ export class BorderPlugin implements Plugin {
             + (this.pluginOptions.innerBorder?.size || 0) + (this.pluginOptions.innerBorder?.margin || 0)
             + (this.pluginOptions.outerBorder?.size || 0) + (this.pluginOptions.outerBorder?.margin || 0)
         )
-        const vb = extendSVG(svg, thickness)
-        if (!vb)
+        const drawArea = extendSVG(svg, thickness)
+        if (!drawArea)
             return
 
-        const cx = (vb.left * 2 + vb.right) / 2
-        const cy = (vb.top * 2 + vb.bottom) / 2
+        const cx = (drawArea.left + drawArea.right) / 2
+        const cy = (drawArea.top + drawArea.bottom) / 2
         const lineSize = Math.min(options.width, options.height) / 2 * (1 - (this.pluginOptions.round || 0))
-        let r = (Math.min(vb.right - 2 * thickness, vb.bottom - 2 * thickness) / 2) - lineSize
+        let r = (Math.min(drawArea.right - drawArea.left - 2 * thickness, drawArea.bottom - drawArea.top - 2 * thickness) / 2) - lineSize
 
         const drawBorder = (cfg: BorderConfig) => {
             const t = cfg.size

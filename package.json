@@ -115,7 +115,9 @@
         "logo",
         "design",
         "node",
-        "nodejs"
+        "nodejs",
+        "plugin",
+        "plugins"
     ],
     "author": "HitkoDev <development@hitko.si>",
     "license": "MIT",

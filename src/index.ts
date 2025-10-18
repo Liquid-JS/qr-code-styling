@@ -4,7 +4,7 @@ export { FileExtension } from './tools/browser-utils.js'
 export { type RecursivePartial } from './types/helper.js'
 export { type CanvasOptions } from './utils/canvas-options.js'
 export { GradientType, type Gradient } from './utils/gradient.js'
-export { CornerDotType, CornerSquareType, DotType, ImageMode, ShapeType, type Options } from './utils/options.js'
+export { CornerDotType, CornerSquareType, DotType, ImageMode, ShapeType, type Options, type Plugin } from './utils/options.js'
 export { ErrorCorrectionPercents } from './utils/qrcode.js'
 import * as _browserUtils from './tools/browser-utils.js'
 
