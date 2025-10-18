@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.0.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.0-2...v5.0.0-3) (2025-10-18)
+
+
+### Features
+
+* border plugin ([4e2a002](https://github.com/Liquid-JS/qr-code-styling/commit/4e2a002ed4582dc0e74758b1f538a38b7442e3d5))
+* plugins ([d325b22](https://github.com/Liquid-JS/qr-code-styling/commit/d325b227d9ee07bbc59cb37ad74ccf6f22e21098))
+
+
+### Bug Fixes
+
+* remove unused square ([10b7119](https://github.com/Liquid-JS/qr-code-styling/commit/10b711986bd86ce0563aa5f375570468dad2dec8))
+
 ## [5.0.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.0-1...v5.0.0-2) (2025-10-03)
 
 
