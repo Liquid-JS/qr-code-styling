@@ -2,7 +2,8 @@ import { RotateFigureArgs } from '../types/helper.js'
 
 const rx = /\.?0+$/
 
-export function numToAttr(value: number) {
+export function numToAttr(value: number | string) {
+    if (typeof value == 'string') return value
     return value.toFixed(7).replace(rx, '')
 }
 

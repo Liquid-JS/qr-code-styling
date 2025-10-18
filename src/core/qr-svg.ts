@@ -1,7 +1,7 @@
 import { QRCodeMinimal } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js'
 import { QRUtil } from '@liquid-js/qrcode-generator/lib/qrcode/QRUtil.js'
-import { getQrCornerDotFigure } from '../figures/corner-dot.js'
-import { getQrCornerSquareFigure } from '../figures/corner-square.js'
+import { drawPluginCornerDot, getQrCornerDotFigure } from '../figures/corner-dot.js'
+import { drawPluginCornerSquare, getQrCornerSquareFigure } from '../figures/corner-square.js'
 import { getQrDotFigure } from '../figures/dot.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
 import { parseColor } from '../utils/color.js'
@@ -9,6 +9,7 @@ import { Gradient, GradientType } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
 import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { numToAttr } from '../utils/svg.js'
+import { DrawArgs } from '../types/helper.js'
 
 const squareMask = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -41,7 +42,7 @@ function isCornerDotType(val?: string): val is `${CornerDotType}` {
 }
 
 export class QRSVG {
-    private _element: SVGElement
+    private _element: SVGSVGElement
 
     get element() {
         return this._element
@@ -76,6 +77,7 @@ export class QRSVG {
             | 'cornersSquareOptions'
             | 'backgroundOptions'
             | 'shape'
+            | 'plugins'
         > & { errorCorrectionPercent: number }
     ) {
         this.document = options.document
@@ -244,7 +246,7 @@ export class QRSVG {
         if (options.imageOptions.mode == ImageMode.background) minSize -= 2 * dotSize * (options.imageOptions.margin || 0)
         const xBeginning = Math.floor((options.width - count * dotSize) / 2)
         const yBeginning = Math.floor((options.height - count * dotSize) / 2)
-        let draw = getQrDotFigure(options.dotsOptions.type);
+        let draw = getQrDotFigure(options.dotsOptions.type, options.plugins);
 
         [this.dotsMask, this.dotsMaskGroup] = this.createMask('mask-dot-color')
         this.defs.appendChild(this.dotsMask)
@@ -445,16 +447,29 @@ export class QRSVG {
                 })
             }
 
-            if (isCornerSquareType(options.cornersSquareOptions?.type)) {
+            const squareArgs: DrawArgs = {
+                x,
+                y,
+                size: cornersSquareSize,
+                document: this.options.document,
+                rotation
+            }
+            const pluinCornerSquare = options.plugins?.length ? drawPluginCornerSquare(options.plugins)(squareArgs) : undefined
+
+            if (pluinCornerSquare) {
+                const [cornerElement, cornerFill] = pluinCornerSquare
+
+                if (cornersSquareMaskGroup) {
+                    cornersSquareMaskGroup.appendChild(cornerElement)
+                }
+
+                if (this.lightDotsMaskGroup) {
+                    this.lightDotsMaskGroup.appendChild(cornerFill)
+                }
+            } else if (isCornerSquareType(options.cornersSquareOptions?.type)) {
                 const draw = getQrCornerSquareFigure(options.cornersSquareOptions.type)
 
-                const [cornerElement, cornerFill] = draw({
-                    x,
-                    y,
-                    size: cornersSquareSize,
-                    document: this.options.document,
-                    rotation
-                })
+                const [cornerElement, cornerFill] = draw(squareArgs)
 
                 if (cornersSquareMaskGroup) {
                     cornersSquareMaskGroup.appendChild(cornerElement)
@@ -464,7 +479,7 @@ export class QRSVG {
                     this.lightDotsMaskGroup.appendChild(cornerFill)
                 }
             } else {
-                const draw = getQrDotFigure(options.cornersSquareOptions?.type || options.dotsOptions.type)
+                const draw = getQrDotFigure(options.cornersSquareOptions?.type || options.dotsOptions.type, options.plugins)
 
                 for (let i = 0; i < squareMask.length; i++) {
                     for (let j = 0; j < squareMask[i].length; j++) {
@@ -534,20 +549,27 @@ export class QRSVG {
                 })
             }
 
-            if (isCornerDotType(options.cornersDotOptions?.type)) {
+            const dotArgs: DrawArgs = {
+                x: x + dotSize * 2,
+                y: y + dotSize * 2,
+                size: cornersDotSize,
+                document: this.document,
+                rotation
+            }
+            const pluinCornerDot = options.plugins?.length ? drawPluginCornerDot(options.plugins)(dotArgs) : undefined
+
+            if (pluinCornerDot) {
+                if (cornersDotMaskGroup) {
+                    cornersDotMaskGroup.appendChild(pluinCornerDot)
+                }
+            } else if (isCornerDotType(options.cornersDotOptions?.type)) {
                 const draw = getQrCornerDotFigure(options.cornersDotOptions.type)
 
                 if (cornersDotMaskGroup) {
-                    cornersDotMaskGroup.appendChild(draw({
-                        x: x + dotSize * 2,
-                        y: y + dotSize * 2,
-                        size: cornersDotSize,
-                        document: this.document,
-                        rotation
-                    }))
+                    cornersDotMaskGroup.appendChild(draw(squareArgs))
                 }
             } else {
-                const draw = getQrDotFigure(options.cornersDotOptions?.type || options.dotsOptions.type)
+                const draw = getQrDotFigure(options.cornersDotOptions?.type || options.dotsOptions.type, options.plugins)
 
                 for (let i = 0; i < dotMask.length; i++) {
                     for (let j = 0; j < dotMask[i].length; j++) {

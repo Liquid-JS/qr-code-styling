@@ -1,5 +1,6 @@
 import { ErrorCorrectionLevel, Mode, TypeNumber } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
+import { DrawArgs } from '../types/helper.js'
 import { Gradient, sanitizeGradient } from './gradient.js'
 
 export enum DotType {
@@ -67,6 +68,31 @@ export enum ImageMode {
      * Use image as background, draw dots over it
      */
     background = 'background'
+}
+
+export interface Plugin {
+    /**
+     * Draw a single dot
+     *
+     * @returns Dot element; if undefined, try to use the next plugin or the default function
+     */
+    drawDot?: (args: DrawArgs) => SVGElement | undefined
+    /**
+     * Draw corner dot
+     *
+     * @returns Corner dot element; if undefined, try to use the next plugin or the default function
+     */
+    drawCornerDot?: (args: DrawArgs) => SVGElement | undefined
+    /**
+     * Draw corner square
+     *
+     * @returns Corner square element and corner mask (used with ImageMode.background); if undefined, try to use the next plugin or the default function
+     */
+    drawCornerSquare?: (args: DrawArgs) => readonly [SVGElement, SVGElement] | undefined
+    /**
+     * Alter the generated SVG, e.g. add borders
+     */
+    postProcess?: (svg: SVGSVGElement, options: Options) => void
 }
 
 export interface Options {
@@ -189,6 +215,7 @@ export interface Options {
     } | false
     /** `import { stringToBytesFuncs } from "@liquid-js/qr-code-styling/kanji";` to add Kanji support */
     stringToBytesFuncs?: { [encoding: string]: (s: string) => number[] }
+    plugins?: Plugin[]
 }
 
 export const defaultOptions: Options = {

@@ -8,7 +8,7 @@ import { QRSVG } from './qr-svg.js'
 
 Object.assign(QRCodeMinimal.stringToBytesFuncs, stringToBytes_UTF8)
 
-export type ExtensionFunction = (svg: SVGElement, options: RecursivePartial<Options>) => void
+export type ExtensionFunction = (svg: SVGSVGElement, options: Options) => void
 
 export class QRCodeStyling {
     private options: Options
@@ -75,7 +75,7 @@ export class QRCodeStyling {
     }
 
     /**
-     *
+     * @deprecated Use options.plugins
      * @example
      *
      * ```js
@@ -112,6 +112,9 @@ export class QRCodeStyling {
         this.update()
     }
 
+    /**
+     * @deprecated Use options.plugins
+     */
     deleteExtension(): void {
         this.extension = undefined
         this.update()
@@ -157,6 +160,11 @@ export class QRCodeStyling {
 
         this.svgDrawingPromise = this.qrSVG.drawQR(this.qr).then(() => {
             if (!this.qrSVG?.element) return
+            this.options.plugins?.forEach(plugin => plugin.postProcess?.(this.qrSVG!.element!, {
+                ...this.options,
+                width: size,
+                height: size
+            }))
             this.extension?.(this.qrSVG.element, {
                 ...this.options,
                 width: size,

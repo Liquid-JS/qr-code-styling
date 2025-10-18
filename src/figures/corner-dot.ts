@@ -1,5 +1,5 @@
 import { DrawArgs } from '../types/helper.js'
-import { CornerDotType } from '../utils/options.js'
+import { CornerDotType, Plugin } from '../utils/options.js'
 import { rotateFigure } from '../utils/svg.js'
 import { DotElements } from './dot-elements.js'
 
@@ -50,4 +50,15 @@ const qrCornerDotFigures: { [type in CornerDotType]: (args: DrawArgs) => SVGElem
 
 export function getQrCornerDotFigure(type: `${CornerDotType}`) {
     return qrCornerDotFigures[type] || qrCornerDotFigures[CornerDotType.square]
+}
+
+export function drawPluginCornerDot(plugins: Plugin[]) {
+    return (args: DrawArgs) => {
+        for (const plugin of plugins) {
+            const el = plugin.drawCornerDot?.(args)
+            if (el)
+                return el
+        }
+        return undefined
+    }
 }

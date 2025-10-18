@@ -1,5 +1,5 @@
 import { DrawArgs } from '../types/helper.js'
-import { DotType } from '../utils/options.js'
+import { DotType, Plugin } from '../utils/options.js'
 import { rotateFigure } from '../utils/svg.js'
 import { DotElements } from './dot-elements.js'
 
@@ -200,6 +200,22 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
     }, { stripe: args.size * 0.8, rotation: -Math.PI / 2 })
 }
 
-export function getQrDotFigure(type: `${DotType}`) {
-    return qrDotFigures[type] || qrDotFigures[DotType.square]
+export function getQrDotFigure(type: `${DotType}`, plugins?: Plugin[]) {
+    const defaultDraw = qrDotFigures[type] || qrDotFigures[DotType.square]
+    if (!plugins?.length)
+        return defaultDraw
+
+    const drawPlugin = drawPluginDot(plugins)
+    return (args: DrawArgs) => drawPlugin(args) || defaultDraw(args)
+}
+
+export function drawPluginDot(plugins: Plugin[]) {
+    return (args: DrawArgs) => {
+        for (const plugin of plugins) {
+            const el = plugin.drawDot?.(args)
+            if (el)
+                return el
+        }
+        return undefined
+    }
 }

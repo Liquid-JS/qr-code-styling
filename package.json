@@ -18,6 +18,10 @@
         "./kanji": {
             "types": "./lib/kanji.d.ts",
             "default": "./lib/kanji.js"
+        },
+        "./plugin-utils": {
+            "types": "./lib/plugins/utils.d.ts",
+            "default": "./lib/plugin-utils.js"
         }
     },
     "files": [

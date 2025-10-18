@@ -1,5 +1,5 @@
 import { DrawArgs } from '../types/helper.js'
-import { CornerSquareType } from '../utils/options.js'
+import { CornerSquareType, Plugin } from '../utils/options.js'
 import { rotateFigure } from '../utils/svg.js'
 import { SquareElements } from './square-elements.js'
 
@@ -27,3 +27,13 @@ export function getQrCornerSquareFigure(type: `${CornerSquareType}`) {
     return qrCornerSquareFigures[type] || qrCornerSquareFigures[CornerSquareType.square]
 }
 
+export function drawPluginCornerSquare(plugins: Plugin[]) {
+    return (args: DrawArgs) => {
+        for (const plugin of plugins) {
+            const el = plugin.drawCornerSquare?.(args)
+            if (el)
+                return el
+        }
+        return undefined
+    }
+}
