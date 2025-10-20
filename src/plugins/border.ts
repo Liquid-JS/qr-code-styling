@@ -32,7 +32,11 @@ export interface BorderPluginOptions {
 
 export class BorderPlugin implements Plugin {
 
-    constructor(private readonly pluginOptions: BorderPluginOptions, private readonly id = Math.random().toFixed(10).substring(2)) { }
+    constructor(
+        private readonly pluginOptions: BorderPluginOptions,
+        /** @ignore Create unique id for SVG elements to prevent naming collisions; specify your own if neccesary e.g. for testing */
+        private readonly idSuffix = Math.random().toFixed(10).substring(2)
+    ) { }
 
     postProcess(svg: SVGSVGElement, options: Options) {
         const { document } = options
@@ -146,7 +150,7 @@ export class BorderPlugin implements Plugin {
                         )
                         break
                 }
-                const id = `border-text-${postion}-${this.id}`
+                const id = `border-text-${postion}-${this.idSuffix}`
                 element.setAttribute('id', id)
                 element.setAttribute('fill', 'none')
 
