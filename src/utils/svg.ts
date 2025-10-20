@@ -55,6 +55,7 @@ export function scalePath(path: Array<string | number>, { x, y, size }: {
 }
 
 export function extendSVG(svg: SVGSVGElement, padding: number) {
+    padding = Math.max(padding, 0)
     svg.setAttribute('width', numToAttr(parseFloat(svg.getAttribute('width') || '0') + 2 * padding))
     svg.setAttribute('height', numToAttr(parseFloat(svg.getAttribute('height') || '0') + 2 * padding))
     const vb = (svg.getAttribute('viewBox') || '').split(' ').map((v, i) => parseFloat(v) + (i < 2 ? -1 : 2) * padding)

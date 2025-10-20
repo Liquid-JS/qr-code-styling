@@ -74,6 +74,77 @@ Try it here <https://styled-qr.liquidjs.io/>
 </html>
 ```
 
+### Plugins <img align="right" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/border.png" width="240" />
+
+Version `5.0.0` of the library introduces plugin support to replace the now-deprecated `QRCodeStyling.extension`, with the ability to customize the shape of dots and corners. Existing extensions can still be applied as `plugins: [{ postProcess: extensionFn }]`.
+
+While the old API only supports a single extension, it is now possible to apply multiple plugins or even multiple instances of a single plugin. For example, to create a QR code with a complex border:
+
+```ts
+import { BorderPlugin } from '@liquid-js/qr-code-styling/border-plugin'
+
+const qrCode = new QRCodeStyling({
+    plugins: [
+        new BorderPlugin({
+            round: 1,
+            size: 2,
+            color: '#20c9dc'
+        }),
+        new BorderPlugin({
+            round: 1,
+            size: 60,
+            color: '#4267b2',
+            text: {
+                font: 'sans-serif',
+                color: '#e9ebee',
+                size: 30,
+                top: {
+                    content: 'Scan the'.toUpperCase()
+                },
+                bottom: {
+                    content: 'QR code'.toUpperCase()
+                }
+            }
+        })
+    ]
+    // ...other options
+})
+```
+
+#### Plugin development
+
+A simple plugin example to customize QR code dots:
+
+```ts
+import { svgPath, DrawArgs } from '@liquid-js/qr-code-styling/plugin-utils'
+
+const qrCode = new QRCodeStyling({
+    plugins: [
+        {
+            drawDot: (args: DrawArgs): SVGElement | undefined => {
+                const { size, x, y, document } = args
+
+                const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')                
+                // Insert your own SVG path definition, or implement neighbour-aware logic through args.getNeighbor()
+                element.setAttribute(
+                    'd',
+                    svgPath`M ${x} ${y + (size - size) / 2}
+                  v ${size}
+                  h ${size / 2}
+                  a ${size / 2} ${size / 2} 0 0 0 0 ${-size}
+                  z`
+                )
+
+                return element
+            }
+        },
+    ]
+    // ...other options
+})
+```
+
+See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/blob/master/src/plugins/border.ts) and [figures](https://github.com/Liquid-JS/qr-code-styling/tree/master/src/figures) for further reference.
+
 ### Node
 
 > ⚠️ **Note**: make sure to install peer dependencies when running on Node (not needed for browser environments)
@@ -124,44 +195,6 @@ const buffer = await new Promise((resolve) => {
 })
 await writeFile('qr.pdf', buffer)
 ```
-
-### Plugins <img align="right" src="https://raw.githubusercontent.com/Liquid-JS/qr-code-styling/master/src/assets/border.png" width="240" />
-
-Version `5.0.0` of the library introduces plugin support, enabling you to further customize the shape of dots and corners. Additionally, plugins can apply effects, such as adding borders, to enhance the final QR code output.
-
-#### Plugin development
-
-A simple plugin example to customize QR code dots:
-
-```ts
-import { svgPath, DrawArgs } from '@liquid-js/qr-code-styling/plugin-utils'
-
-const qrCode = new QRCodeStyling({
-    plugins: [
-        {
-            drawDot: (args: DrawArgs): SVGElement | undefined => {
-                const { size, x, y, document } = args
-
-                const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')                
-                // Insert your own SVG path definition, or implement neighbour-aware logic through args.getNeighbor()
-                element.setAttribute(
-                    'd',
-                    svgPath`M ${x} ${y + (size - size) / 2}
-                  v ${size}
-                  h ${size / 2}
-                  a ${size / 2} ${size / 2} 0 0 0 0 ${-size}
-                  z`
-                )
-
-                return element
-            }
-        },
-    ]
-    // ...other options
-})
-```
-
-See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/blob/master/src/plugins/border.ts) and [figures](https://github.com/Liquid-JS/qr-code-styling/tree/master/src/figures) for further reference.
 
 ### Kanji support
 

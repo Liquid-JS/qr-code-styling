@@ -8,13 +8,6 @@ enum TextPosition {
     right = 'right'
 }
 
-export interface BorderConfig {
-    size: number
-    color: string
-    dasharray?: string
-    margin?: number
-}
-
 export interface TextConfig {
     font?: string
     color?: string
@@ -23,16 +16,18 @@ export interface TextConfig {
     fontStyle?: 'normal' | 'italic' | 'oblique'
 }
 
-export interface BorderPluginOptions extends BorderConfig {
+export interface BorderPluginOptions {
     /** Border roundnes, from 0 (square) to 1 (circle) */
     round?: number
-    text: TextConfig & {
+    size: number
+    color: string
+    dasharray?: string
+    margin?: number
+    text?: TextConfig & {
         [key in TextPosition]?: TextConfig & {
             content: string
         }
     }
-    innerBorder?: BorderConfig
-    outerBorder?: BorderConfig
 }
 
 export class BorderPlugin implements Plugin {
@@ -41,56 +36,40 @@ export class BorderPlugin implements Plugin {
 
     postProcess(svg: SVGSVGElement, options: Options) {
         const { document } = options
-        const thickness = (
-            this.pluginOptions.size + (this.pluginOptions.margin || 0)
-            + (this.pluginOptions.innerBorder?.size || 0) + (this.pluginOptions.innerBorder?.margin || 0)
-            + (this.pluginOptions.outerBorder?.size || 0) + (this.pluginOptions.outerBorder?.margin || 0)
-        )
-        const drawArea = extendSVG(svg, thickness)
+        const margin = this.pluginOptions.margin || 0
+        let thickness = this.pluginOptions.size
+        const drawArea = extendSVG(svg, thickness + margin)
         if (!drawArea)
             return
+
+        thickness = Math.abs(thickness)
 
         const cx = (drawArea.left + drawArea.right) / 2
         const cy = (drawArea.top + drawArea.bottom) / 2
         const lineSize = Math.min(options.width, options.height) / 2 * (1 - (this.pluginOptions.round || 0))
-        let r = (Math.min(drawArea.right - drawArea.left - 2 * thickness, drawArea.bottom - drawArea.top - 2 * thickness) / 2) - lineSize
+        const r = (Math.min(drawArea.right - drawArea.left - 2 * thickness, drawArea.bottom - drawArea.top - 2 * thickness) / 2) - lineSize + thickness / 2
 
-        const drawBorder = (cfg: BorderConfig) => {
-            const t = cfg.size
-            const mid = r += (cfg.margin || 0) + t / 2
-            const pathR = this.pluginOptions.round ? r : 0
-            const pathL = this.pluginOptions.round ? lineSize : lineSize + r
-            r += t / 2
+        let pathR = this.pluginOptions.round ? r : 0
+        let pathL = this.pluginOptions.round ? lineSize : lineSize + r
 
-            const element = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-            element.setAttribute('width', numToAttr((pathL + pathR) * 2))
-            element.setAttribute('height', numToAttr((pathL + pathR) * 2))
-            element.setAttribute('x', numToAttr(cx - pathL - pathR))
-            element.setAttribute('y', numToAttr(cy - pathL - pathR))
-            element.setAttribute('rx', numToAttr(pathR))
-            element.setAttribute('fill', 'none')
-            element.setAttribute('stroke', cfg.color)
-            element.setAttribute('stroke-width', numToAttr(t))
-            if (cfg.dasharray) {
-                element.setAttribute('stroke-dasharray', cfg.dasharray)
-            }
-
-            svg.appendChild(element)
-            return mid
+        const borderEl = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+        borderEl.setAttribute('width', numToAttr((pathL + pathR) * 2))
+        borderEl.setAttribute('height', numToAttr((pathL + pathR) * 2))
+        borderEl.setAttribute('x', numToAttr(cx - pathL - pathR))
+        borderEl.setAttribute('y', numToAttr(cy - pathL - pathR))
+        borderEl.setAttribute('rx', numToAttr(pathR))
+        borderEl.setAttribute('fill', 'none')
+        borderEl.setAttribute('stroke', this.pluginOptions.color)
+        borderEl.setAttribute('stroke-width', numToAttr(thickness))
+        if (this.pluginOptions.dasharray) {
+            borderEl.setAttribute('stroke-dasharray', this.pluginOptions.dasharray)
         }
 
-        if (this.pluginOptions.innerBorder) {
-            drawBorder(this.pluginOptions.innerBorder)
-        }
-
-        const textRadius = drawBorder(this.pluginOptions)
-
-        if (this.pluginOptions.outerBorder) {
-            drawBorder(this.pluginOptions.outerBorder)
-        }
+        svg.appendChild(borderEl);
 
         [TextPosition.left, TextPosition.top, TextPosition.right, TextPosition.bottom].forEach(postion => {
-            const config = this.pluginOptions.text[postion]
+            const textCfg = this.pluginOptions.text
+            const config = textCfg?.[postion]
             if (config) {
                 let defs = Array.from(svg.childNodes).find(v => (v as HTMLElement).tagName.toUpperCase() == 'DEFS')
                 if (!defs) {
@@ -98,9 +77,9 @@ export class BorderPlugin implements Plugin {
                     svg.appendChild(defs)
                 }
                 const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                const size = (config.size || this.pluginOptions.text.size || 1)
-                let pathR = this.pluginOptions.round ? textRadius - size / 3 : 0
-                let pathL = this.pluginOptions.round ? lineSize : lineSize + (textRadius - size / 3)
+                const size = (config.size || textCfg.size || 1)
+                pathR = this.pluginOptions.round ? r - size / 3 : 0
+                pathL = this.pluginOptions.round ? lineSize : lineSize + (r - size / 3)
                 switch (postion) {
                     case TextPosition.top:
                         element.setAttribute(
@@ -172,10 +151,10 @@ export class BorderPlugin implements Plugin {
                 element.setAttribute('fill', 'none')
 
                 const span = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
-                span.setAttribute('font-family', config.font || this.pluginOptions.text.font || 'sans-serif')
-                span.setAttribute('fill', config.color || this.pluginOptions.text.color || '#000')
-                span.setAttribute('font-weight', numToAttr(config.fontWeight || this.pluginOptions.text.fontWeight || 'normal'))
-                span.setAttribute('font-style', config.fontStyle || this.pluginOptions.text.fontStyle || 'normal')
+                span.setAttribute('font-family', config.font || textCfg.font || 'sans-serif')
+                span.setAttribute('fill', config.color || textCfg.color || '#000')
+                span.setAttribute('font-weight', numToAttr(config.fontWeight || textCfg.fontWeight || 'normal'))
+                span.setAttribute('font-style', config.fontStyle || textCfg.fontStyle || 'normal')
                 span.setAttribute('font-size', numToAttr(size))
                 span.textContent = config.content
 

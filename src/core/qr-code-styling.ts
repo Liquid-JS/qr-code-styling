@@ -75,7 +75,7 @@ export class QRCodeStyling {
     }
 
     /**
-     * @deprecated Use options.plugins
+     * @deprecated Use options.plugins with a postProcess hook
      * @example
      *
      * ```js
@@ -113,7 +113,7 @@ export class QRCodeStyling {
     }
 
     /**
-     * @deprecated Use options.plugins
+     * @deprecated Use options.plugins with a postProcess hook
      */
     deleteExtension(): void {
         this.extension = undefined
