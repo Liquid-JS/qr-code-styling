@@ -16,6 +16,8 @@ export interface BasicFigureDrawArgs {
 export interface DrawArgs extends BasicFigureDrawArgs {
     rotation?: number
     getNeighbor?: (x: number, y: number) => boolean
+    /** A pseudo-random number generator for the given position */
+    getPRandom?: () => number
 }
 
 export interface RotateFigureArgs<T extends SVGElement | ReadonlyArray<SVGElement>> extends BasicFigureDrawArgs {

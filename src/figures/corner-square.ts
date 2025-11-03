@@ -3,7 +3,7 @@ import { CornerSquareType, Plugin } from '../utils/options.js'
 import { rotateFigure } from '../utils/svg.js'
 import { SquareElements } from './square-elements.js'
 
-const qrCornerSquareFigures: { [type in CornerSquareType]: (args: DrawArgs) => readonly [SVGPathElement, SVGPathElement] } = {
+const qrCornerSquareFigures: { [type in CornerSquareType]: (args: DrawArgs) => readonly [SVGElement, SVGElement] } = {
     [CornerSquareType.dot]: args => SquareElements.dot(args),
     [CornerSquareType.square]: args => SquareElements.square(args),
     [CornerSquareType.extraRounded]: args => SquareElements.extraRounded(args),

@@ -2,7 +2,7 @@ import { BasicFigureDrawArgs } from '../types/helper.js'
 import { svgPath } from '../utils/svg.js'
 
 export const SquareElements = {
-    dot: (args: BasicFigureDrawArgs) => {
+    dot: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { size, x, y, document } = args
 
         const dotSize = size / 7
@@ -28,9 +28,9 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     },
-    square: (args: BasicFigureDrawArgs) => {
+    square: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { size, x, y, document } = args
 
         const dotSize = size / 7
@@ -62,9 +62,9 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     },
-    extraRounded: (args: BasicFigureDrawArgs) => {
+    extraRounded: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { size, x, y, document } = args
 
         const dotSize = size / 7
@@ -112,9 +112,9 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     },
-    classy: (args: BasicFigureDrawArgs) => {
+    classy: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { size, x, y, document } = args
 
         const dotSize = size / 7
@@ -157,9 +157,9 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     },
-    inpoint: (args: BasicFigureDrawArgs) => {
+    inpoint: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { size, x, y, document } = args
 
         const dotSize = size / 7
@@ -204,9 +204,9 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     },
-    centerCircle: (args: BasicFigureDrawArgs) => {
+    centerCircle: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
         const { x, y, size } = args
 
         const circleRadius = size / 2.5
@@ -240,6 +240,6 @@ export const SquareElements = {
           z`
         )
 
-        return [element, fill] as const
+        return [element, fill]
     }
 }

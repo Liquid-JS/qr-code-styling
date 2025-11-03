@@ -42,13 +42,13 @@
         "@commitlint/config-conventional": "^20.0.0",
         "@liquid-js/qrcode-generator": "^1.1.1",
         "@liquid-js/rollup-plugin-closure-compiler": "^0.28.0",
-        "@rollup/plugin-commonjs": "^28.0.8",
+        "@rollup/plugin-commonjs": "^29.0.0",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-terser": "^0.4.4",
-        "@rollup/plugin-typescript": "^12.1.4",
+        "@rollup/plugin-typescript": "^12.3.0",
         "@stylistic/eslint-plugin": "^5.5.0",
         "@testdeck/mocha": "^0.3.3",
-        "@types/chai": "^5.2.2",
+        "@types/chai": "^5.2.3",
         "@types/jsdom": "^27.0.0",
         "@types/jsdom-global": "^3.0.7",
         "@types/mocha": "^10",
@@ -60,19 +60,19 @@
         "chai": "^6.2.0",
         "clean-package": "^2.2.0",
         "commit-and-tag-version": "^12.6.0",
-        "eslint": "^9.38.0",
+        "eslint": "<9.39.0",
         "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-jsdoc": "^61.1.4",
+        "eslint-plugin-jsdoc": "^61.1.12",
         "eslint-plugin-prefer-arrow-functions": "^3.9.1",
-        "eslint-plugin-unused-imports": "^4.2.0",
+        "eslint-plugin-unused-imports": "^4.3.0",
         "file-type": "^21.0.0",
-        "google-closure-compiler": "^20251015.0.0",
+        "google-closure-compiler": "^20251029.0.0",
         "husky": "^9.1.7",
-        "jsdom": "^27.0.1",
+        "jsdom": "^27.1.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^11.7.4",
-        "npm-check-updates": "^19.1.1",
-        "rimraf": "^6.0.1",
+        "npm-check-updates": "^19.1.2",
+        "rimraf": "^6.1.0",
         "rollup": "^4.52.5",
         "rollup-plugin-minify-template-literals": "^1.1.7",
         "sharp": "^0.34.4",
@@ -80,8 +80,11 @@
         "ts-node-maintained": "^10.9.6",
         "typedoc": "^0.28.14",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.46.1",
-        "vite": "^7.1.10"
+        "typescript-eslint": "^8.46.3",
+        "vite": "^7.1.12"
+    },
+    "resolutions": {
+        "@eslint/core": "^0.17.0"
     },
     "scripts": {
         "build": "rimraf lib && rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
@@ -131,7 +134,8 @@
             "packageManager",
             "scripts",
             "devDependencies",
-            "clean-package"
+            "clean-package",
+            "resolutions"
         ]
     }
 }

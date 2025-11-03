@@ -2,7 +2,7 @@ import { BasicFigureDrawArgs } from '../types/helper.js'
 import { numToAttr, scalePath, svgPath } from '../utils/svg.js'
 
 export const DotElements = {
-    dot: (args: BasicFigureDrawArgs) => {
+    dot: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
@@ -12,7 +12,7 @@ export const DotElements = {
 
         return element
     },
-    square: (args: BasicFigureDrawArgs, { width = args.size, height = args.size } = {}) => {
+    square: (args: BasicFigureDrawArgs, { width = args.size, height = args.size } = {}): SVGElement => {
         const { x, y, size, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
@@ -24,7 +24,7 @@ export const DotElements = {
         return element
     },
     //if rotation === 0 - right side is rounded
-    sideRounded: (args: BasicFigureDrawArgs, { height = args.size } = {}) => {
+    sideRounded: (args: BasicFigureDrawArgs, { height = args.size } = {}): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -40,7 +40,7 @@ export const DotElements = {
         return element
     },
     //if rotation === 0 - top right corner is rounded
-    cornerRounded: (args: BasicFigureDrawArgs) => {
+    cornerRounded: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -57,7 +57,7 @@ export const DotElements = {
         return element
     },
     //if rotation === 0 - top right corner is rounded
-    cornerExtraRounded: (args: BasicFigureDrawArgs) => {
+    cornerExtraRounded: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -72,8 +72,8 @@ export const DotElements = {
 
         return element
     },
-    //if rotation === 0 - left bottom and right top corners are rounded
-    cornersRounded: (args: BasicFigureDrawArgs) => {
+    //if rotation === 0 - bottom left and top right corners are rounded
+    classyDot: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -90,7 +90,8 @@ export const DotElements = {
 
         return element
     },
-    wave: (args: BasicFigureDrawArgs) => {
+    //if rotation === 0 - top right corner is rounded
+    wave: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const a1 = 5 * Math.PI / 180
@@ -115,7 +116,7 @@ export const DotElements = {
 
         return element
     },
-    heart: (args: BasicFigureDrawArgs) => {
+    heart: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -173,7 +174,7 @@ export const DotElements = {
 
         return element
     },
-    rounded: (args: BasicFigureDrawArgs) => {
+    rounded: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
@@ -186,7 +187,7 @@ export const DotElements = {
 
         return element
     },
-    classy: (args: BasicFigureDrawArgs) => {
+    classy: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
         const dotSize = size / 7
 
@@ -206,7 +207,7 @@ export const DotElements = {
 
         return element
     },
-    inpoint: (args: BasicFigureDrawArgs) => {
+    inpoint: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -229,7 +230,7 @@ export const DotElements = {
         spikes = 5,
         outerRadius = args.size / 2,
         innerRadius = args.size / 4
-    } = {}) => {
+    } = {}): SVGElement => {
         const { size, x, y, document } = args
         const cx = x + size / 2
         const cy = y + size / 2
@@ -249,7 +250,7 @@ export const DotElements = {
 
         return element
     },
-    weave: (args: BasicFigureDrawArgs) => {
+    weave: (args: BasicFigureDrawArgs): SVGElement => {
         const { size, x, y, document } = args
 
         const thickness = size * 0.6
