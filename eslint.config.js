@@ -26,7 +26,6 @@ export default defineConfig(
         languageOptions: {
             parser,
             parserOptions: {
-                project: 'tsconfig.json',
                 projectService: {
                     allowDefaultProject: ['.*']
                 }
