@@ -28,6 +28,8 @@ export interface BorderPluginOptions {
             content: string
         }
     }
+    /** A string of embedded CSS @font-face rules */
+    fontFaces?: string
 }
 
 export class BorderPlugin implements Plugin {
@@ -175,5 +177,16 @@ export class BorderPlugin implements Plugin {
                 svg.appendChild(text)
             }
         })
+
+        if (this.pluginOptions.fontFaces) {
+            let defs = Array.from(svg.childNodes).find(v => (v as HTMLElement).tagName.toUpperCase() == 'DEFS')
+            if (!defs) {
+                defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
+                svg.appendChild(defs)
+            }
+            const style = document.createElementNS('http://www.w3.org/2000/svg', 'style')
+            style.innerHTML = this.pluginOptions.fontFaces
+            defs.appendChild(style)
+        }
     }
 }
