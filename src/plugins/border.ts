@@ -32,7 +32,7 @@ export interface BorderPluginOptions {
     fontFaces?: string
 }
 
-export class BorderPlugin implements Plugin {
+export default class BorderPlugin implements Plugin {
 
     constructor(
         private readonly pluginOptions: BorderPluginOptions,
@@ -190,5 +190,3 @@ export class BorderPlugin implements Plugin {
         }
     }
 }
-
-export default BorderPlugin

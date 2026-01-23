@@ -83,7 +83,7 @@ Version `5.0.0` of the library introduces plugin support to replace the now-depr
 While the old API only supports a single extension, it is now possible to apply multiple plugins or even multiple instances of a single plugin. For example, to create a QR code with a complex border:
 
 ```ts
-import { BorderPlugin } from '@liquid-js/qr-code-styling/border-plugin'
+import BorderPlugin from '@liquid-js/qr-code-styling/border-plugin'
 
 const qrCode = new QRCodeStyling({
     plugins: [
