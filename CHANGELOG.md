@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.0.3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.2...v5.0.3) (2026-01-23)
+
+
+### Bug Fixes
+
+* border plugin ([ce732f6](https://github.com/Liquid-JS/qr-code-styling/commit/ce732f6c9b3f014a67c9b4689eda27622d0b9796))
+
 ## [5.0.2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.1...v5.0.2) (2026-01-23)
 
 
