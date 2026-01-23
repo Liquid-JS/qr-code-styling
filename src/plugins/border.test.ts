@@ -1,7 +1,7 @@
 import { suite, test } from '@testdeck/mocha'
 import { expect } from 'chai'
 import { QRCodeStyling } from '../core/qr-code-styling.js'
-import { BorderPlugin } from './border.js'
+import BorderPlugin from './border.js'
 
 @suite('Test BorderPlugin class')
 export class BorderPluginTest {
