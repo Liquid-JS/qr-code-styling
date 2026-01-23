@@ -12,7 +12,7 @@ export interface TextConfig {
     font?: string
     color?: string
     size?: number
-    fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number
+    fontWeight?: 'normal' | 'bold' | number
     fontStyle?: 'normal' | 'italic' | 'oblique'
 }
 
@@ -185,8 +185,10 @@ export class BorderPlugin implements Plugin {
                 svg.appendChild(defs)
             }
             const style = document.createElementNS('http://www.w3.org/2000/svg', 'style')
-            style.innerHTML = this.pluginOptions.fontFaces
+            style.textContent = this.pluginOptions.fontFaces
             defs.appendChild(style)
         }
     }
 }
+
+export default BorderPlugin
