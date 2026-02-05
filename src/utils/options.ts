@@ -102,10 +102,18 @@ export interface Options {
     document: Document
     /** Use a custom image fetching & serializaton implementation */
     imageTools?: typeof browserImageTools
-    /** @ignore */
+    /**
+     * @ignore
+     * @deprecated kept for compatibility with older extensions, use options.size
+     */
     width: number
-    /** @ignore */
+    /**
+     * @ignore
+     * @deprecated kept for compatibility with older extensions, use options.size
+     */
     height: number
+    /** @ignore */
+    size: number
     /** The data will be encoded in the QR code */
     data: string
     /** The image will be copied to the center of the QR code */
@@ -225,6 +233,7 @@ export const defaultOptions: Options = {
     shape: ShapeType.square,
     width: undefined as never,
     height: undefined as never,
+    size: undefined as never,
     data: '',
     qrOptions: {
         typeNumber: TypeNumber[0],

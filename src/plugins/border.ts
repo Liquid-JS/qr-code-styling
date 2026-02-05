@@ -52,7 +52,7 @@ export default class BorderPlugin implements Plugin {
 
         const cx = (drawArea.left + drawArea.right) / 2
         const cy = (drawArea.top + drawArea.bottom) / 2
-        const lineSize = Math.min(options.width, options.height) / 2 * (1 - (this.pluginOptions.round || 0))
+        const lineSize = options.size / 2 * (1 - (this.pluginOptions.round || 0))
         const r = (Math.min(drawArea.right - drawArea.left - 2 * thickness, drawArea.bottom - drawArea.top - 2 * thickness) / 2) - lineSize + thickness / 2
 
         let pathR = this.pluginOptions.round ? r : 0

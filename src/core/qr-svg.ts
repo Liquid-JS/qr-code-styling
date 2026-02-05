@@ -70,6 +70,7 @@ export class QRSVG {
             Options,
             | 'width'
             | 'height'
+            | 'size'
             | 'document'
             | 'imageTools'
             | 'image'
@@ -84,22 +85,21 @@ export class QRSVG {
     ) {
         this.document = options.document
         this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-        const width = numToAttr(options.width)
-        const height = numToAttr(options.height)
-        this._element.setAttribute('width', width)
-        this._element.setAttribute('height', height)
-        this._element.setAttribute('viewBox', `0 0 ${width} ${height}`)
+        const size = numToAttr(options.size)
+        this._element.setAttribute('width', size)
+        this._element.setAttribute('height', size)
+        this._element.setAttribute('viewBox', `0 0 ${size} ${size}`)
         this.defs = this.document.createElementNS('http://www.w3.org/2000/svg', 'defs')
         this._element.appendChild(this.defs)
         this.imageTools = options.imageTools || browserImageTools
     }
 
     get width(): number {
-        return this.options.width
+        return this.options.size
     }
 
     get height(): number {
-        return this.options.height
+        return this.options.size
     }
 
     async drawQR(qr: QRCodeMinimal): Promise<void> {
@@ -122,16 +122,15 @@ export class QRSVG {
 
             if (imageOptions.mode == ImageMode.background) {
                 const margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
-                const maxWidth = (this.options.width - 2 * margin * dotSize) * imageOptions.imageSize
-                const maxHeight = (this.options.height - 2 * margin * dotSize) * imageOptions.imageSize
+                const maxSize = (this.options.size - 2 * margin * dotSize) * imageOptions.imageSize
                 let { width, height } = size
 
-                height = (height / width) * maxWidth
-                width = maxWidth
+                height = (height / width) * maxSize
+                width = maxSize
 
-                if (height > maxHeight) {
-                    width = (width / height) * maxHeight
-                    height = maxHeight
+                if (height > maxSize) {
+                    width = (width / height) * maxSize
+                    height = maxSize
                 }
 
                 drawImageSize = {
@@ -211,21 +210,20 @@ export class QRSVG {
                 additionalRotation: 0,
                 x: 0,
                 y: 0,
-                height: options.height,
-                width: options.width,
+                height: options.size,
+                width: options.size,
                 name: 'background-color'
             })
 
-            const size = Math.min(options.width, options.height)
             const element = this.document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             [this.backgroundMask, this.backgroundMaskGroup] = this.createMask('mask-background-color')
             this.defs.appendChild(this.backgroundMask)
 
-            element.setAttribute('x', numToAttr((options.width - size) / 2))
-            element.setAttribute('y', numToAttr((options.height - size) / 2))
-            element.setAttribute('width', numToAttr(size))
-            element.setAttribute('height', numToAttr(size))
-            element.setAttribute('rx', numToAttr((size / 2) * (options.backgroundOptions.round || 0)))
+            element.setAttribute('x', numToAttr(0))
+            element.setAttribute('y', numToAttr(0))
+            element.setAttribute('width', numToAttr(options.size))
+            element.setAttribute('height', numToAttr(options.size))
+            element.setAttribute('rx', numToAttr((options.size / 2) * (options.backgroundOptions.round || 0)))
 
             this.backgroundMaskGroup.appendChild(element)
         }
@@ -239,15 +237,13 @@ export class QRSVG {
         const options = this.options
         const count = this.qr.getModuleCount()
 
-        if (count > options.width || count > options.height) {
+        if (count > options.size) {
             throw new Error('The canvas is too small')
         }
 
         const dotSize = this.options.dotsOptions.size
-        let minSize = Math.min(options.width, options.height)
-        if (options.imageOptions.mode == ImageMode.background) minSize -= 2 * dotSize * (options.imageOptions.margin || 0)
-        const xBeginning = Math.floor((options.width - count * dotSize) / 2)
-        const yBeginning = Math.floor((options.height - count * dotSize) / 2)
+        if (options.imageOptions.mode == ImageMode.background) options.size -= 2 * dotSize * (options.imageOptions.margin || 0)
+        const beginning = Math.floor((options.size - count * dotSize) / 2)
         let draw = getQrDotFigure(options.dotsOptions.type, options.plugins);
 
         [this.dotsMask, this.dotsMaskGroup] = this.createMask('mask-dot-color')
@@ -264,17 +260,14 @@ export class QRSVG {
 
         if (options.shape === ShapeType.circle) {
             margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
-            additionalDots = Math.floor((minSize / dotSize - count - 2 * margin) / 2)
+            additionalDots = Math.floor((options.size / dotSize - count - 2 * margin) / 2)
             fakeCount = count + additionalDots * 2
         } else if (options.imageOptions.mode == ImageMode.background) {
             additionalDots = 1
             fakeCount = count + additionalDots * 2
         }
 
-        const xFakeBeginning = xBeginning - additionalDots * dotSize
-        const yFakeBeginning = yBeginning - additionalDots * dotSize
-        const colorX = xFakeBeginning
-        const colorY = yFakeBeginning
+        const fakeBeginning = beginning - additionalDots * dotSize
         const colorCount = count + additionalDots * 2
         this._fakeMatrix = new Array(fakeCount)
         const center = Math.floor(fakeCount / 2)
@@ -352,8 +345,8 @@ export class QRSVG {
                     if (this.lightDotsMask) {
                         if (this.lightDotsMaskGroup) {
                             this.lightDotsMaskGroup.appendChild(draw({
-                                x: xFakeBeginning + i * dotSize,
-                                y: yFakeBeginning + j * dotSize,
+                                x: fakeBeginning + i * dotSize,
+                                y: fakeBeginning + j * dotSize,
                                 size: dotSize,
                                 document: this.options.document,
                                 getNeighbor: (xOffset: number, yOffset: number): boolean => this._fakeMatrix![i + xOffset]?.[j + yOffset] === false,
@@ -366,8 +359,8 @@ export class QRSVG {
 
                 if (this.dotsMaskGroup) {
                     this.dotsMaskGroup.appendChild(draw({
-                        x: xFakeBeginning + i * dotSize,
-                        y: yFakeBeginning + j * dotSize,
+                        x: fakeBeginning + i * dotSize,
+                        y: fakeBeginning + j * dotSize,
                         size: dotSize,
                         document: this.options.document,
                         getNeighbor: (xOffset: number, yOffset: number): boolean => this._fakeMatrix![i + xOffset]?.[j + yOffset] === true,
@@ -382,8 +375,8 @@ export class QRSVG {
                 options: options.imageOptions.fill.gradient,
                 color: options.imageOptions.fill.color,
                 additionalRotation: 0,
-                x: colorX,
-                y: colorY,
+                x: fakeBeginning,
+                y: fakeBeginning,
                 height: colorCount * dotSize,
                 width: colorCount * dotSize,
                 name: 'light-dot-color'
@@ -394,8 +387,8 @@ export class QRSVG {
             options: options.dotsOptions?.gradient,
             color: options.dotsOptions.color,
             additionalRotation: 0,
-            x: colorX,
-            y: colorY,
+            x: fakeBeginning,
+            y: fakeBeginning,
             height: colorCount * dotSize,
             width: colorCount * dotSize,
             name: 'dot-color'
@@ -418,16 +411,15 @@ export class QRSVG {
         const dotSize = this.options.dotsOptions.size
         const cornersSquareSize = dotSize * 7
         const cornersDotSize = dotSize * 3
-        const xBeginning = Math.floor((options.width - count * dotSize) / 2)
-        const yBeginning = Math.floor((options.height - count * dotSize) / 2);
+        const beginning = Math.floor((options.size - count * dotSize) / 2);
 
         [
             [0, 0, 0],
             [1, 0, Math.PI / 2],
             [0, 1, -Math.PI / 2]
         ].forEach(([column, row, rotation]) => {
-            const x = xBeginning + column * dotSize * (count - 7)
-            const y = yBeginning + row * dotSize * (count - 7)
+            const x = beginning + column * dotSize * (count - 7)
+            const y = beginning + row * dotSize * (count - 7)
             let cornersSquareMask = this.dotsMask
             let cornersSquareMaskGroup = this.dotsMaskGroup
             let cornersDotMask = this.dotsMask
@@ -612,12 +604,11 @@ export class QRSVG {
         dotSize: number
     }): Promise<void> {
         const options = this.options
-        const xBeginning = Math.floor((options.width - count * dotSize) / 2)
-        const yBeginning = Math.floor((options.height - count * dotSize) / 2)
+        const beginning = Math.floor((options.size - count * dotSize) / 2)
         let margin = options.imageOptions.margin * dotSize
         if (options.imageOptions.mode == ImageMode.background) margin = 0
-        const dx = xBeginning + margin + (count * dotSize - width) / 2
-        const dy = yBeginning + margin + (count * dotSize - height) / 2
+        const dx = beginning + margin + (count * dotSize - width) / 2
+        const dy = beginning + margin + (count * dotSize - height) / 2
         const dw = width - margin * 2
         const dh = height - margin * 2
 
@@ -773,8 +764,8 @@ export class QRSVG {
         mask.setAttribute('maskUnits', 'userSpaceOnUse')
         mask.setAttribute('x', '0')
         mask.setAttribute('y', '0')
-        mask.setAttribute('width', numToAttr(options.width))
-        mask.setAttribute('height', numToAttr(options.height))
+        mask.setAttribute('width', numToAttr(options.size))
+        mask.setAttribute('height', numToAttr(options.size))
 
         const group = this.document.createElementNS('http://www.w3.org/2000/svg', 'g')
         group.setAttribute('fill', '#fff')

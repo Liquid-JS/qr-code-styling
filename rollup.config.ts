@@ -32,42 +32,17 @@ const bundle = () => [
 
 export default new Array<RollupOptions>(
     {
-        input: 'src/index.ts',
+        input: {
+            'qr-code-styling': 'src/index.ts',
+            'kanji': 'src/kanji.ts',
+            'plugin-utils': 'src/plugins/utils.ts',
+            'border-plugin': 'src/plugins/border.ts'
+        },
         output: {
-            file: './lib/qr-code-styling.js',
+            dir: './lib',
             sourcemap: true,
             format: 'esm',
             name: 'QRCodeStyling'
-        },
-        plugins: [...common(), ...bundle()]
-    },
-    {
-        input: 'src/kanji.ts',
-        output: {
-            file: './lib/kanji.js',
-            sourcemap: true,
-            format: 'esm',
-            name: 'Kanji'
-        },
-        plugins: [...common(), ...bundle()]
-    },
-    {
-        input: 'src/plugins/utils.ts',
-        output: {
-            file: './lib/plugin-utils.js',
-            sourcemap: true,
-            format: 'esm',
-            name: 'PluginUtils'
-        },
-        plugins: [...common(), ...bundle()]
-    },
-    {
-        input: 'src/plugins/border.ts',
-        output: {
-            file: './lib/border-plugin.js',
-            sourcemap: true,
-            format: 'esm',
-            name: 'BorderPlugin'
         },
         plugins: [...common(), ...bundle()]
     },

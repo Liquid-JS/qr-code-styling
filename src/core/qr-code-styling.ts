@@ -155,6 +155,7 @@ export class QRCodeStyling {
             ...this.options,
             width: size,
             height: size,
+            size,
             errorCorrectionPercent: ErrorCorrectionPercents[this.options.qrOptions.errorCorrectionLevel]
         })
 
@@ -163,12 +164,14 @@ export class QRCodeStyling {
             this.options.plugins?.forEach(plugin => plugin.postProcess?.(this.qrSVG!.element!, {
                 ...this.options,
                 width: size,
-                height: size
+                height: size,
+                size
             }))
             this.extension?.(this.qrSVG.element, {
                 ...this.options,
                 width: size,
-                height: size
+                height: size,
+                size
             })
         })
     }
