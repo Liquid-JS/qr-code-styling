@@ -23,6 +23,15 @@ export interface BorderPluginOptions {
     color: string
     dasharray?: string
     margin?: number
+    /**
+     * If true, all dimensions are proportional to the code size,
+     * i.e. `size: 0.1` means the border thickness is 1/10 of the QR code size
+     *
+     * This is useful to keep the border visually consistent regardless of the amount of data
+     *
+     * Note: if using dasharray, use percentage values to maintain consistency
+     */
+    proportional?: boolean
     text?: TextConfig & {
         [key in TextPosition]?: TextConfig & {
             content: string
@@ -42,8 +51,10 @@ export default class BorderPlugin implements Plugin {
 
     postProcess(svg: SVGSVGElement, options: Options) {
         const { document } = options
-        const margin = this.pluginOptions.margin || 0
-        let thickness = this.pluginOptions.size
+        const sizeFactor = this.pluginOptions.proportional ? options.size : 1
+
+        const margin = (this.pluginOptions.margin || 0) * sizeFactor
+        let thickness = (this.pluginOptions.size) * sizeFactor
         const drawArea = extendSVG(svg, thickness + margin)
         if (!drawArea)
             return
@@ -83,7 +94,7 @@ export default class BorderPlugin implements Plugin {
                     svg.appendChild(defs)
                 }
                 const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-                const size = (config.size || textCfg.size || 1)
+                const size = (config.size || textCfg.size || 1) * sizeFactor
                 pathR = this.pluginOptions.round ? r - size / 3 : 0
                 pathL = this.pluginOptions.round ? lineSize : lineSize + (r - size / 3)
                 switch (postion) {
