@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.1.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.3...v5.1.0) (2026-02-05)
+
+
+### Features
+
+* add an option to keep the border proportional to QR code size ([efce6db](https://github.com/Liquid-JS/qr-code-styling/commit/efce6db9265ea906f1c15f463a3d45f8c0f32c89))
+
 ## [5.0.3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.2...v5.0.3) (2026-01-23)
 
 
