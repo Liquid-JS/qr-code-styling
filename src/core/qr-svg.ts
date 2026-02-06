@@ -53,13 +53,8 @@ export class QRSVG {
     private defs: SVGElement
 
     private backgroundMask?: SVGElement
-    private backgroundMaskGroup?: SVGElement
-
     private dotsMask?: SVGElement
-    private dotsMaskGroup?: SVGElement
-
     private lightDotsMask?: SVGElement
-    private lightDotsMaskGroup?: SVGElement
 
     private qr?: QRCodeMinimal
     private document: Document
@@ -215,8 +210,8 @@ export class QRSVG {
                 name: 'background-color'
             })
 
-            const element = this.document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            [this.backgroundMask, this.backgroundMaskGroup] = this.createMask('mask-background-color')
+            const element = this.document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+            this.backgroundMask = this.createMask('mask-background-color')
             this.defs.appendChild(this.backgroundMask)
 
             element.setAttribute('x', numToAttr(0))
@@ -225,7 +220,7 @@ export class QRSVG {
             element.setAttribute('height', numToAttr(options.size))
             element.setAttribute('rx', numToAttr((options.size / 2) * (options.backgroundOptions.round || 0)))
 
-            this.backgroundMaskGroup.appendChild(element)
+            this.backgroundMask.appendChild(element)
         }
     }
 
@@ -244,13 +239,13 @@ export class QRSVG {
         const dotSize = this.options.dotsOptions.size
         if (options.imageOptions.mode == ImageMode.background) options.size -= 2 * dotSize * (options.imageOptions.margin || 0)
         const beginning = Math.floor((options.size - count * dotSize) / 2)
-        let draw = getQrDotFigure(options.dotsOptions.type, options.plugins);
+        let draw = getQrDotFigure(options.dotsOptions.type, options.plugins)
 
-        [this.dotsMask, this.dotsMaskGroup] = this.createMask('mask-dot-color')
+        this.dotsMask = this.createMask('mask-dot-color')
         this.defs.appendChild(this.dotsMask)
 
         if (options.imageOptions.mode == ImageMode.background) {
-            [this.lightDotsMask, this.lightDotsMaskGroup] = this.createMask('mask-light-dot-color')
+            this.lightDotsMask = this.createMask('mask-light-dot-color')
             this.defs.appendChild(this.lightDotsMask)
         }
 
@@ -343,8 +338,8 @@ export class QRSVG {
 
                 if (!this._fakeMatrix[i][j]) {
                     if (this.lightDotsMask) {
-                        if (this.lightDotsMaskGroup) {
-                            this.lightDotsMaskGroup.appendChild(draw({
+                        if (this.lightDotsMask) {
+                            this.lightDotsMask.appendChild(draw({
                                 x: fakeBeginning + i * dotSize,
                                 y: fakeBeginning + j * dotSize,
                                 size: dotSize,
@@ -357,8 +352,8 @@ export class QRSVG {
                     continue
                 }
 
-                if (this.dotsMaskGroup) {
-                    this.dotsMaskGroup.appendChild(draw({
+                if (this.dotsMask) {
+                    this.dotsMask.appendChild(draw({
                         x: fakeBeginning + i * dotSize,
                         y: fakeBeginning + j * dotSize,
                         size: dotSize,
@@ -421,15 +416,13 @@ export class QRSVG {
             const x = beginning + column * dotSize * (count - 7)
             const y = beginning + row * dotSize * (count - 7)
             let cornersSquareMask = this.dotsMask
-            let cornersSquareMaskGroup = this.dotsMaskGroup
             let cornersDotMask = this.dotsMask
-            let cornersDotMaskGroup = this.dotsMaskGroup
 
             if (options.cornersSquareOptions?.gradient || options.cornersSquareOptions?.color) {
-                [cornersSquareMask, cornersSquareMaskGroup] = this.createMask(`mask-corners-square-color-${column}-${row}`)
+                cornersSquareMask = this.createMask(`mask-corners-square-color-${column}-${row}`)
                 this.defs.appendChild(cornersSquareMask)
                 cornersDotMask = cornersSquareMask
-                cornersDotMaskGroup = cornersSquareMaskGroup
+                cornersDotMask = cornersSquareMask
 
                 this.createColor({
                     options: options.cornersSquareOptions?.gradient,
@@ -455,24 +448,24 @@ export class QRSVG {
             if (pluinCornerSquare) {
                 const [cornerElement, cornerFill] = pluinCornerSquare
 
-                if (cornersSquareMaskGroup) {
-                    cornersSquareMaskGroup.appendChild(cornerElement)
+                if (cornersSquareMask) {
+                    cornersSquareMask.appendChild(cornerElement)
                 }
 
-                if (this.lightDotsMaskGroup) {
-                    this.lightDotsMaskGroup.appendChild(cornerFill)
+                if (this.lightDotsMask) {
+                    this.lightDotsMask.appendChild(cornerFill)
                 }
             } else if (isCornerSquareType(options.cornersSquareOptions?.type)) {
                 const draw = getQrCornerSquareFigure(options.cornersSquareOptions.type)
 
                 const [cornerElement, cornerFill] = draw(squareArgs)
 
-                if (cornersSquareMaskGroup) {
-                    cornersSquareMaskGroup.appendChild(cornerElement)
+                if (cornersSquareMask) {
+                    cornersSquareMask.appendChild(cornerElement)
                 }
 
-                if (this.lightDotsMaskGroup) {
-                    this.lightDotsMaskGroup.appendChild(cornerFill)
+                if (this.lightDotsMask) {
+                    this.lightDotsMask.appendChild(cornerFill)
                 }
             } else {
                 const draw = getQrDotFigure(options.cornersSquareOptions?.type || options.dotsOptions.type, options.plugins)
@@ -481,8 +474,8 @@ export class QRSVG {
                     for (let j = 0; j < squareMask[i].length; j++) {
                         if (!squareMask[i]?.[j]) {
                             if (this.lightDotsMask && !dotMask[i]?.[j]) {
-                                if (this.lightDotsMaskGroup) {
-                                    this.lightDotsMaskGroup.appendChild(draw({
+                                if (this.lightDotsMask) {
+                                    this.lightDotsMask.appendChild(draw({
                                         x: x + i * dotSize,
                                         y: y + j * dotSize,
                                         size: dotSize,
@@ -496,8 +489,8 @@ export class QRSVG {
                             continue
                         }
 
-                        if (cornersSquareMaskGroup) {
-                            cornersSquareMaskGroup.appendChild(draw({
+                        if (cornersSquareMask) {
+                            cornersSquareMask.appendChild(draw({
                                 x: x + i * dotSize,
                                 y: y + j * dotSize,
                                 size: dotSize,
@@ -513,8 +506,8 @@ export class QRSVG {
                     for (let i = -1; i < 8; i++) {
                         for (let j = -1; j < 8; j++) {
                             if (i == -1 || i == 7 || j == -1 || j == 7) {
-                                if (this.lightDotsMaskGroup) {
-                                    this.lightDotsMaskGroup.appendChild(draw({
+                                if (this.lightDotsMask) {
+                                    this.lightDotsMask.appendChild(draw({
                                         x: x + i * dotSize,
                                         y: y + j * dotSize,
                                         size: dotSize,
@@ -533,7 +526,7 @@ export class QRSVG {
             }
 
             if (options.cornersDotOptions?.gradient || options.cornersDotOptions?.color) {
-                [cornersDotMask, cornersDotMaskGroup] = this.createMask(`mask-corners-dot-color-${column}-${row}`)
+                cornersDotMask = this.createMask(`mask-corners-dot-color-${column}-${row}`)
                 this.defs.appendChild(cornersDotMask)
 
                 this.createColor({
@@ -558,14 +551,14 @@ export class QRSVG {
             const pluinCornerDot = options.plugins?.length ? drawPluginCornerDot(options.plugins)(dotArgs) : undefined
 
             if (pluinCornerDot) {
-                if (cornersDotMaskGroup) {
-                    cornersDotMaskGroup.appendChild(pluinCornerDot)
+                if (cornersDotMask) {
+                    cornersDotMask.appendChild(pluinCornerDot)
                 }
             } else if (isCornerDotType(options.cornersDotOptions?.type)) {
                 const draw = getQrCornerDotFigure(options.cornersDotOptions.type)
 
-                if (cornersDotMaskGroup) {
-                    cornersDotMaskGroup.appendChild(draw(dotArgs))
+                if (cornersDotMask) {
+                    cornersDotMask.appendChild(draw(dotArgs))
                 }
             } else {
                 const draw = getQrDotFigure(options.cornersDotOptions?.type || options.dotsOptions.type, options.plugins)
@@ -576,8 +569,8 @@ export class QRSVG {
                             continue
                         }
 
-                        if (cornersDotMaskGroup) {
-                            cornersDotMaskGroup.appendChild(draw({
+                        if (cornersDotMask) {
+                            cornersDotMask.appendChild(draw({
                                 x: x + i * dotSize,
                                 y: y + j * dotSize,
                                 size: dotSize,
@@ -680,7 +673,7 @@ export class QRSVG {
         rect.setAttribute('y', numToAttr(y))
         rect.setAttribute('height', numToAttr(height))
         rect.setAttribute('width', numToAttr(width))
-        rect.setAttribute('style', `mask:url(#mask-${name})`)
+        rect.setAttribute('clip-path', `url(#mask-${name})`)
 
         if (options) {
             let gradient: SVGElement
@@ -757,20 +750,10 @@ export class QRSVG {
     }
 
     private createMask(id: string) {
-        const options = this.options
-
-        const mask = this.document.createElementNS('http://www.w3.org/2000/svg', 'mask')
+        const mask = this.document.createElementNS('http://www.w3.org/2000/svg', 'clipPath')
         mask.setAttribute('id', id)
-        mask.setAttribute('maskUnits', 'userSpaceOnUse')
-        mask.setAttribute('x', '0')
-        mask.setAttribute('y', '0')
-        mask.setAttribute('width', numToAttr(options.size))
-        mask.setAttribute('height', numToAttr(options.size))
+        mask.setAttribute('clipPathUnits', 'userSpaceOnUse')
 
-        const group = this.document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        group.setAttribute('fill', '#fff')
-        mask.appendChild(group)
-
-        return [mask, group]
+        return mask
     }
 }
