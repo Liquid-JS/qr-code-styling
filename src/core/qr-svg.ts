@@ -237,7 +237,8 @@ export class QRSVG {
         }
 
         const dotSize = this.options.dotsOptions.size
-        if (options.imageOptions.mode == ImageMode.background) options.size -= 2 * dotSize * (options.imageOptions.margin || 0)
+        let size = options.size
+        if (options.imageOptions.mode == ImageMode.background) size -= 2 * dotSize * (options.imageOptions.margin || 0)
         const beginning = Math.floor((options.size - count * dotSize) / 2)
         let draw = getQrDotFigure(options.dotsOptions.type, options.plugins)
 
@@ -255,7 +256,7 @@ export class QRSVG {
 
         if (options.shape === ShapeType.circle) {
             margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
-            additionalDots = Math.floor((options.size / dotSize - count - 2 * margin) / 2)
+            additionalDots = Math.floor((size / dotSize - count - 2 * margin) / 2)
             fakeCount = count + additionalDots * 2
         } else if (options.imageOptions.mode == ImageMode.background) {
             additionalDots = 1
