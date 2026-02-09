@@ -26,6 +26,10 @@
         "./border-plugin": {
             "types": "./lib/plugins/border.d.ts",
             "default": "./lib/border-plugin.js"
+        },
+        "./font-faces-plugin": {
+            "types": "./lib/plugins/font-faces.d.ts",
+            "default": "./lib/font-faces-plugin.js"
         }
     },
     "files": [

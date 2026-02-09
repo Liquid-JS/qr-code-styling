@@ -36,7 +36,8 @@ export default new Array<RollupOptions>(
             'qr-code-styling': 'src/index.ts',
             'kanji': 'src/kanji.ts',
             'plugin-utils': 'src/plugins/utils.ts',
-            'border-plugin': 'src/plugins/border.ts'
+            'border-plugin': 'src/plugins/border.ts',
+            'font-faces-plugin': 'src/plugins/font-faces.ts'
         },
         output: {
             dir: './lib',

@@ -78,19 +78,19 @@ export interface Plugin {
      *
      * @returns Dot element; if undefined, try to use the next plugin or the default function
      */
-    drawDot?: (args: DrawArgs) => SVGElement | undefined
+    drawDot?: (args: DrawArgs) => SVGElement | undefined | void
     /**
      * Draw corner dot
      *
      * @returns Corner dot element; if undefined, try to use the next plugin or the default function
      */
-    drawCornerDot?: (args: DrawArgs) => SVGElement | undefined
+    drawCornerDot?: (args: DrawArgs) => SVGElement | undefined | void
     /**
      * Draw corner square
      *
      * @returns Corner square element and corner mask (used with ImageMode.background); if undefined, try to use the next plugin or the default function
      */
-    drawCornerSquare?: (args: DrawArgs) => readonly [SVGElement, SVGElement] | undefined
+    drawCornerSquare?: (args: DrawArgs) => readonly [SVGElement, SVGElement] | undefined | void
     /**
      * Alter the generated SVG, e.g. add borders
      */

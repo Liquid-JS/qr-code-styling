@@ -84,6 +84,7 @@ While the old API only supports a single extension, it is now possible to apply 
 
 ```ts
 import BorderPlugin from '@liquid-js/qr-code-styling/border-plugin'
+import FontFacesPlugin from '@liquid-js/qr-code-styling/font-faces-plugin'
 
 const qrCode = new QRCodeStyling({
     plugins: [
@@ -107,7 +108,17 @@ const qrCode = new QRCodeStyling({
                     content: 'QR code'.toUpperCase()
                 }
             }
-        })
+        }),
+        /**
+         * Embed fonts used with BorderPlugin
+         * 
+         * Not needed when using standard or local fonts, but recommended for portability and consistency; use
+         * subsetting if possible to reduce the generated file size.
+         */
+        new FontFacesPlugin([{
+            font: 'sans-serif',
+            src: `url(data:font/otf;base64,d09GMgABAA...)`
+        }])
     ]
     // ...other options
 })

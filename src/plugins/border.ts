@@ -37,7 +37,11 @@ export interface BorderPluginOptions {
             content: string
         }
     }
-    /** A string of embedded CSS @font-face rules */
+    /**
+     * A string of embedded CSS @font-face rules
+     *
+     * @deprecated Use @liquid-js/qr-code-styling/font-faces-plugin
+     */
     fontFaces?: string
 }
 
@@ -189,6 +193,7 @@ export default class BorderPlugin implements Plugin {
             }
         })
 
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         if (this.pluginOptions.fontFaces) {
             let defs = Array.from(svg.childNodes).find(v => (v as HTMLElement).tagName.toUpperCase() == 'DEFS')
             if (!defs) {
@@ -196,6 +201,7 @@ export default class BorderPlugin implements Plugin {
                 svg.appendChild(defs)
             }
             const style = document.createElementNS('http://www.w3.org/2000/svg', 'style')
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
             style.textContent = this.pluginOptions.fontFaces
             defs.appendChild(style)
         }
