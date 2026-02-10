@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.2.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.1.0...v5.2.0) (2026-02-10)
+
+
+### Features
+
+* font-faces plugin ([a9322ee](https://github.com/Liquid-JS/qr-code-styling/commit/a9322ee619e8221f35637180ac799cf7be953e69))
+* use clip-path to improve compatiblity and reduce size ([56ed01b](https://github.com/Liquid-JS/qr-code-styling/commit/56ed01b0b6ba3e14e179fdb91769038f78d1bee7))
+
+
+### Bug Fixes
+
+* regression in background image mode ([b3de321](https://github.com/Liquid-JS/qr-code-styling/commit/b3de321eae90847eadef68c7627164c74d761a14))
+
 ## [5.1.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.0.3...v5.1.0) (2026-02-05)
 
 
