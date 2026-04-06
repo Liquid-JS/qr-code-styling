@@ -207,7 +207,7 @@ export const SquareElements = {
         return [element, fill]
     },
     centerCircle: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
-        const { x, y, size } = args
+        const { x, y, size, document } = args
 
         const circleRadius = size / 2.5
         const cx = x + size / 2
