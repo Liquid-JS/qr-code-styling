@@ -2,6 +2,7 @@ import { QRCodeStyling } from '../core/qr-code-styling.js'
 import { RecursivePartial } from '../types/helper.js'
 import { CanvasOptions, defaultCanvasOptions, sanitizeCanvasOptions } from '../utils/canvas-options.js'
 import { mergeDeep } from '../utils/merge.js'
+import { lanczosResize } from './resize.js'
 
 export enum FileExtension {
     svg = 'svg',
@@ -26,6 +27,7 @@ export function drawToCanvas(
 
     const canvasDrawingPromise = qrCode.serialize().then((xml) => {
         if (!xml) return
+        const viewBox = xml.match(/viewBox="([^"]+)"/i)![1]
         const svg64 = btoa(xml)
         const image64 = 'data:image/svg+xml;base64,' + svg64
         const image = new Image()
@@ -34,18 +36,25 @@ export function drawToCanvas(
             image.onload = (): void => {
                 // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
                 const aaFactor = Math.ceil((2 * size) / Math.min(image.width, image.height))
+                const [x, y, w, h] = viewBox.split(/\s+/g).map(parseFloat).map(v => v * aaFactor)
+                const dx = ((x % 1) + 1) % 1
+                const dy = ((y % 1) + 1) % 1
                 let aaCanvas: HTMLCanvasElement | OffscreenCanvas
                 try {
-                    aaCanvas = new OffscreenCanvas(image.width * aaFactor, image.height * aaFactor)
+                    aaCanvas = new OffscreenCanvas(Math.ceil(w + dx), Math.ceil(h + dy))
                 } catch (_) {
                     // Fallback to regular canvas element
                     aaCanvas = document.createElement('canvas')
                     aaCanvas.width = image.width * aaFactor
                     aaCanvas.height = image.height * aaFactor
                 }
-                aaCanvas.getContext('2d')?.drawImage(image, 0, 0, aaCanvas.width, aaCanvas.height)
+                aaCanvas.getContext('2d')?.drawImage(image, dx, dy, w, h)
+                const imgData = lanczosResize(aaCanvas, {
+                    width: width - 2 * margin,
+                    height: height - 2 * margin
+                })
 
-                canvas?.getContext('2d')?.drawImage(aaCanvas, (width - size) / 2, (height - size) / 2, size, size)
+                canvas?.getContext('2d')?.putImageData(imgData, margin, margin)
                 resolve()
             }
             image.onerror = image.onabort = reject
