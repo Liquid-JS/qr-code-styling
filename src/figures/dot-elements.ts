@@ -275,5 +275,97 @@ export const DotElements = {
         )
 
         return element
+    },
+    blob: (args: BasicFigureDrawArgs, corners: Record<'tl' | 'tr' | 'bl' | 'br', 'round' | 'out' | 'square'>): SVGElement => {
+        const { size, x, y, document } = args
+        const dotSize = size / 7
+
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+
+        const parts = [
+            svgPath`M ${x} ${y + 2.5 * dotSize}`
+        ]
+
+        let l = 2 * dotSize
+
+        if (corners.bl == 'round') {
+            parts.push(
+                svgPath`v ${l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}`
+            )
+            l = 2 * dotSize
+        } else if (corners.bl == 'out') {
+            parts.push(
+                svgPath`v ${5 * dotSize + l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * 2.5} ${dotSize * -2.5}`
+            )
+            l = 2 * dotSize
+        } else {
+            parts.push(
+                svgPath`v ${2.5 * dotSize + l}`
+            )
+            l = 4.5 * dotSize
+        }
+
+        if (corners.br == 'round') {
+            parts.push(
+                svgPath`h ${l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * -2.5}`
+            )
+            l = -2 * dotSize
+        } else if (corners.br == 'out') {
+            parts.push(
+                svgPath`h ${5 * dotSize + l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * -2.5} ${dotSize * -2.5}`
+            )
+            l = -2 * dotSize
+        } else {
+            parts.push(
+                svgPath`h ${2.5 * dotSize + l}`
+            )
+            l = -4.5 * dotSize
+        }
+
+        if (corners.tr == 'round') {
+            parts.push(
+                svgPath`v ${l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * -2.5} ${dotSize * -2.5}`
+            )
+            l = -2 * dotSize
+        } else if (corners.tr == 'out') {
+            parts.push(
+                svgPath`v ${-5 * dotSize + l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * -2.5} ${dotSize * 2.5}`
+            )
+            l = -2 * dotSize
+        } else {
+            parts.push(
+                svgPath`v ${-2.5 * dotSize + l}`
+            )
+            l = -4.5 * dotSize
+        }
+
+        if (corners.tl == 'round') {
+            parts.push(
+                svgPath`h ${l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * -2.5} ${dotSize * 2.5}`
+            )
+        } else if (corners.tl == 'out') {
+            parts.push(
+                svgPath`h ${-5 * dotSize + l}
+              a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * 2.5} ${dotSize * 2.5}`
+            )
+        } else {
+            parts.push(
+                svgPath`h ${-2.5 * dotSize + l}`
+            )
+        }
+
+        element.setAttribute(
+            'd',
+            parts.join(' ') + ' z'
+        )
+
+        return element
     }
 }

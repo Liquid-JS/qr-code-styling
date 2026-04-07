@@ -111,7 +111,43 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
             const y = args.y + (args.size - height) * rnd()
             return DotElements.square({ ..._args, y }, { height })
         }
-    })
+    }),
+    [DotType.blobs]: ({ getNeighbor, ...args }) => {
+        const tl = getNeighbor?.(-1, -1)
+        const t = getNeighbor?.(0, -1)
+        const tr = getNeighbor?.(1, -1)
+        const r = getNeighbor?.(1, 0)
+        const br = getNeighbor?.(1, 1)
+        const b = getNeighbor?.(0, 1)
+        const bl = getNeighbor?.(-1, 1)
+        const l = getNeighbor?.(-1, 0)
+        const corners: Record<'tl' | 'tr' | 'bl' | 'br', 'round' | 'out' | 'square'> = {
+            tl: 'square',
+            tr: 'square',
+            bl: 'square',
+            br: 'square'
+        }
+
+        if (!l && tl)
+            corners.tl = 'out'
+        if (!t && tr)
+            corners.tr = 'out'
+        if (!r && br)
+            corners.br = 'out'
+        if (!b && bl)
+            corners.bl = 'out'
+
+        if (!l && !tl && !t)
+            corners.tl = 'round'
+        if (!t && !tr && !r)
+            corners.tr = 'round'
+        if (!r && !br && !b)
+            corners.br = 'round'
+        if (!b && !bl && !l)
+            corners.bl = 'round'
+
+        return DotElements.blob(args, corners)
+    }
 }
 
 export function getQrDotFigure(type: `${DotType}`, plugins?: Plugin[]) {
