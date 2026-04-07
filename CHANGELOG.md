@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.3.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.2.0...v5.3.0) (2026-04-07)
+
+
+### Features
+
+* blobs dot type ([d50c8cd](https://github.com/Liquid-JS/qr-code-styling/commit/d50c8cd03b6934aa54c3b75d071395b5362d5354))
+* improve image resizing ([301cf50](https://github.com/Liquid-JS/qr-code-styling/commit/301cf5045d04686a2c8a2826ed81afb6f610a730))
+
+
+### Bug Fixes
+
+* square document ([53b6d29](https://github.com/Liquid-JS/qr-code-styling/commit/53b6d297e6b35a3fed4ac973f3c51058476d12d8))
+
 ## [5.2.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.1.0...v5.2.0) (2026-02-10)
 
 
