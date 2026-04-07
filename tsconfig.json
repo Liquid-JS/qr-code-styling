@@ -9,7 +9,7 @@
         "module": "esnext",
         "target": "es2024",
         "allowJs": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "declaration": true,
         "allowSyntheticDefaultImports": true,
         "strict": true,

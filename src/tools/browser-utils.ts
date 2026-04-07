@@ -41,14 +41,14 @@ export function drawToCanvas(
                 const dy = ((y % 1) + 1) % 1
                 let aaCanvas: HTMLCanvasElement | OffscreenCanvas
                 try {
-                    aaCanvas = new OffscreenCanvas(Math.ceil(w + dx), Math.ceil(h + dy))
+                    aaCanvas = new OffscreenCanvas(Math.ceil(w + dx + 2), Math.ceil(h + dy + 2))
                 } catch (_) {
                     // Fallback to regular canvas element
                     aaCanvas = document.createElement('canvas')
-                    aaCanvas.width = image.width * aaFactor
-                    aaCanvas.height = image.height * aaFactor
+                    aaCanvas.width = Math.ceil(w + dx + 2)
+                    aaCanvas.height = Math.ceil(h + dy + 2)
                 }
-                aaCanvas.getContext('2d')?.drawImage(image, dx, dy, w, h)
+                aaCanvas.getContext('2d')?.drawImage(image, dx + 1, dy + 1, w, h)
                 const imgData = lanczosResize(aaCanvas, {
                     width: width - 2 * margin,
                     height: height - 2 * margin
