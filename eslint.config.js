@@ -15,6 +15,7 @@ export default defineConfig(
     {
         files: ['**/*.ts', '**/*.js', '**/*.cjs'],
         plugins: {
+            // @ts-ignore
             '@typescript-eslint': typescriptEslintPlugin,
             '@import': importPlugin,
             '@jsdoc': jsdocPlugin,

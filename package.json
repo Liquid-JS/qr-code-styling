@@ -98,7 +98,7 @@
         "prepublishOnly": "npm run build",
         "prepare": "husky",
         "release": "git diff --exit-code && commit-and-tag-version && git push --follow-tags origin",
-        "docs": "typedoc",
+        "docs": "typedoc --tsconfig ./tsconfig.lib.json",
         "prepack": "clean-package",
         "postpack": "clean-package restore"
     },

@@ -38,7 +38,7 @@ export interface BorderPluginOptions {
         }
     }
     /**
-     * A string of embedded CSS @font-face rules
+     * A string of embedded CSS \@font-face rules
      *
      * @deprecated Use @liquid-js/qr-code-styling/font-faces-plugin
      */
