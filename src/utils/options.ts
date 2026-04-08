@@ -26,7 +26,8 @@ export enum DotType {
     zebraVertical = 'zebra-vertical',
     blocksHorizontal = 'blocks-horizontal',
     blocksVertical = 'blocks-vertical',
-    blobs = 'blobs'
+    blobs = 'blobs',
+    soft = 'soft'
 }
 
 export enum CornerDotType {

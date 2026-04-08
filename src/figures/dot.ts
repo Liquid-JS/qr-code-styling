@@ -147,6 +147,42 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
             corners.bl = 'round'
 
         return DotElements.blob(args, corners)
+    },
+    [DotType.soft]: ({ getNeighbor, ...args }) => {
+        const tl = getNeighbor?.(-1, -1)
+        const t = getNeighbor?.(0, -1)
+        const tr = getNeighbor?.(1, -1)
+        const r = getNeighbor?.(1, 0)
+        const br = getNeighbor?.(1, 1)
+        const b = getNeighbor?.(0, 1)
+        const bl = getNeighbor?.(-1, 1)
+        const l = getNeighbor?.(-1, 0)
+        const corners: Record<'tl' | 'tr' | 'bl' | 'br', 'round' | 'out' | 'square'> = {
+            tl: 'square',
+            tr: 'square',
+            bl: 'square',
+            br: 'square'
+        }
+
+        if (!l && tl && t)
+            corners.tl = 'out'
+        if (!t && tr && r)
+            corners.tr = 'out'
+        if (!r && br && b)
+            corners.br = 'out'
+        if (!b && bl && l)
+            corners.bl = 'out'
+
+        if (!l && !t)
+            corners.tl = 'round'
+        if (!t && !r)
+            corners.tr = 'round'
+        if (!r && !b)
+            corners.br = 'round'
+        if (!b && !l)
+            corners.bl = 'round'
+
+        return DotElements.blob(args, corners)
     }
 }
 
