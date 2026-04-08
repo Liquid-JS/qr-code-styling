@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.3.1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.3.0...v5.3.1) (2026-04-08)
+
+
+### Features
+
+* soft dot type ([5592934](https://github.com/Liquid-JS/qr-code-styling/commit/559293485ceb6844447aa1e72c7bb7ecfb1f4ff7))
+
 ## [5.3.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.2.0...v5.3.0) (2026-04-07)
 
 
