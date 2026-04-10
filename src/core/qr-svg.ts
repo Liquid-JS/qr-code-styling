@@ -241,6 +241,7 @@ export class QRSVG {
         if (options.imageOptions.mode == ImageMode.background) size -= 2 * dotSize * (options.imageOptions.margin || 0)
         const beginning = Math.floor((options.size - count * dotSize) / 2)
         let draw = getQrDotFigure(options.dotsOptions.type, options.plugins)
+        const orgDarw = draw
 
         this.dotsMask = this.createMask('mask-dot-color')
         this.defs.appendChild(this.dotsMask)
@@ -267,6 +268,8 @@ export class QRSVG {
         const colorCount = count + additionalDots * 2
         this._fakeMatrix = new Array(fakeCount)
         const center = Math.floor(fakeCount / 2)
+
+        const rng = getRng(this._fakeMatrix!, 0, 0, false)
 
         for (let i = 0; i < fakeCount; i++) {
             this._fakeMatrix[i] = new Array(fakeCount)
@@ -311,8 +314,8 @@ export class QRSVG {
 
                 // Get random dots from QR code to show it outside of QR code
                 this._fakeMatrix[i][j] = this.qr.isDark(
-                    j - 2 * additionalDots < 0 ? j : j >= count ? j - 2 * additionalDots : j - additionalDots,
-                    i - 2 * additionalDots < 0 ? i : i >= count ? i - 2 * additionalDots : i - additionalDots
+                    Math.floor(rng() * count),
+                    Math.floor(rng() * count)
                 )
             }
         }
@@ -320,22 +323,38 @@ export class QRSVG {
         const typeNr = (count - 17) / 4
         const alignment = QRUtil.getPatternPosition(typeNr)
 
+        // Create a mask of alignment squares, where each
+        const alignmentMatrix = new Array(fakeCount)
         for (let i = 0; i < fakeCount; i++) {
+            alignmentMatrix[i] = new Array(fakeCount)
             const iAlign = alignment.find((v) => i - additionalDots > v - 3 && i - additionalDots < v + 3)
             for (let j = 0; j < fakeCount; j++) {
                 const jAlign = alignment.find((v) => j - additionalDots > v - 3 && j - additionalDots < v + 3)
+
+                alignmentMatrix[i][j] = undefined
+                if (this._fakeMatrix[i][j] == undefined) continue
+
+                if (this.lightDotsMask &&
+                    iAlign &&
+                    jAlign &&
+                    ((iAlign != alignment[0] && jAlign != alignment[0]) ||
+                        (jAlign != alignment[0] && jAlign != alignment[alignment.length - 1]) ||
+                        (iAlign != alignment[0] && iAlign != alignment[alignment.length - 1])))
+                    alignmentMatrix[i][j] = this._fakeMatrix[i][j]
+            }
+        }
+
+        for (let i = 0; i < fakeCount; i++) {
+            for (let j = 0; j < fakeCount; j++) {
                 if (this._fakeMatrix[i][j] == undefined) continue
 
                 if (this.lightDotsMask) {
-                    draw =
-                        iAlign &&
-                            jAlign &&
-                            ((iAlign != alignment[0] && jAlign != alignment[0]) ||
-                                (jAlign != alignment[0] && jAlign != alignment[alignment.length - 1]) ||
-                                (iAlign != alignment[0] && iAlign != alignment[alignment.length - 1]))
-                            ? getQrDotFigure(DotType.square)
-                            : getQrDotFigure(DotType.tinySquare)
+                    draw = alignmentMatrix[i][j] != undefined
+                        ? orgDarw
+                        : getQrDotFigure(DotType.tinySquare)
                 }
+
+                const alignmentNb = options.imageOptions.mode == ImageMode.background && alignmentMatrix[i][j] != undefined
 
                 if (!this._fakeMatrix[i][j]) {
                     if (this.lightDotsMask) {
@@ -345,7 +364,14 @@ export class QRSVG {
                                 y: fakeBeginning + j * dotSize,
                                 size: dotSize,
                                 document: this.options.document,
-                                getNeighbor: (xOffset: number, yOffset: number): boolean => this._fakeMatrix![i + xOffset]?.[j + yOffset] === false,
+                                getNeighbor: (xOffset: number, yOffset: number): boolean => {
+                                    const ii = i + xOffset
+                                    const jj = j + yOffset
+                                    if (alignmentNb) {
+                                        return alignmentMatrix![ii]?.[jj] === false
+                                    }
+                                    return this._fakeMatrix![ii]?.[jj] === false
+                                },
                                 getPRandom: getRng(this._fakeMatrix, i, j, false)
                             }))
                         }
@@ -359,7 +385,14 @@ export class QRSVG {
                         y: fakeBeginning + j * dotSize,
                         size: dotSize,
                         document: this.options.document,
-                        getNeighbor: (xOffset: number, yOffset: number): boolean => this._fakeMatrix![i + xOffset]?.[j + yOffset] === true,
+                        getNeighbor: (xOffset: number, yOffset: number): boolean => {
+                            const ii = i + xOffset
+                            const jj = j + yOffset
+                            if (alignmentNb) {
+                                return alignmentMatrix![ii]?.[jj] === true
+                            }
+                            return this._fakeMatrix![ii]?.[jj] === true
+                        },
                         getPRandom: getRng(this._fakeMatrix, i, j)
                     }))
                 }
