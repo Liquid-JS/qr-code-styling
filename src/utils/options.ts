@@ -22,6 +22,8 @@ export enum DotType {
     weave = 'weave',
     pentagon = 'pentagon',
     hexagon = 'hexagon',
+    octagon = 'octagon',
+    circuit = 'circuit',
     zebraHorizontal = 'zebra-horizontal',
     zebraVertical = 'zebra-vertical',
     blocksHorizontal = 'blocks-horizontal',
@@ -41,6 +43,7 @@ export enum CornerDotType {
     star = 'star',
     pentagon = 'pentagon',
     hexagon = 'hexagon',
+    octagon = 'octagon',
     diamond = 'diamond'
 }
 

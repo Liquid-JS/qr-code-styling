@@ -73,6 +73,36 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
         outerRadius: args.size / 2,
         innerRadius: args.size / 2
     }),
+    [DotType.octagon]: args => DotElements.star(args, {
+        spikes: 4,
+        outerRadius: args.size * Math.cos(Math.PI / 8) / 2,
+        innerRadius: args.size * Math.cos(Math.PI / 8) / 2
+    }),
+    [DotType.circuit]: ({ getNeighbor, ...args }) => {
+        const rnd = (args.getPRandom || Math.random)
+        const leftNeighbor = getNeighbor && rnd() < 2 / 3 ? +getNeighbor(-1, 0) : 0
+        const topNeighbor = getNeighbor && rnd() < 2 / 3 ? +getNeighbor(0, -1) : 0
+
+        const dotSize = args.size * 0.8
+
+        if (topNeighbor && leftNeighbor)
+            return DotElements.circuit(args, true)
+        else if (topNeighbor)
+            return DotElements.circuit(args)
+        else if (leftNeighbor)
+            return rotateFigure({
+                ...args,
+                rotation: -Math.PI / 2,
+                draw: DotElements.circuit
+            })
+        else
+            return DotElements.dot({
+                ...args,
+                x: args.x + args.size * 0.1,
+                y: args.y + args.size * 0.1,
+                size: dotSize
+            })
+    },
     [DotType.zebraVertical]: args => stripes(args, { stripe: args.size * 0.8 }),
     [DotType.zebraHorizontal]: ({ getNeighbor, ...args }) => stripes({
         ...args,
