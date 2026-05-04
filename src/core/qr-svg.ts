@@ -696,14 +696,6 @@ export class QRSVG {
         width: number
         name: string
     }) {
-        const value = createColor({
-            ...cfg,
-            dotSize: this.options.dotsOptions.size,
-            document: this.document
-        })
-        if (!value)
-            return
-
         let { width, height, x, y } = cfg
 
         x -= this.options.dotsOptions.size
@@ -718,11 +710,19 @@ export class QRSVG {
         rect.setAttribute('width', numToAttr(width))
         rect.setAttribute('clip-path', `url(#mask-${cfg.name})`)
 
-        rect.setAttribute('fill', value.value)
-        if (value.gradient)
-            this.defs.appendChild(value.gradient)
+        const value = createColor({
+            ...cfg,
+            dotSize: this.options.dotsOptions.size,
+            document: this.document
+        })
 
-        if (value.opacity < 1) rect.setAttribute('opacity', value.opacity.toFixed(7))
+        if (value) {
+            rect.setAttribute('fill', value.value)
+            if (value.gradient)
+                this.defs.appendChild(value.gradient)
+
+            if (value.opacity < 1) rect.setAttribute('opacity', value.opacity.toFixed(7))
+        }
 
         this._element.appendChild(rect)
         return value
