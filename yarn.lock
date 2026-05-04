@@ -933,9 +933,9 @@ __metadata:
   linkType: soft
 
 "@liquid-js/qrcode-generator@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "@liquid-js/qrcode-generator@npm:1.1.5"
-  checksum: 10/cadccc297db6bf177174c945eac1c6d40b6ab17fd37384338a3125ef57e7451c4747d791103dd67998076351fc2458eacd249edc57ceb2254c96c14ef9cb8bee
+  version: 1.1.6
+  resolution: "@liquid-js/qrcode-generator@npm:1.1.6"
+  checksum: 10/89ec615cc7a09e1fffcedbbbf91c2c400d1eebf591e58d1656f77955456040a8d01a89b210b59664c929f6321304bfc67ef186518d6d39c0a1328f27c4374ff3
   languageName: node
   linkType: hard
 
