@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.4.3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.2...v5.4.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* incompatible gradient options ([ebf4d52](https://github.com/Liquid-JS/qr-code-styling/commit/ebf4d52ed1399ea6a1a5faffa1b71a6d90031af3))
+
 ## [5.4.2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.1...v5.4.2) (2026-05-04)
 
 
