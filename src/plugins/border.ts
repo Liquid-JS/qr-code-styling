@@ -1,3 +1,5 @@
+import { createColor } from '../utils/color.js'
+import { Gradient } from '../utils/gradient.js'
 import { Options, Plugin } from '../utils/options.js'
 import { extendSVG, numToAttr, svgPath } from './utils.js'
 
@@ -21,6 +23,8 @@ export interface BorderPluginOptions {
     round?: number
     size: number
     color: string
+    /** Gradient of Corners Dot */
+    gradient?: Gradient
     dasharray?: string
     margin?: number
     /**
@@ -80,11 +84,38 @@ export default class BorderPlugin implements Plugin {
         borderEl.setAttribute('y', numToAttr(cy - pathL - pathR))
         borderEl.setAttribute('rx', numToAttr(pathR))
         borderEl.setAttribute('fill', 'none')
-        borderEl.setAttribute('stroke', this.pluginOptions.color)
         borderEl.setAttribute('stroke-width', numToAttr(thickness))
         if (this.pluginOptions.dasharray) {
             borderEl.setAttribute('stroke-dasharray', this.pluginOptions.dasharray)
         }
+
+        const value = createColor({
+            options: this.pluginOptions.gradient,
+            color: this.pluginOptions.color,
+            additionalRotation: 0,
+            x: cx - pathL - pathR,
+            y: cy - pathL - pathR,
+            height: 2 * pathR,
+            width: 2 * pathR,
+            name: `border-color-${this.idSuffix}`,
+            dotSize: options.dotsOptions.size,
+            document: options.document
+        })
+
+        if (value) {
+            if (value.gradient) {
+                let defs = Array.from(svg.childNodes).find(v => (v as HTMLElement).tagName.toUpperCase() == 'DEFS')
+                if (!defs) {
+                    defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
+                    svg.appendChild(defs)
+                }
+                defs.appendChild(value.gradient)
+            }
+            borderEl.setAttribute('stroke', value.value)
+
+            if (value.opacity < 1) borderEl.setAttribute('stroke-opacity', value.opacity.toFixed(7))
+        } else
+            borderEl.setAttribute('stroke', '#000')
 
         svg.appendChild(borderEl);
 

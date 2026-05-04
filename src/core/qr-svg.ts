@@ -4,8 +4,8 @@ import { drawPluginCornerDot, getQrCornerDotFigure } from '../figures/corner-dot
 import { drawPluginCornerSquare, getQrCornerSquareFigure } from '../figures/corner-square.js'
 import { getQrDotFigure } from '../figures/dot.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
-import { parseColor } from '../utils/color.js'
-import { Gradient, GradientType } from '../utils/gradient.js'
+import { createColor } from '../utils/color.js'
+import { Gradient } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
 import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { numToAttr } from '../utils/svg.js'
@@ -676,16 +676,7 @@ export class QRSVG {
         this._element.appendChild(image)
     }
 
-    private createColor({
-        options,
-        color,
-        additionalRotation,
-        x,
-        y,
-        height,
-        width,
-        name
-    }: {
+    private createColor(cfg: {
         options?: Gradient
         color?: string
         additionalRotation: number
@@ -695,7 +686,15 @@ export class QRSVG {
         width: number
         name: string
     }): void {
-        const gradientSize = width > height ? width : height
+        const value = createColor({
+            ...cfg,
+            dotSize: this.options.dotsOptions.size,
+            document: this.document
+        })
+        if (!value)
+            return
+
+        let { width, height, x, y } = cfg
 
         x -= this.options.dotsOptions.size
         y -= this.options.dotsOptions.size
@@ -707,78 +706,13 @@ export class QRSVG {
         rect.setAttribute('y', numToAttr(y))
         rect.setAttribute('height', numToAttr(height))
         rect.setAttribute('width', numToAttr(width))
-        rect.setAttribute('clip-path', `url(#mask-${name})`)
+        rect.setAttribute('clip-path', `url(#mask-${cfg.name})`)
 
-        if (options) {
-            let gradient: SVGElement
-            if (options.type === GradientType.radial) {
-                gradient = this.document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient')
-                gradient.setAttribute('id', name)
-                gradient.setAttribute('gradientUnits', 'userSpaceOnUse')
-                gradient.setAttribute('fx', numToAttr(x + width / 2))
-                gradient.setAttribute('fy', numToAttr(y + height / 2))
-                gradient.setAttribute('cx', numToAttr(x + width / 2))
-                gradient.setAttribute('cy', numToAttr(y + height / 2))
-                gradient.setAttribute('r', numToAttr(gradientSize / 2))
-            } else {
-                const rotation = ((options.rotation || 0) + additionalRotation) % (2 * Math.PI)
-                const positiveRotation = (rotation + 2 * Math.PI) % (2 * Math.PI)
-                let x0 = x + width / 2
-                let y0 = y + height / 2
-                let x1 = x + width / 2
-                let y1 = y + height / 2
+        rect.setAttribute('fill', value.value)
+        if (value.gradient)
+            this.defs.appendChild(value.gradient)
 
-                if (
-                    (positiveRotation >= 0 && positiveRotation <= 0.25 * Math.PI) ||
-                    (positiveRotation > 1.75 * Math.PI && positiveRotation <= 2 * Math.PI)
-                ) {
-                    x0 = x0 - width / 2
-                    y0 = y0 - (height / 2) * Math.tan(rotation)
-                    x1 = x1 + width / 2
-                    y1 = y1 + (height / 2) * Math.tan(rotation)
-                } else if (positiveRotation > 0.25 * Math.PI && positiveRotation <= 0.75 * Math.PI) {
-                    y0 = y0 - height / 2
-                    x0 = x0 - width / 2 / Math.tan(rotation)
-                    y1 = y1 + height / 2
-                    x1 = x1 + width / 2 / Math.tan(rotation)
-                } else if (positiveRotation > 0.75 * Math.PI && positiveRotation <= 1.25 * Math.PI) {
-                    x0 = x0 + width / 2
-                    y0 = y0 + (height / 2) * Math.tan(rotation)
-                    x1 = x1 - width / 2
-                    y1 = y1 - (height / 2) * Math.tan(rotation)
-                } else if (positiveRotation > 1.25 * Math.PI && positiveRotation <= 1.75 * Math.PI) {
-                    y0 = y0 + height / 2
-                    x0 = x0 + width / 2 / Math.tan(rotation)
-                    y1 = y1 - height / 2
-                    x1 = x1 - width / 2 / Math.tan(rotation)
-                }
-
-                gradient = this.document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient')
-                gradient.setAttribute('id', name)
-                gradient.setAttribute('gradientUnits', 'userSpaceOnUse')
-                gradient.setAttribute('x1', numToAttr(x0))
-                gradient.setAttribute('y1', numToAttr(y0))
-                gradient.setAttribute('x2', numToAttr(x1))
-                gradient.setAttribute('y2', numToAttr(y1))
-            }
-
-            options.colorStops.forEach((stopCfg: { offset: number, color: string }) => {
-                const stop = this.document.createElementNS('http://www.w3.org/2000/svg', 'stop')
-                stop.setAttribute('offset', `${numToAttr(100 * stopCfg.offset)}%`)
-
-                const parsed = parseColor(stopCfg.color)
-                stop.setAttribute('stop-color', parsed.value)
-                if (parsed.alpha < 1) stop.setAttribute('stop-opacity', parsed.alpha.toFixed(7))
-                gradient.appendChild(stop)
-            })
-
-            rect.setAttribute('fill', `url(#${name})`)
-            this.defs.appendChild(gradient)
-        } else if (color) {
-            const parsed = parseColor(color)
-            rect.setAttribute('fill', parsed.value)
-            if (parsed.alpha < 1) rect.setAttribute('opacity', parsed.alpha.toFixed(7))
-        }
+        if (value.opacity < 1) rect.setAttribute('opacity', value.opacity.toFixed(7))
 
         this._element.appendChild(rect)
     }
