@@ -370,22 +370,22 @@ export const DotElements = {
     },
     circuit: (args: BasicFigureDrawArgs, left = false): SVGElement => {
         const { size, x, y, document } = args
-        const dotSize = size * 0.8
         const dP = 0.17 ** 0.5 * size
 
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
             svgPath`M ${x + size * 0.4} ${y + size * 0.5 - dP}
-          a ${0.5 * dotSize} ${0.5 * dotSize} 0 ${left ? 0 : 1} 0 ${left ? size * 0.1 - dP : 0.2 * size} ${left ? dP - 0.1 * size : 0}
+          a ${0.4 * size} ${0.4 * size} 0 0 0 ${left ? size * 0.1 - dP : -0.3 * size} ${left ? dP - 0.1 * size : dP}
           ${left ? svgPath`
           h ${-0.3 * size}
           v ${0.2 * size}
           h ${0.3 * size}
-          a ${0.5 * dotSize} ${0.5 * dotSize} 0 1 0 ${dP + 0.1 * size} ${-dP - 0.1 * size}` : ''}
+          a ${0.4 * size} ${0.4 * size} 0 0 0 ${dP} ${0.3 * size}` : svgPath`a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${0.4 * size}`}
+          a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${-0.4 * size}
+          a ${0.4 * size} ${0.4 * size} 0 0 0 ${-0.3 * size} ${-dP}
           v ${-0.3 * size}
           h ${-0.2 * size}
-          v ${0.3 * size}
           z`
         )
         element.setAttribute('fill-rule', 'nonzero')
