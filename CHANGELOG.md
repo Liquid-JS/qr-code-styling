@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.4.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.3.1...v5.4.0) (2026-05-04)
+
+
+### Features
+
+* border gradient ([6275970](https://github.com/Liquid-JS/qr-code-styling/commit/627597050e80865bce800888d117b91dc3a9e435))
+* border plugin gradient support ([398451b](https://github.com/Liquid-JS/qr-code-styling/commit/398451b836b9ac7d07a702d0ec350cf99fe9a497))
+* circuit & octagon shapes ([9a5fe53](https://github.com/Liquid-JS/qr-code-styling/commit/9a5fe53e13b765ad1883d936cfa43877a673715c))
+* in background image mode, draw alignment squares using the selected dot shape ([51c1cb3](https://github.com/Liquid-JS/qr-code-styling/commit/51c1cb38841ae890b5a7582c9d7fd351e16dde75))
+
 ## [5.3.1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.3.0...v5.3.1) (2026-04-08)
 
 
