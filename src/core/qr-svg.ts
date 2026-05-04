@@ -4,13 +4,13 @@ import { drawPluginCornerDot, getQrCornerDotFigure } from '../figures/corner-dot
 import { drawPluginCornerSquare, getQrCornerSquareFigure } from '../figures/corner-square.js'
 import { getQrDotFigure } from '../figures/dot.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
-import { createColor } from '../utils/color.js'
+import { DrawArgs } from '../types/helper.js'
+import { ColorElementValue, createColor } from '../utils/color.js'
 import { Gradient } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
 import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
-import { numToAttr } from '../utils/svg.js'
-import { DrawArgs } from '../types/helper.js'
 import { getRng } from '../utils/random.js'
+import { numToAttr } from '../utils/svg.js'
 
 const squareMask = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -45,9 +45,19 @@ function isCornerDotType(val?: string): val is `${CornerDotType}` {
 export class QRSVG {
     private _element: SVGSVGElement
     private _fakeMatrix?: Array<Array<boolean | undefined>>
+    private _dotsColor?: ColorElementValue
+    private _backgroundColor?: ColorElementValue
 
     get element() {
         return this._element
+    }
+
+    get dotsColor() {
+        return this._dotsColor
+    }
+
+    get backgroundColor() {
+        return this._backgroundColor
     }
 
     private defs: SVGElement
@@ -199,7 +209,7 @@ export class QRSVG {
             const gradientOptions = options.backgroundOptions.gradient
             const color = options.backgroundOptions.color
 
-            this.createColor({
+            this._backgroundColor = this.createColor({
                 options: gradientOptions,
                 color,
                 additionalRotation: 0,
@@ -412,7 +422,7 @@ export class QRSVG {
             })
         }
 
-        this.createColor({
+        this._dotsColor = this.createColor({
             options: options.dotsOptions?.gradient,
             color: options.dotsOptions.color,
             additionalRotation: 0,
@@ -685,7 +695,7 @@ export class QRSVG {
         height: number
         width: number
         name: string
-    }): void {
+    }) {
         const value = createColor({
             ...cfg,
             dotSize: this.options.dotsOptions.size,
@@ -715,6 +725,7 @@ export class QRSVG {
         if (value.opacity < 1) rect.setAttribute('opacity', value.opacity.toFixed(7))
 
         this._element.appendChild(rect)
+        return value
     }
 
     private createMask(id: string) {

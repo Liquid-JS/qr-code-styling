@@ -1,6 +1,7 @@
 import { ErrorCorrectionLevel, Mode, TypeNumber } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMinimal.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
 import { DrawArgs } from '../types/helper.js'
+import { ColorElementValue } from './color.js'
 import { Gradient, sanitizeGradient } from './gradient.js'
 
 export enum DotType {
@@ -99,7 +100,10 @@ export interface Plugin {
     /**
      * Alter the generated SVG, e.g. add borders
      */
-    postProcess?: (svg: SVGSVGElement, options: Options) => void
+    postProcess?: (svg: SVGSVGElement, options: Options, colors: {
+        dots?: ColorElementValue
+        background?: ColorElementValue
+    }) => void
 }
 
 export interface Options {

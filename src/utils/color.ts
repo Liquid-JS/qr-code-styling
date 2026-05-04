@@ -58,6 +58,12 @@ export function parseColor(cstr: string) {
     }
 }
 
+export interface ColorElementValue {
+    gradient?: SVGElement
+    value: string
+    opacity: number
+}
+
 export function createColor({
     options,
     color,
@@ -80,11 +86,7 @@ export function createColor({
     name: string
     dotSize: number
     document: Document
-}): {
-    gradient?: SVGElement
-    value: string
-    opacity: number
-} | undefined {
+}): ColorElementValue | undefined {
     const gradientSize = width > height ? width : height
 
     x -= size

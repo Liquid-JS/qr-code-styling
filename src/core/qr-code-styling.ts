@@ -166,6 +166,9 @@ export class QRCodeStyling {
                 width: size,
                 height: size,
                 size
+            }, {
+                dots: this.qrSVG?.dotsColor,
+                background: this.qrSVG?.backgroundColor
             }))
             this.extension?.(this.qrSVG.element, {
                 ...this.options,
