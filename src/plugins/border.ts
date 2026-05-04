@@ -13,7 +13,6 @@ enum TextPosition {
 export interface TextConfig {
     font?: string
     color?: string
-    gradient?: Gradient
     size?: number
     fontWeight?: 'normal' | 'bold' | number
     fontStyle?: 'normal' | 'italic' | 'oblique'
@@ -123,20 +122,7 @@ export default class BorderPlugin implements Plugin {
             if (colors.dots.opacity < 1) borderEl.setAttribute('stroke-opacity', colors.dots.opacity.toFixed(7))
         }
 
-        svg.appendChild(borderEl)
-
-        const textColor = createColor({
-            options: this.pluginOptions.text?.gradient,
-            color: this.pluginOptions.text?.color,
-            additionalRotation: 0,
-            x: cx - pathL - pathR,
-            y: cy - pathL - pathR,
-            height: 2 * pathR,
-            width: 2 * pathR,
-            name: `border-text-color-${this.idSuffix}`,
-            dotSize: options.dotsOptions.size,
-            document: options.document
-        });
+        svg.appendChild(borderEl);
 
         [TextPosition.left, TextPosition.top, TextPosition.right, TextPosition.bottom].forEach(postion => {
             const textCfg = this.pluginOptions.text
@@ -223,36 +209,11 @@ export default class BorderPlugin implements Plugin {
 
                 const span = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
                 span.setAttribute('font-family', config.font || textCfg.font || 'sans-serif')
+                span.setAttribute('fill', config.color || textCfg.color || '#000')
                 span.setAttribute('font-weight', numToAttr(config.fontWeight || textCfg.fontWeight || 'normal'))
                 span.setAttribute('font-style', config.fontStyle || textCfg.fontStyle || 'normal')
                 span.setAttribute('font-size', numToAttr(size))
                 span.textContent = config.content
-
-                const color = createColor({
-                    options: config.gradient,
-                    color: config.color,
-                    additionalRotation: 0,
-                    x: cx - pathL - pathR,
-                    y: cy - pathL - pathR,
-                    height: 2 * pathR,
-                    width: 2 * pathR,
-                    name: `border-text-color-${this.idSuffix}-${postion}`,
-                    dotSize: options.dotsOptions.size,
-                    document: options.document
-                }) || textColor
-
-                if (color) {
-                    if (color.gradient)
-                        defs.appendChild(color.gradient)
-
-                    span.setAttribute('fill', color.value)
-
-                    if (color.opacity < 1) span.setAttribute('opacity', color.opacity.toFixed(7))
-                } else if (colors.dots) {
-                    span.setAttribute('fill', colors.dots.value)
-
-                    if (colors.dots.opacity < 1) span.setAttribute('opacity', colors.dots.opacity.toFixed(7))
-                }
 
                 const textPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath')
                 textPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id)
