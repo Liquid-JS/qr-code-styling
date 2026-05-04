@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.4.4](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.3...v5.4.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* default color value ([fcc0510](https://github.com/Liquid-JS/qr-code-styling/commit/fcc0510871c7f95fb02f9fb15d65b1e199dbdafb))
+
 ## [5.4.3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.2...v5.4.3) (2026-05-04)
 
 
