@@ -6,7 +6,7 @@
 
 JavaScript library for generating QR codes with customizable styling.
 
-Try it here <https://qrky.to/generator/">
+Try it here <https://qrky.to/generator/>
 
 > 🌟 Check out [qr-code-styling-cli](https://www.npmjs.com/package/@liquid-js/qr-code-styling-cli) if you're looking to automate your QR generation process
 
