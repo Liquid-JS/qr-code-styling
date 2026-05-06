@@ -897,6 +897,7 @@ __metadata:
     rollup-plugin-minify-template-literals: "npm:^1.1.7"
     sharp: "npm:^0.34.5"
     source-map-support: "npm:^0.5.21"
+    ts-ics: "npm:^2.4.4"
     ts-node-maintained: "npm:^10.9.6"
     typedoc: "npm:^0.28.19"
     typescript: "npm:^6.0.3"
@@ -909,6 +910,9 @@ __metadata:
     "@xmldom/xmldom": ^0.9.0
     file-type: ^21.0.0 || ^22.0.0
     sharp: ">0.32.1 <1.0.0"
+    ts-ics: ^2.4.0
+    vcards-js: ^2.10.0
+    vcf: ^2.1.0
   languageName: unknown
   linkType: soft
 
@@ -1420,6 +1424,13 @@ __metadata:
   version: 1.0.0
   resolution: "@sindresorhus/base62@npm:1.0.0"
   checksum: 10/ba1a1ccfc9de0995f0e4506b8cabff3436fd1a9815f9c1a44f6833694bba6b3db7fa61fa5fc2f63180edda01abf3c26ffd16325be0ab25409f992ba91ea6dcd0
+  languageName: node
+  linkType: hard
+
+"@standard-schema/spec@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "@standard-schema/spec@npm:1.1.0"
+  checksum: 10/a209615c9e8b2ea535d7db0a5f6aa0f962fd4ab73ee86a46c100fb78116964af1f55a27c1794d4801e534a196794223daa25ff5135021e03c7828aa3d95e1763
   languageName: node
   linkType: hard
 
@@ -5313,11 +5324,11 @@ __metadata:
   linkType: hard
 
 "node-abi@npm:^3.3.0":
-  version: 3.91.0
-  resolution: "node-abi@npm:3.91.0"
+  version: 3.92.0
+  resolution: "node-abi@npm:3.92.0"
   dependencies:
     semver: "npm:^7.3.5"
-  checksum: 10/ffa23180862b036b95dc81971f7578993b14556fe2c9cc2c5b1a9ba0a9df391efd0b7cda7df3e01c78cc7fd21988a5fd725fcd881108ca3dea31fcd9f4c5e9de
+  checksum: 10/b57a8eaa3e0f0531688b7f9c85ca0831e8b1195c9c331205f8a5ec3aa4e0a898671b85c8a0a0f4469ce550ce2cd32df1a4ccf437a7518bbff6459dc88f59d3a5
   languageName: node
   linkType: hard
 
@@ -7106,6 +7117,15 @@ __metadata:
   peerDependencies:
     typescript: ">=4.8.4"
   checksum: 10/d5f1936f5618c6ab6942a97b78802217540ced00e7501862ae1f578d9a3aa189fc06050e64cb8951d21f7088e5fd35f53d2bf0d0370a883861c7b05e993ebc44
+  languageName: node
+  linkType: hard
+
+"ts-ics@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "ts-ics@npm:2.4.4"
+  dependencies:
+    "@standard-schema/spec": "npm:^1.0.0"
+  checksum: 10/3da35f2b37695752ea30e327c2184dc3a22b0f9ec2632f879052ecaa3ab8d177c8788462ff99e997bb0263f174dff4a179181a790ba325727dc6b879b71107ea
   languageName: node
   linkType: hard
 

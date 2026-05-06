@@ -1,6 +1,4 @@
-// eslint-disable-next-line @import/no-extraneous-dependencies
 import VCard from 'vcards-js'
-// eslint-disable-next-line @import/no-extraneous-dependencies
 import vcf from 'vcf'
 import { Options, Plugin } from '../utils/options.js'
 

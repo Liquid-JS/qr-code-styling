@@ -27,6 +27,10 @@
             "types": "./lib/plugins/border.d.ts",
             "default": "./lib/border-plugin.js"
         },
+        "./event-plugin": {
+            "types": "./lib/plugins/event.d.ts",
+            "default": "./lib/event-plugin.js"
+        },
         "./font-faces-plugin": {
             "types": "./lib/plugins/font-faces.d.ts",
             "default": "./lib/font-faces-plugin.js"
@@ -47,7 +51,10 @@
         "@liquid-js/qrcode-generator": "^1.1.0",
         "@xmldom/xmldom": "^0.9.0",
         "file-type": "^21.0.0 || ^22.0.0",
-        "sharp": ">0.32.1 <1.0.0"
+        "sharp": ">0.32.1 <1.0.0",
+        "ts-ics": "^2.4.0",
+        "vcards-js": "^2.10.0",
+        "vcf": "^2.1.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^20.5.3",
@@ -91,6 +98,7 @@
         "rollup-plugin-minify-template-literals": "^1.1.7",
         "sharp": "^0.34.5",
         "source-map-support": "^0.5.21",
+        "ts-ics": "^2.4.4",
         "ts-node-maintained": "^10.9.6",
         "typedoc": "^0.28.19",
         "typescript": "^6.0.3",
