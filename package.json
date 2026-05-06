@@ -34,6 +34,10 @@
         "./vcard-plugin": {
             "types": "./lib/plugins/vcard.d.ts",
             "default": "./lib/vcard-plugin.js"
+        },
+        "./wifi-plugin": {
+            "types": "./lib/plugins/wifi.d.ts",
+            "default": "./lib/wifi-plugin.js"
         }
     },
     "files": [
