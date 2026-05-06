@@ -80,6 +80,10 @@ export enum ImageMode {
 
 export interface Plugin {
     /**
+     * Modify the options before rendering
+     */
+    configure?: (options: Options) => Options | undefined | void
+    /**
      * Draw a single dot
      *
      * @returns Dot element; if undefined, try to use the next plugin or the default function

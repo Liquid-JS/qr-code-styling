@@ -40,6 +40,16 @@ export class QRCodeStyling {
 
         this.options = options ? sanitizeOptions(mergeDeep(this.options, options) as Options) : this.options
 
+        const plugins = this.options.plugins
+        plugins?.forEach(p => {
+            if ('configure' in p && p.configure) {
+                const modified = p.configure(this.options)
+                if (modified) {
+                    this.options = sanitizeOptions(modified)
+                }
+            }
+        })
+
         if (!this.options.data) {
             return
         }
