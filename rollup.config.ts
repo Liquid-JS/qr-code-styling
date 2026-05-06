@@ -37,6 +37,7 @@ export default new Array<RollupOptions>(
             'kanji': 'src/kanji.ts',
             'plugin-utils': 'src/plugins/utils.ts',
             'border-plugin': 'src/plugins/border.ts',
+            'vcard-plugin': 'src/plugins/vcard.ts',
             'font-faces-plugin': 'src/plugins/font-faces.ts'
         },
         output: {

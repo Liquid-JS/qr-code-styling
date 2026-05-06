@@ -30,6 +30,10 @@
         "./font-faces-plugin": {
             "types": "./lib/plugins/font-faces.d.ts",
             "default": "./lib/font-faces-plugin.js"
+        },
+        "./vcard-plugin": {
+            "types": "./lib/plugins/vcard.d.ts",
+            "default": "./lib/vcard-plugin.js"
         }
     },
     "files": [
@@ -59,18 +63,20 @@
         "@types/node": "<25.0.0",
         "@types/sharp": "^0.32.0",
         "@types/source-map-support": "^0.5.10",
+        "@types/vcards-js": "^2.10.5",
+        "@types/vcf": "^2.0.7",
         "@xmldom/xmldom": "^0.9.10",
         "canvas": "^3.2.3",
         "chai": "^6.2.2",
         "clean-package": "^2.2.0",
         "commit-and-tag-version": "^12.7.1",
-        "eslint": "<10.0.0",
+        "eslint": "^10.3.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsdoc": "^62.9.0",
         "eslint-plugin-prefer-arrow-functions": "^3.9.1",
         "eslint-plugin-unused-imports": "^4.4.1",
         "file-type": "^22.0.1",
-        "google-closure-compiler": "^20260429.0.0",
+        "google-closure-compiler": "^20260504.0.0",
         "husky": "^9.1.7",
         "jsdom": "^29.1.1",
         "jsdom-global": "^3.0.2",
@@ -85,6 +91,8 @@
         "typedoc": "^0.28.19",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.59.2",
+        "vcards-js": "^2.10.0",
+        "vcf": "^2.1.2",
         "vite": "^8.0.10"
     },
     "resolutions": {
