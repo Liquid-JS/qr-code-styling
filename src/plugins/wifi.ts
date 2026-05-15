@@ -2,15 +2,28 @@ import { Options, Plugin } from '../utils/options.js'
 
 export enum EncryptionType {
     wep = 'WEP',
-    wpa = 'WPA'
+    wpa = 'WPA',
+    wpaEap = 'WPA2-EAP'
 }
 
-export interface WiFiPluginOptions {
+export type WiFiPluginOptions = {
     ssid: string
     hidden?: boolean
-    encryption?: `${EncryptionType}`
+} & ({
+    encryption: `${EncryptionType.wep | EncryptionType.wpa}`
+    password: string
+} | {}) & (({
+    encryption: `${EncryptionType.wpaEap}`
     password?: string
-}
+    /** EAP method, like PEAP, TTLS or PWD */
+    eapMethod?: string
+    /** EAP identity */
+    eapIdentity?: string
+    /** EAP anonymous identity */
+    eapAnonymousIdentity?: string
+    /** EAP phase 2 method, like MSCHAPV2 or TLS */
+    eapPhase2Method?: string
+} & {}) | {})
 
 export default class WiFiPlugin implements Plugin {
 
@@ -26,22 +39,44 @@ export default class WiFiPlugin implements Plugin {
     private generateWiFi() {
         // https://github.com/zxing/zxing/wiki/Barcode-Contents#wi-fi-network-config-android-ios-11
 
-        const { ssid, encryption, password, hidden } = this.pluginOptions
+        const { ssid, hidden } = this.pluginOptions
 
         const parts = new Array<{ key: 'T' | 'S' | 'P' | 'H' | 'E' | 'A' | 'I' | 'PH2', value: string }>()
         parts.push({
             key: 'S',
             value: escape_string(ssid)
         })
-        if (encryption)
+        if ('encryption' in this.pluginOptions && this.pluginOptions.encryption) {
             parts.push({
                 key: 'T',
-                value: encryption
+                value: this.pluginOptions.encryption
             }, {
                 key: 'P',
-                value: escape_string(password || '', true)
+                value: escape_string(this.pluginOptions.password || '', true)
             })
-        else
+            if (this.pluginOptions.encryption == EncryptionType.wpaEap) {
+                if (this.pluginOptions.eapMethod)
+                    parts.push({
+                        key: 'E',
+                        value: this.pluginOptions.eapMethod
+                    })
+                if (this.pluginOptions.eapIdentity)
+                    parts.push({
+                        key: 'I',
+                        value: this.pluginOptions.eapIdentity
+                    })
+                if (this.pluginOptions.eapAnonymousIdentity)
+                    parts.push({
+                        key: 'A',
+                        value: this.pluginOptions.eapAnonymousIdentity
+                    })
+                if (this.pluginOptions.eapPhase2Method)
+                    parts.push({
+                        key: 'PH2',
+                        value: this.pluginOptions.eapPhase2Method
+                    })
+            }
+        } else
             parts.push({
                 key: 'T',
                 value: 'nopass'
