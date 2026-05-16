@@ -3,8 +3,8 @@ import { Options, Plugin } from '../utils/options.js'
 
 export interface EventPluginOptions {
     summary: string
-    start: Date
-    end: Date
+    start: Date | string
+    end: Date | string
     allDay?: boolean
     description?: string
     url?: string
@@ -19,6 +19,14 @@ export interface EventPluginOptions {
     }
 }
 
+function toDate(val?: string | Date) {
+    if (!val)
+        return
+    if (typeof val == 'string')
+        return new Date(val)
+    return val
+}
+
 export default class EventPlugin implements Plugin {
 
     constructor(
@@ -29,9 +37,9 @@ export default class EventPlugin implements Plugin {
     configure(options: Options): Options | undefined | void {
         options.data = generateIcsEvent({
             ...this.pluginOptions,
-            stamp: { date: this.pluginOptions.start, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
-            start: { date: this.pluginOptions.start, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
-            end: { date: this.pluginOptions.end, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
+            stamp: { date: toDate(this.pluginOptions.start)!, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
+            start: { date: toDate(this.pluginOptions.start)!, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
+            end: { date: toDate(this.pluginOptions.end)!, type: this.pluginOptions.allDay ? 'DATE' : 'DATE-TIME' },
             geo: this.pluginOptions.geo ? `${this.pluginOptions.geo.lat}:${this.pluginOptions.geo.lon}` : undefined,
             uid: this.uuid || ''
         })

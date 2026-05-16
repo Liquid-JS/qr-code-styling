@@ -5,6 +5,7 @@ import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 import { type RollupOptions } from 'rollup'
 import { minifyTemplateLiterals } from 'rollup-plugin-minify-template-literals'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 
 const common = () => [
     typescript({
@@ -23,6 +24,7 @@ const common = () => [
 
 const bundle = () => [
     nodeResolve(),
+    nodePolyfills(),
     compiler({
         language_in: 'ECMASCRIPT_NEXT',
         language_out: 'ECMASCRIPT_NEXT'

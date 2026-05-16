@@ -34,11 +34,12 @@ export enum SocialType {
     GaduGadu = 'gadu-gadu'
 }
 
-export interface Image {
-    /** URL where photo can be found */
-    url: string
-    /** the media type */
-    mediaType: string
+function toDate(val?: string | Date) {
+    if (!val)
+        return
+    if (typeof val == 'string')
+        return new Date(val)
+    return val
 }
 
 export interface VCardPluginOptions {
@@ -53,21 +54,16 @@ export interface VCardPluginOptions {
             nick?: string
         }
         title?: string
-        birthday?: Date
-        photo?: Image
+        birthday?: Date | string
         phone?: Array<{ type?: `${PhoneType}`, value: string }>
         email?: Array<{ type?: `${AddressType}`, value: string }>
-
         address?: {
             work?: Address
             home?: Address
         }
-
-        logo?: Image
         note?: string
         company?: string
         social?: Array<{ type: `${SocialType}`, value: string }>
-
         website?: {
             personal?: string
             company?: string
@@ -125,10 +121,7 @@ export default class VCardPlugin implements Plugin {
             card.title = data.title
 
         if (data.birthday)
-            card.birthday = data.birthday
-
-        if (data.photo)
-            card.photo.attachFromUrl(data.photo.url, data.photo.mediaType)
+            card.birthday = toDate(data.birthday)!
 
         data.phone?.forEach(el => {
             let key: 'workPhone' | 'cellPhone' | 'pagerPhone' | 'homePhone' | 'otherPhone' = 'otherPhone'
@@ -211,9 +204,6 @@ export default class VCardPlugin implements Plugin {
                     card[key].countryRegion = countryRegion
             })
         }
-
-        if (data.logo)
-            card.logo.attachFromUrl(data.logo.url, data.logo.mediaType)
 
         if (data.note)
             card.note = data.note
