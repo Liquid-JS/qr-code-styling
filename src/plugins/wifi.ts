@@ -49,7 +49,7 @@ export default class WiFiPlugin implements Plugin {
         if ('encryption' in this.pluginOptions && this.pluginOptions.encryption) {
             parts.push({
                 key: 'T',
-                value: this.pluginOptions.encryption
+                value: escape_string(this.pluginOptions.encryption)
             }, {
                 key: 'P',
                 value: escape_string(this.pluginOptions.password || '', true)
@@ -58,22 +58,22 @@ export default class WiFiPlugin implements Plugin {
                 if (this.pluginOptions.eapMethod)
                     parts.push({
                         key: 'E',
-                        value: this.pluginOptions.eapMethod
+                        value: escape_string(this.pluginOptions.eapMethod)
                     })
                 if (this.pluginOptions.eapIdentity)
                     parts.push({
                         key: 'I',
-                        value: this.pluginOptions.eapIdentity
+                        value: escape_string(this.pluginOptions.eapIdentity)
                     })
                 if (this.pluginOptions.eapAnonymousIdentity)
                     parts.push({
                         key: 'A',
-                        value: this.pluginOptions.eapAnonymousIdentity
+                        value: escape_string(this.pluginOptions.eapAnonymousIdentity)
                     })
                 if (this.pluginOptions.eapPhase2Method)
                     parts.push({
                         key: 'PH2',
-                        value: this.pluginOptions.eapPhase2Method
+                        value: escape_string(this.pluginOptions.eapPhase2Method)
                     })
             }
         } else
