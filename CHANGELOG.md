@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.5.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.5...v5.5.0-0) (2026-05-16)
+
+
+### Features
+
+* event plugin ([25557fa](https://github.com/Liquid-JS/qr-code-styling/commit/25557fac20aa821d71abc70eba3e8a70ee598f64))
+* plugin configure hook ([1e3fd68](https://github.com/Liquid-JS/qr-code-styling/commit/1e3fd68c7c53ce4d40bd18aa6c9de69fe5dc1637))
+* vcard plugin ([1e0cde8](https://github.com/Liquid-JS/qr-code-styling/commit/1e0cde8db8603d415a8227e8ef10bd5150029b6b))
+* wifi eap config ([f1b0bca](https://github.com/Liquid-JS/qr-code-styling/commit/f1b0bcafe6b603b1d11a03026ea8669ee775f620))
+* wifi plugin ([ab4adf5](https://github.com/Liquid-JS/qr-code-styling/commit/ab4adf5632775f69bcb3964245bd5f72485703f9))
+
+
+### Bug Fixes
+
+* wifi plugin escape ([816e1d5](https://github.com/Liquid-JS/qr-code-styling/commit/816e1d5301f15c1ed3f01f20194c19a972de0d35))
+
 ## [5.4.5](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.4...v5.4.5) (2026-05-04)
 
 ## [5.4.4](https://github.com/Liquid-JS/qr-code-styling/compare/v5.4.3...v5.4.4) (2026-05-04)
