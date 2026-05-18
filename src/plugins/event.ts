@@ -43,6 +43,8 @@ export default class EventPlugin implements Plugin {
             geo: this.pluginOptions.geo ? `${this.pluginOptions.geo.lat}:${this.pluginOptions.geo.lon}` : undefined,
             uid: this.uuid || ''
         })
+        // Auto mode
+        options.qrOptions.mode = undefined
         return options
     }
 

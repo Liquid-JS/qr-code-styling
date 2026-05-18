@@ -33,6 +33,8 @@ export default class WiFiPlugin implements Plugin {
 
     configure(options: Options): Options | undefined | void {
         options.data = this.generateWiFi()
+        // Auto mode
+        options.qrOptions.mode = undefined
         return options
     }
 

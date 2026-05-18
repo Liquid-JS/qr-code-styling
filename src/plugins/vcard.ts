@@ -80,6 +80,8 @@ export default class VCardPlugin implements Plugin {
 
     configure(options: Options): Options | undefined | void {
         options.data = this.generateVCard()
+        // Auto mode
+        options.qrOptions.mode = undefined
         return options
     }
 
