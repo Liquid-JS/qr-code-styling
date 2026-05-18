@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.5.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.0-1...v5.5.0-2) (2026-05-18)
+
+
+### Bug Fixes
+
+* ical event ([917100d](https://github.com/Liquid-JS/qr-code-styling/commit/917100d0eee905951fcc0536933b228f12ba1979))
+* use auto mode with data plugins ([ef7834e](https://github.com/Liquid-JS/qr-code-styling/commit/ef7834e273d1545ce5414061877fdc5326622ae4))
+
 ## [5.5.0-1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.0-0...v5.5.0-1) (2026-05-16)
 
 
