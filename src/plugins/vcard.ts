@@ -143,10 +143,12 @@ export default class VCardPlugin implements Plugin {
                     break
             }
             const v = card[key]
-            if (Array.isArray(v))
-                v.push(el.value)
-            else
-                card[key] = [el.value]
+            if (el.value) {
+                if (Array.isArray(v))
+                    v.push(el.value)
+                else
+                    card[key] = [el.value]
+            }
         })
 
         data.email?.forEach(el => {
@@ -161,10 +163,12 @@ export default class VCardPlugin implements Plugin {
                     break
             }
             const v = card[key]
-            if (Array.isArray(v))
-                v.push(el.value)
-            else
-                card[key] = [el.value]
+            if (el.value) {
+                if (Array.isArray(v))
+                    v.push(el.value)
+                else
+                    card[key] = [el.value]
+            }
         })
 
         if (data.address) {
@@ -252,58 +256,59 @@ export default class VCardPlugin implements Plugin {
 
         if (data.social)
             data.social.forEach((v) => {
-                switch (v.type) {
-                    case SocialType.Messenger:
-                        extraProps.push(vcf.Property.fromJSON([
-                            'xSocialprofile',
-                            {
-                                type: 'messenger',
-                                xUser: v.value
-                            },
-                            'text',
-                            'x-apple:messenger'
-                        ]))
-                        const group = getGroup()
-                        extraProps.push(vcf.Property.fromJSON([
-                            'impp',
-                            {
-                                group,
-                                xServiceType: 'Facebook'
-                            },
-                            'text',
-                            `xmpp:${v.value}`
-                        ]))
-                        extraProps.push(vcf.Property.fromJSON([
-                            'xAbLabel',
-                            {
-                                group
-                            },
-                            'text',
-                            'Facebook'
-                        ]))
-                        break
+                if (v.value && v.type)
+                    switch (v.type) {
+                        case SocialType.Messenger:
+                            extraProps.push(vcf.Property.fromJSON([
+                                'xSocialprofile',
+                                {
+                                    type: 'messenger',
+                                    xUser: v.value
+                                },
+                                'text',
+                                'x-apple:messenger'
+                            ]))
+                            const group = getGroup()
+                            extraProps.push(vcf.Property.fromJSON([
+                                'impp',
+                                {
+                                    group,
+                                    xServiceType: 'Facebook'
+                                },
+                                'text',
+                                `xmpp:${v.value}`
+                            ]))
+                            extraProps.push(vcf.Property.fromJSON([
+                                'xAbLabel',
+                                {
+                                    group
+                                },
+                                'text',
+                                'Facebook'
+                            ]))
+                            break
 
-                    case SocialType.Twitter:
-                    case SocialType.Facebook:
-                    case SocialType.LinkedIn:
-                    case SocialType.SinaWeibo:
-                        const surl = getSocialUrl(v)
-                        if (surl)
-                            card.socialUrls[v.type] = surl
-                        break
+                        case SocialType.Twitter:
+                        case SocialType.Facebook:
+                        case SocialType.LinkedIn:
+                        case SocialType.SinaWeibo:
+                            const surl = getSocialUrl(v)
+                            if (surl)
+                                card.socialUrls[v.type] = surl
+                            break
 
-                    case SocialType.Jabber:
-                        pushMsgProtocol(v.value, 'xJabber', 'xmpp', 'Jabber')
-                        break
+                        case SocialType.Jabber:
+                            pushMsgProtocol(v.value, 'xJabber', 'xmpp', 'Jabber')
+                            break
 
-                    case SocialType.QQ:
-                        pushMsgProtocol(v.value, 'xQq', 'x-apple', 'QQ')
-                        break
+                        case SocialType.QQ:
+                            pushMsgProtocol(v.value, 'xQq', 'x-apple', 'QQ')
+                            break
 
-                    case SocialType.GaduGadu:
-                        pushMsgProtocol(v.value, 'xGaduGadu', 'x-apple', 'GaduGadu')
-                        break
-                }
+                        case SocialType.GaduGadu:
+                            pushMsgProtocol(v.value, 'xGaduGadu', 'x-apple', 'GaduGadu')
+                            break
+                    }
             })
 
         if (data.website?.company)
@@ -334,9 +339,9 @@ const socialUrls = {
     [SocialType.Messenger]: 'https://www.messenger.com/t/'
 }
 
-function getSocialUrl({ value, type }: { value: string, type: `${SocialType}` }) {
+function getSocialUrl({ value, type }: { value?: string, type?: `${SocialType}` }) {
     let val = value?.trim()
-    if (!val.match(/^https?:\/\//im)) {
+    if (!val?.match(/^https?:\/\//im)) {
         try {
             const u = new URL(socialUrls[type as keyof typeof socialUrls])
             u.pathname = (u.pathname + '/' + val).replace(/[\/\\]+/g, '/')

@@ -13,7 +13,7 @@ export interface EventPluginOptions {
         lat: number
         lon: number
     }
-    organizer: {
+    organizer?: {
         name?: string
         email: string
     }
@@ -43,24 +43,26 @@ export default class EventPlugin implements Plugin {
 
     private generateEvent() {
         const calendar = ical({ name: 'QR calendar' })
+        const { start, end, location, geo: _geo, organizer, ...cfg } = this.pluginOptions
+        const geo = typeof _geo?.lat == 'number' && typeof _geo.lon == 'number' ? (_geo as { lat: number, lon: number }) : undefined
         return calendar.createEvent({
-            ...this.pluginOptions,
-            start: toDate(this.pluginOptions.start)!,
-            end: toDate(this.pluginOptions.end),
-            location: this.pluginOptions.location
+            ...cfg,
+            start: toDate(start)!,
+            end: toDate(end),
+            location: location
                 ? {
-                    title: this.pluginOptions.location,
-                    geo: this.pluginOptions.geo
+                    title: location,
+                    geo
                 }
-                : this.pluginOptions.geo
+                : geo
                     ? {
-                        geo: this.pluginOptions.geo
+                        geo
                     }
                     : undefined,
-            organizer: this.pluginOptions.organizer?.email
+            organizer: organizer?.email
                 ? {
-                    name: this.pluginOptions.organizer.name || this.pluginOptions.organizer.email,
-                    email: this.pluginOptions.organizer.email
+                    name: organizer.name || organizer.email,
+                    email: organizer.email
                 }
                 : undefined,
             id: this.uuid
