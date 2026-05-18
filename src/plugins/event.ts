@@ -10,8 +10,8 @@ export interface EventPluginOptions {
     url?: string
     location?: string
     geo?: {
-        lat: string
-        lon: string
+        lat: number
+        lon: number
     }
     organizer: {
         name?: string
@@ -35,24 +35,39 @@ export default class EventPlugin implements Plugin {
     ) { }
 
     configure(options: Options): Options | undefined | void {
-        const calendar = ical({ name: 'QR calendar' })
-        options.data = calendar.createEvent({
-            ...this.pluginOptions,
-            start: toDate(this.pluginOptions.start)!,
-            end: toDate(this.pluginOptions.end),
-            location: this.pluginOptions.location || this.pluginOptions.geo ? {
-                title: this.pluginOptions.location,
-                geo: this.pluginOptions.geo
-            } as any : undefined,
-            organizer: this.pluginOptions.organizer ? {
-                name: this.pluginOptions.organizer.name || this.pluginOptions.organizer.email,
-                email: this.pluginOptions.organizer.email
-            } : undefined,
-            id: this.uuid
-        }).toString().split('\n').filter(v => !v.startsWith('SEQUENCE:') && !v.startsWith('DTSTAMP:') && (this.uuid || !v.startsWith('UID:'))).join('\n')
+        options.data = this.generateEvent()
         // Auto mode
         options.qrOptions.mode = undefined
         return options
+    }
+
+    private generateEvent() {
+        const calendar = ical({ name: 'QR calendar' })
+        return calendar.createEvent({
+            ...this.pluginOptions,
+            start: toDate(this.pluginOptions.start)!,
+            end: toDate(this.pluginOptions.end),
+            location: this.pluginOptions.location
+                ? {
+                    title: this.pluginOptions.location,
+                    geo: this.pluginOptions.geo
+                }
+                : this.pluginOptions.geo
+                    ? {
+                        geo: this.pluginOptions.geo
+                    }
+                    : undefined,
+            organizer: this.pluginOptions.organizer?.email
+                ? {
+                    name: this.pluginOptions.organizer.name || this.pluginOptions.organizer.email,
+                    email: this.pluginOptions.organizer.email
+                }
+                : undefined,
+            id: this.uuid
+        }).toString()
+            .split(/[\r\n]+/g)
+            .filter(v => !v.startsWith('SEQUENCE:') && !v.startsWith('DTSTAMP:') && (this.uuid || !v.startsWith('UID:')))
+            .join('\n')
     }
 
 }
