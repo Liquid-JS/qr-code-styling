@@ -888,6 +888,7 @@ __metadata:
     file-type: "npm:^22.0.1"
     google-closure-compiler: "npm:^20260504.0.0"
     husky: "npm:^9.1.7"
+    ical-generator: "npm:^10.2.0"
     jsdom: "npm:^29.1.1"
     jsdom-global: "npm:^3.0.2"
     mocha: "npm:^11.7.5"
@@ -910,8 +911,8 @@ __metadata:
     "@liquid-js/qrcode-generator": ^1.1.0
     "@xmldom/xmldom": ^0.9.0
     file-type: ^21.0.0 || ^22.0.0
+    ical-generator: ^10.2.0
     sharp: ">0.32.1 <1.0.0"
-    ts-ics: ^2.4.0
     vcards-js: ^2.10.0
     vcf: ^2.1.0
   languageName: unknown
@@ -4213,6 +4214,41 @@ __metadata:
   bin:
     husky: bin.js
   checksum: 10/c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
+  languageName: node
+  linkType: hard
+
+"ical-generator@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "ical-generator@npm:10.2.0"
+  peerDependencies:
+    "@touch4it/ical-timezones": ">=1.6.0"
+    "@types/luxon": ">= 1.26.0"
+    "@types/mocha": ">= 8.2.1"
+    dayjs: ">= 1.10.0"
+    luxon: ">= 1.26.0"
+    moment: ">= 2.29.0"
+    moment-timezone: ">= 0.5.33"
+    rrule: ">= 2.6.8"
+  peerDependenciesMeta:
+    "@touch4it/ical-timezones":
+      optional: true
+    "@types/luxon":
+      optional: true
+    "@types/mocha":
+      optional: true
+    "@types/node":
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+    moment-timezone:
+      optional: true
+    rrule:
+      optional: true
+  checksum: 10/1378d76543591d241e063cf0215ecbcd318daf730ff214dc6360619fc4223804d91f0fdd669cdf2b4a287f1f9cad9dcd58adeb0f61563f1d4b86ce23ac82fbdd
   languageName: node
   linkType: hard
 

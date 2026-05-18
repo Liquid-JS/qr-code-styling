@@ -43,31 +43,29 @@ function toDate(val?: string | Date) {
 }
 
 export interface VCardPluginOptions {
-    data: {
-        fullName: string
-        name?: {
-            first?: string
-            last?: string
-            middle?: string
-            prefix?: string
-            suffix?: string
-            nick?: string
-        }
-        title?: string
-        birthday?: Date | string
-        phone?: Array<{ type?: `${PhoneType}`, value: string }>
-        email?: Array<{ type?: `${AddressType}`, value: string }>
-        address?: {
-            work?: Address
-            home?: Address
-        }
-        note?: string
+    fullName: string
+    name?: {
+        first?: string
+        last?: string
+        middle?: string
+        prefix?: string
+        suffix?: string
+        nick?: string
+    }
+    title?: string
+    birthday?: Date | string
+    phone?: Array<{ type?: `${PhoneType}`, value: string }>
+    email?: Array<{ type?: `${AddressType}`, value: string }>
+    address?: {
+        work?: Address
+        home?: Address
+    }
+    note?: string
+    company?: string
+    social?: Array<{ type: `${SocialType}`, value: string }>
+    website?: {
+        personal?: string
         company?: string
-        social?: Array<{ type: `${SocialType}`, value: string }>
-        website?: {
-            personal?: string
-            company?: string
-        }
     }
 }
 
@@ -86,7 +84,7 @@ export default class VCardPlugin implements Plugin {
     }
 
     private generateVCard() {
-        const { data } = this.pluginOptions
+        const data = this.pluginOptions
         const card = VCard()
         card.version = '3.0'
 
