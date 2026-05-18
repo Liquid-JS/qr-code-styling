@@ -46,7 +46,7 @@ export default class WiFiPlugin implements Plugin {
         const parts = new Array<{ key: 'T' | 'S' | 'P' | 'H' | 'E' | 'A' | 'I' | 'PH2', value: string }>()
         parts.push({
             key: 'S',
-            value: escape_string(ssid)
+            value: escape_string(ssid || '', true)
         })
         if ('encryption' in this.pluginOptions && this.pluginOptions.encryption) {
             parts.push({
