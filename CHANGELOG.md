@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.5.0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.0-3...v5.5.0) (2026-05-19)
+
+
+### Features
+
+* circuit diagonals ([fcfcbdf](https://github.com/Liquid-JS/qr-code-styling/commit/fcfcbdfc1836577d4c6aa7329382ef229d77e369))
+
+
+### Bug Fixes
+
+* wifi ssid ([d8da71a](https://github.com/Liquid-JS/qr-code-styling/commit/d8da71a273fd9e306ed8e816b80d4c91a19fd252))
+
 ## [5.5.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.0-2...v5.5.0-3) (2026-05-18)
 
 
