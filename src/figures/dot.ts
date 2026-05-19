@@ -82,10 +82,30 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
         const rnd = (args.getPRandom || Math.random)
         const leftNeighbor = getNeighbor && rnd() < 2 / 3 ? +getNeighbor(-1, 0) : 0
         const topNeighbor = getNeighbor && rnd() < 2 / 3 ? +getNeighbor(0, -1) : 0
+        const tlNeighbor = getNeighbor && rnd() < 2 / 3 ? (getNeighbor(-1, -1) && !getNeighbor(-1, 0) && !getNeighbor(0, -1)) : 0
+        const trNeighbor = getNeighbor && rnd() < 2 / 3 ? (getNeighbor(1, -1) && !getNeighbor(1, 0) && !getNeighbor(0, -1)) : 0
 
         const dotSize = args.size * 0.8
 
-        if (topNeighbor && leftNeighbor)
+        if (tlNeighbor && trNeighbor)
+            return rotateFigure({
+                ...args,
+                rotation: Math.PI / 4,
+                draw: (args2) => DotElements.circuit(args2, true)
+            })
+        else if (trNeighbor)
+            return rotateFigure({
+                ...args,
+                rotation: Math.PI / 4,
+                draw: DotElements.circuit
+            })
+        else if (tlNeighbor)
+            return rotateFigure({
+                ...args,
+                rotation: -Math.PI / 4,
+                draw: DotElements.circuit
+            })
+        else if (topNeighbor && leftNeighbor)
             return DotElements.circuit(args, true)
         else if (topNeighbor)
             return DotElements.circuit(args)

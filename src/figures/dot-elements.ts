@@ -378,13 +378,13 @@ export const DotElements = {
             svgPath`M ${x + size * 0.4} ${y + size * 0.5 - dP}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${left ? size * 0.1 - dP : -0.3 * size} ${left ? dP - 0.1 * size : dP}
           ${left ? svgPath`
-          h ${-0.3 * size}
+          h ${-0.65 * size}
           v ${0.2 * size}
-          h ${0.3 * size}
+          h ${0.65 * size}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${dP} ${0.3 * size}` : svgPath`a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${0.4 * size}`}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${-0.4 * size}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${-0.3 * size} ${-dP}
-          v ${-0.3 * size}
+          v ${-0.65 * size}
           h ${-0.2 * size}
           z`
         )
