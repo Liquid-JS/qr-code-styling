@@ -25,6 +25,7 @@ export interface BorderPluginOptions {
     color?: string
     gradient?: Gradient
     dasharray?: string
+    dasharrayOffset?: string
     margin?: number
     /**
      * If true, all dimensions are proportional to the code size,
@@ -86,9 +87,27 @@ export default class BorderPlugin implements Plugin {
         borderEl.setAttribute('y', numToAttr(cy - pathL - pathR))
         borderEl.setAttribute('rx', numToAttr(pathR))
         borderEl.setAttribute('fill', 'none')
+
+        const percenToLength = (dim: string) => {
+            if (dim.endsWith('%')) {
+                const val = (parseFloat(dim.substring(0, dim.length - 1)) || 0) * strokeLen / 100
+                return val
+            }
+            return dim
+        }
+
+        const strokeLen = 2 * Math.PI * pathR + 8 * pathL
+        const dashArray = this.pluginOptions.dasharray?.split(/[,\s]+/g).map(v => v.trim()).filter(v => !!v).map(percenToLength)
+
         borderEl.setAttribute('stroke-width', numToAttr(thickness))
-        if (this.pluginOptions.dasharray) {
-            borderEl.setAttribute('stroke-dasharray', this.pluginOptions.dasharray)
+        if (dashArray?.length) {
+            borderEl.setAttribute('stroke-dasharray', dashArray.map(numToAttr).join(' '))
+            let dashOffset = (this.pluginOptions.dasharrayOffset?.trim() ? percenToLength(this.pluginOptions.dasharrayOffset?.trim()) : 0)
+            if (typeof dashOffset == 'string')
+                dashOffset = parseFloat(dashOffset)
+            dashOffset -= pathL
+            if (dashOffset)
+                borderEl.setAttribute('stroke-dashoffset', numToAttr(dashOffset))
         }
 
         const value = createColor({
