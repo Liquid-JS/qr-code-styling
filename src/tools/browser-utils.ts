@@ -27,15 +27,33 @@ export function drawToCanvas(
 
     const canvasDrawingPromise = qrCode.serialize().then((xml) => {
         if (!xml) return
-        const viewBox = xml.match(/viewBox="([^"]+)"/i)![1]
-        const svg64 = btoa(xml)
+
+        const container = new DOMParser().parseFromString(xml, 'text/xml')
+        const rootEl = Array.from(container.getElementsByTagName('svg'))
+        if (!rootEl.length) return
+        const svg = rootEl[0]
+        const viewBox = svg.getAttribute('viewBox') || ''
+        const imgW = parseFloat(svg.getAttribute('width') || '0')
+        const imgH = parseFloat(svg.getAttribute('height') || '0')
+        if (!imgW || !imgH)
+            return
+
+        // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
+        const aaFactor = Math.ceil((2 * size) / Math.min(imgW, imgH))
+        svg.setAttribute('width', (aaFactor * imgW).toFixed())
+        svg.setAttribute('height', (aaFactor * imgH).toFixed())
+
+        const serializer = new XMLSerializer()
+        let source = serializer.serializeToString(svg)
+
+        source = '<?xml version="1.0" standalone="no"?>\r\n' + source
+
+        const svg64 = btoa(source)
         const image64 = 'data:image/svg+xml;base64,' + svg64
         const image = new Image()
 
         return new Promise<void>((resolve, reject) => {
             image.onload = (): void => {
-                // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
-                const aaFactor = Math.ceil((2 * size) / Math.min(image.width, image.height))
                 const [x, y, w, h] = viewBox.split(/\s+/g).map(parseFloat).map(v => v * aaFactor)
                 const dx = ((x % 1) + 1) % 1
                 const dy = ((y % 1) + 1) % 1
