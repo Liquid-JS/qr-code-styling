@@ -27,21 +27,20 @@ export function drawToCanvas(
 
     const canvasDrawingPromise = qrCode.serialize().then((xml) => {
         if (!xml) return
+        const viewBox = xml.match(/viewBox="([^"]+)"/i)![1].split(/\s+/g).map(parseFloat)
+
+        // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
+        const aaFactor = Math.ceil((2 * size) / Math.min(viewBox[2], viewBox[3]))
+        const [x, y, w, h] = viewBox.map(v => v * aaFactor)
+        const dx = ((x % 1) + 1) % 1
+        const dy = ((y % 1) + 1) % 1
 
         const container = new DOMParser().parseFromString(xml, 'text/xml')
         const rootEl = Array.from(container.getElementsByTagName('svg'))
         if (!rootEl.length) return
         const svg = rootEl[0]
-        const viewBox = svg.getAttribute('viewBox') || ''
-        const imgW = parseFloat(svg.getAttribute('width') || '0')
-        const imgH = parseFloat(svg.getAttribute('height') || '0')
-        if (!imgW || !imgH)
-            return
-
-        // Ensure pixel-perfect rendering of SVG to avoid artefact, then downscale to requested size
-        const aaFactor = Math.ceil((2 * size) / Math.min(imgW, imgH))
-        svg.setAttribute('width', (aaFactor * imgW).toFixed())
-        svg.setAttribute('height', (aaFactor * imgH).toFixed())
+        svg.setAttribute('width', w.toFixed(10))
+        svg.setAttribute('height', h.toFixed(10))
 
         const serializer = new XMLSerializer()
         let source = serializer.serializeToString(svg)
@@ -54,9 +53,6 @@ export function drawToCanvas(
 
         return new Promise<void>((resolve, reject) => {
             image.onload = (): void => {
-                const [x, y, w, h] = viewBox.split(/\s+/g).map(parseFloat).map(v => v * aaFactor)
-                const dx = ((x % 1) + 1) % 1
-                const dy = ((y % 1) + 1) % 1
                 let aaCanvas: HTMLCanvasElement | OffscreenCanvas
                 try {
                     aaCanvas = new OffscreenCanvas(Math.ceil(w + dx + 2), Math.ceil(h + dy + 2))
