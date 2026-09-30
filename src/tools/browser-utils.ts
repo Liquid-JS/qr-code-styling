@@ -97,19 +97,23 @@ export async function download(
         }
     }
 
+    let url: string
     if (extension.toLowerCase() === 'svg') {
         const source = await qrCode.serialize()
         if (!source) return
-        const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source)
-        downloadURI(url, `${name}.svg`)
+        url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source)
     } else {
         const res = drawToCanvas(qrCode, options)
         if (!res) return
         const { canvas, canvasDrawingPromise } = res
         await canvasDrawingPromise
-        const url = canvas.toDataURL(`image/${extension}`)
-        downloadURI(url, `${name}.${extension}`)
+        url = canvas.toDataURL(`image/${extension}`)
     }
+
+    const blob = await (await fetch(url)).blob()
+    const objectUrl = URL.createObjectURL(blob)
+    downloadURI(objectUrl, `${name}.${extension}`)
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000)
 }
 
 export function downloadURI(uri: string, name: string): void {
