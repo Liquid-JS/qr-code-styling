@@ -122,7 +122,12 @@ export function downloadURI(uri: string | Blob, name: string, share = false): vo
             const file = new File([uri], name, { type: uri.type })
             if (navigator.canShare?.({ files: [file] })) {
                 try {
-                    navigator.share({ files: [file] }).catch((err) => console.warn(err))
+                    navigator.share({ files: [file] }).catch((err) => {
+                        if (err.name == 'AbortError')
+                            return
+                        console.warn(err)
+                        downloadURI(uri, name)  // Fallback
+                    })
                     return
                 } catch (err) {
                     console.error(err)
