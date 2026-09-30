@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.5.1-1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.1-0...v5.5.1-1) (2026-09-30)
+
+
+### Bug Fixes
+
+* safari aa factor ([3ffdbd9](https://github.com/Liquid-JS/qr-code-styling/commit/3ffdbd9da2ad42865a00923780c16c4b9df69d54))
+
 ## [5.5.1-0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.0...v5.5.1-0) (2026-05-29)
 
 
