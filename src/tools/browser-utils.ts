@@ -83,7 +83,8 @@ export function drawToCanvas(
 export async function download(
     qrCode: QRCodeStyling,
     downloadOptions?: { name?: string, extension: `${FileExtension}` },
-    options?: RecursivePartial<CanvasOptions>
+    options?: RecursivePartial<CanvasOptions>,
+    share = false
 ): Promise<void> {
     let extension: `${FileExtension}` = FileExtension.png
     let name = 'qr'
@@ -111,16 +112,31 @@ export async function download(
     }
 
     const blob = await (await fetch(url)).blob()
-    const objectUrl = URL.createObjectURL(blob)
-    downloadURI(objectUrl, `${name}.${extension}`)
-    setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000)
+    downloadURI(blob, `${name}.${extension}`, share)
 }
 
-export function downloadURI(uri: string, name: string): void {
+export function downloadURI(uri: string | Blob, name: string, share = false): void {
+    const isBlob = uri instanceof Blob
+    if (uri instanceof Blob) {
+        if (share) {
+            const file = new File([uri], name, { type: uri.type })
+            if (navigator.canShare?.({ files: [file] })) {
+                try {
+                    navigator.share({ files: [file] }).catch((err) => console.warn(err))
+                    return
+                } catch (err) {
+                    console.error(err)
+                }
+            }
+        }
+        uri = URL.createObjectURL(uri)
+    }
     const link = document.createElement('a')
     link.download = name
     link.href = uri
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+    if (isBlob)
+        setTimeout(() => URL.revokeObjectURL(uri), 60_000)
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 const { pathToFileURL } = require('url')
 const { register } = require('module')
 process.env.TS_NODE_PROJECT = 'tsconfig.test.json'

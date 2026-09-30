@@ -15,11 +15,7 @@ const common = () => [
         tsconfig: 'tsconfig.lib.json'
     }),
     commonjs(),
-    minifyTemplateLiterals({
-        options: {
-            shouldMinify: () => true
-        }
-    })
+    minifyTemplateLiterals()
 ]
 
 const bundle = () => [
