@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.5.1-3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.1-2...v5.5.1-3) (2026-09-30)
+
+
+### Bug Fixes
+
+* download as blob ([4906580](https://github.com/Liquid-JS/qr-code-styling/commit/490658057befe7e5987a9805c5254421e6b164cf))
+
 ## [5.5.1-2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.5.1-1...v5.5.1-2) (2026-09-30)
 
 
