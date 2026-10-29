@@ -2,7 +2,7 @@ import { QRCodeMinimal } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMini
 import { stringToBytes_UTF8 } from '@liquid-js/qrcode-generator/lib/text/stringToBytes_UTF8.js'
 import { RecursivePartial } from '../types/helper.js'
 import { mergeDeep } from '../utils/merge.js'
-import { ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from '../utils/options.js'
+import { GeneratorMask, ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from '../utils/options.js'
 import { ErrorCorrectionPercents, getMode } from '../utils/qrcode.js'
 import { QRSVG } from './qr-svg.js'
 
@@ -154,32 +154,71 @@ export class QRCodeStyling {
             return
         }
         let moduleCount = this.qr.getModuleCount()
-        if (this.options.imageOptions.mode == ImageMode.background && this.options.shape != ShapeType.circle)
-            moduleCount += 2
-        let count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * moduleCount)
-        if (count % 2 == 0) count -= 1
-        let margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
-        if (this.options.imageOptions.mode == ImageMode.background) margin += this.options.imageOptions.margin || 0
-        const size = Math.ceil(this.options.dotsOptions.size * (count + 2 * margin))
+        // ImageMode.background draws a light border around the QR code, which is considered a part of the code
+        const isBackground = this.options.imageOptions.mode == ImageMode.background
+        const border = isBackground ? 1 : 0
+        const maskCount = moduleCount + 2 * border
+
+        let mask: GeneratorMask | undefined
+        for (const plugin of this.options.plugins || []) {
+            mask = plugin.applyMask?.(maskCount) || undefined
+            if (mask) break
+        }
+
+        if (mask) {
+            const { startX, startY } = mask
+            const columns = mask.mask.slice(startX, startX + maskCount)
+            if (startX < 0 || startY < 0 || columns.length < maskCount || columns.some((col) => col.length < startY + maskCount))
+                throw new Error('The QR code must lie inside the mask')
+
+            const corners = [[border, border], [maskCount - border - 7, border], [border, maskCount - border - 7]]
+            if (corners.some(([x, y]) => columns.slice(x, x + 7).some((col) => col.slice(startY + y, startY + y + 7).some((v) => !v))))
+                throw new Error('The QR code corners must not be hidden by the mask')
+
+            // Position of the QR code itself, without the border
+            mask = { ...mask, startX: startX + border, startY: startY + border }
+        }
+
+        let size: number
+        if (mask) {
+            // The QR code is drawn at [0, 0] in its original size, the remaining cells are drawn outside the viewBox;
+            // the image margin is kept in ImageMode.background, so the code is aligned the same as without a mask
+            const margin = isBackground ? this.options.imageOptions.margin || 0 : 0
+            size = Math.ceil(this.options.dotsOptions.size * (maskCount + 2 * margin))
+        } else {
+            if (this.options.imageOptions.mode == ImageMode.background && this.options.shape != ShapeType.circle)
+                moduleCount += 2
+            let count = Math.ceil((this.options.shape == ShapeType.circle ? Math.sqrt(2) : 1) * moduleCount)
+            if (count % 2 == 0) count -= 1
+            let margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
+            if (this.options.imageOptions.mode == ImageMode.background) margin += this.options.imageOptions.margin || 0
+            size = Math.ceil(this.options.dotsOptions.size * (count + 2 * margin))
+        }
+
         this.qrSVG = new QRSVG({
             ...this.options,
+            ...(mask && { shape: ShapeType.square, backgroundOptions: undefined }),
             width: size,
             height: size,
             size,
+            mask,
             errorCorrectionPercent: ErrorCorrectionPercents[this.options.qrOptions.errorCorrectionLevel]
         })
 
-        this.svgDrawingPromise = this.qrSVG.drawQR(this.qr).then(() => {
+        this.svgDrawingPromise = this.qrSVG.drawQR(this.qr).then(async () => {
             if (!this.qrSVG?.element) return
-            this.options.plugins?.forEach(plugin => plugin.postProcess?.(this.qrSVG!.element!, {
-                ...this.options,
-                width: size,
-                height: size,
-                size
-            }, {
-                dots: this.qrSVG?.dotsColor,
-                background: this.qrSVG?.backgroundColor
-            }))
+            if (this.options.plugins)
+                for (const plugin of this.options.plugins) {
+                    await plugin.postProcess?.(this.qrSVG!.element!, {
+                        ...this.options,
+                        width: size,
+                        height: size,
+                        size
+                    }, {
+                        dots: this.qrSVG?.dotsColor,
+                        background: this.qrSVG?.backgroundColor
+                    })
+                }
             this.extension?.(this.qrSVG.element, {
                 ...this.options,
                 width: size,

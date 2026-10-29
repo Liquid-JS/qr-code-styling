@@ -8,7 +8,7 @@ import { DrawArgs } from '../types/helper.js'
 import { ColorElementValue, createColor } from '../utils/color.js'
 import { Gradient } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
-import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
+import { CornerDotType, CornerSquareType, DotType, GeneratorMask, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { getRng } from '../utils/random.js'
 import { mergeShapes, numToAttr, svgAttr } from '../utils/svg.js'
 
@@ -66,6 +66,7 @@ export class QRSVG {
     private dotsMask?: SVGElement
     private lightDotsMask?: SVGElement
     private colorLayers: Array<{ rect: SVGElement, mask: string }> = []
+    private segmentMask?: GeneratorMask
 
     private qr?: QRCodeMinimal
     private document: Document
@@ -87,7 +88,7 @@ export class QRSVG {
             | 'backgroundOptions'
             | 'shape'
             | 'plugins'
-        > & { errorCorrectionPercent: number }
+        > & { errorCorrectionPercent: number, mask?: GeneratorMask }
     ) {
         this.document = options.document
         this._element = this.document.createElementNS('http://www.w3.org/2000/svg', 'svg')
@@ -120,6 +121,7 @@ export class QRSVG {
         }
 
         this.qr = qr
+        this.segmentMask = this.getSegmentMask(count)
 
         if (this.options.image) {
             //We need it to get image size
@@ -297,8 +299,6 @@ export class QRSVG {
         }
 
         const dotSize = this.options.dotsOptions.size
-        let size = options.size
-        if (options.imageOptions.mode == ImageMode.background) size -= 2 * dotSize * (options.imageOptions.margin || 0)
         const beginning = Math.floor((options.size - count * dotSize) / 2)
         let draw = getQrDotFigure(options.dotsOptions.type, options.plugins)
         const orgDarw = draw
@@ -311,61 +311,64 @@ export class QRSVG {
             this.defs.appendChild(this.lightDotsMask)
         }
 
-        let margin = 0
-        let additionalDots = 0
-        let fakeCount = count
+        const mask = this.segmentMask || this.getSegmentMask(count)
+        // Position of the QR code within the (fake) matrix
+        const offsetX = mask.startX
+        const offsetY = mask.startY
+        const fakeCountX = mask.mask.length
+        const fakeCountY = Math.max(0, ...mask.mask.map((col) => col.length))
 
-        if (options.shape === ShapeType.circle) {
-            margin = (this.options.backgroundOptions && this.options.backgroundOptions.margin) || 0
-            additionalDots = Math.floor((size / dotSize - count - 2 * margin) / 2)
-            fakeCount = count + additionalDots * 2
-        } else if (options.imageOptions.mode == ImageMode.background) {
-            additionalDots = 1
-            fakeCount = count + additionalDots * 2
+        const fakeBeginningX = beginning - offsetX * dotSize
+        const fakeBeginningY = beginning - offsetY * dotSize
+
+        // Color layer area, the whole (fake) matrix if the gradient should fit the mask
+        let colorX = fakeBeginningX
+        let colorY = fakeBeginningY
+        let colorWidth = fakeCountX * dotSize
+        let colorHeight = fakeCountY * dotSize
+        if (!mask.fitGradient) {
+            // Square centered at the QR code, large enough to cover all segments
+            const half = count / 2 + Math.max(offsetX, offsetY, fakeCountX - offsetX - count, fakeCountY - offsetY - count)
+            colorX = colorY = beginning + (count / 2 - half) * dotSize
+            colorWidth = colorHeight = 2 * half * dotSize
         }
 
-        const fakeBeginning = beginning - additionalDots * dotSize
-        const colorCount = count + additionalDots * 2
-        this._fakeMatrix = new Array(fakeCount)
-        const center = Math.floor(fakeCount / 2)
+        this._fakeMatrix = new Array(fakeCountX)
 
         const rng = getRng(this._fakeMatrix!, 0, 0, false)
 
-        for (let i = 0; i < fakeCount; i++) {
-            this._fakeMatrix[i] = new Array(fakeCount)
-            for (let j = 0; j < fakeCount; j++) {
+        for (let i = 0; i < fakeCountX; i++) {
+            this._fakeMatrix[i] = new Array(fakeCountY)
+            for (let j = 0; j < fakeCountY; j++) {
+                if (!mask.mask[i][j]) {
+                    this._fakeMatrix[i][j] = undefined
+                    continue
+                }
+
                 if (
-                    i > additionalDots - 1 &&
-                    i < fakeCount - additionalDots &&
-                    j > additionalDots - 1 &&
-                    j < fakeCount - additionalDots
+                    i > offsetX - 1 &&
+                    i < offsetX + count &&
+                    j > offsetY - 1 &&
+                    j < offsetY + count
                 ) {
-                    const ii = i - additionalDots
-                    const jj = j - additionalDots
+                    const ii = i - offsetX
+                    const jj = j - offsetY
                     if (filter && !filter(ii, jj)) this._fakeMatrix[i][j] = undefined
                     else this._fakeMatrix[i][j] = !!this.qr.isDark(jj, ii)
                     continue
                 }
 
                 if (
-                    options.shape === ShapeType.circle &&
-                    Math.sqrt((i - center) * (i - center) + (j - center) * (j - center)) > center
-                ) {
-                    this._fakeMatrix[i][j] = undefined
-                    continue
-                }
-
-                if (
-                    i == additionalDots - 1 ||
-                    i == fakeCount - additionalDots ||
-                    j == additionalDots - 1 ||
-                    j == fakeCount - additionalDots
+                    i == offsetX - 1 ||
+                    i == offsetX + count ||
+                    j == offsetY - 1 ||
+                    j == offsetY + count
                 ) {
                     if (
-                        (j == additionalDots - 1 && (i < additionalDots + 8 || i > fakeCount - additionalDots - 9)) ||
-                        (j == fakeCount - additionalDots && i < additionalDots + 8) ||
-                        (i == additionalDots - 1 && (j < additionalDots + 8 || j > fakeCount - additionalDots - 9)) ||
-                        (i == fakeCount - additionalDots && j < additionalDots + 8)
+                        (j == offsetY - 1 && (i < offsetX + 8 || i > offsetX + count - 9)) ||
+                        (j == offsetY + count && i < offsetX + 8) ||
+                        (i == offsetX - 1 && (j < offsetY + 8 || j > offsetY + count - 9)) ||
+                        (i == offsetX + count && j < offsetY + 8)
                     )
                         this._fakeMatrix[i][j] = undefined
                     else this._fakeMatrix[i][j] = false
@@ -384,12 +387,12 @@ export class QRSVG {
         const alignment = QRUtil.getPatternPosition(typeNr)
 
         // Create a mask of alignment squares, where each
-        const alignmentMatrix = new Array(fakeCount)
-        for (let i = 0; i < fakeCount; i++) {
-            alignmentMatrix[i] = new Array(fakeCount)
-            const iAlign = alignment.find((v) => i - additionalDots > v - 3 && i - additionalDots < v + 3)
-            for (let j = 0; j < fakeCount; j++) {
-                const jAlign = alignment.find((v) => j - additionalDots > v - 3 && j - additionalDots < v + 3)
+        const alignmentMatrix = new Array(fakeCountX)
+        for (let i = 0; i < fakeCountX; i++) {
+            alignmentMatrix[i] = new Array(fakeCountY)
+            const iAlign = alignment.find((v) => i - offsetX > v - 3 && i - offsetX < v + 3)
+            for (let j = 0; j < fakeCountY; j++) {
+                const jAlign = alignment.find((v) => j - offsetY > v - 3 && j - offsetY < v + 3)
 
                 alignmentMatrix[i][j] = undefined
                 if (this._fakeMatrix[i][j] == undefined) continue
@@ -404,8 +407,8 @@ export class QRSVG {
             }
         }
 
-        for (let i = 0; i < fakeCount; i++) {
-            for (let j = 0; j < fakeCount; j++) {
+        for (let i = 0; i < fakeCountX; i++) {
+            for (let j = 0; j < fakeCountY; j++) {
                 if (this._fakeMatrix[i][j] == undefined) continue
 
                 if (this.lightDotsMask) {
@@ -420,8 +423,8 @@ export class QRSVG {
                     if (this.lightDotsMask) {
                         if (this.lightDotsMask) {
                             this.lightDotsMask.appendChild(draw({
-                                x: fakeBeginning + i * dotSize,
-                                y: fakeBeginning + j * dotSize,
+                                x: fakeBeginningX + i * dotSize,
+                                y: fakeBeginningY + j * dotSize,
                                 size: dotSize,
                                 document: this.options.document,
                                 getNeighbor: (xOffset: number, yOffset: number): boolean => {
@@ -441,8 +444,8 @@ export class QRSVG {
 
                 if (this.dotsMask) {
                     this.dotsMask.appendChild(draw({
-                        x: fakeBeginning + i * dotSize,
-                        y: fakeBeginning + j * dotSize,
+                        x: fakeBeginningX + i * dotSize,
+                        y: fakeBeginningY + j * dotSize,
                         size: dotSize,
                         document: this.options.document,
                         getNeighbor: (xOffset: number, yOffset: number): boolean => {
@@ -464,10 +467,10 @@ export class QRSVG {
                 options: options.imageOptions.fill.gradient,
                 color: options.imageOptions.fill.color,
                 additionalRotation: 0,
-                x: fakeBeginning,
-                y: fakeBeginning,
-                height: colorCount * dotSize,
-                width: colorCount * dotSize,
+                x: colorX,
+                y: colorY,
+                height: colorHeight,
+                width: colorWidth,
                 name: 'light-dot-color'
             })
         }
@@ -476,10 +479,10 @@ export class QRSVG {
             options: options.dotsOptions?.gradient,
             color: options.dotsOptions.color,
             additionalRotation: 0,
-            x: fakeBeginning,
-            y: fakeBeginning,
-            height: colorCount * dotSize,
-            width: colorCount * dotSize,
+            x: colorX,
+            y: colorY,
+            height: colorHeight,
+            width: colorWidth,
             name: 'dot-color'
         })
     }
@@ -677,6 +680,36 @@ export class QRSVG {
                 }
             }
         })
+    }
+
+    /**
+     * Segments that get drawn, with the position of the QR code within them; the plugin mask if
+     * available, otherwise a mask generated from the shape and image mode
+     */
+    private getSegmentMask(count: number): GeneratorMask {
+        const options = this.options
+        if (options.mask) return options.mask
+
+        const dotSize = options.dotsOptions.size
+        let offset = 0
+        if (options.shape === ShapeType.circle) {
+            let size = options.size
+            if (options.imageOptions.mode == ImageMode.background) size -= 2 * dotSize * (options.imageOptions.margin || 0)
+            const margin = (options.backgroundOptions && options.backgroundOptions.margin) || 0
+            offset = Math.floor((size / dotSize - count - 2 * margin) / 2)
+        } else if (options.imageOptions.mode == ImageMode.background) {
+            offset = 1
+        }
+
+        const fakeCount = count + offset * 2
+        const center = Math.floor(fakeCount / 2)
+        const mask = Array.from({ length: fakeCount }, (_col, i) => Array.from({ length: fakeCount }, (_cell, j) =>
+            options.shape !== ShapeType.circle
+            // The QR code is always drawn, the circle only limits the remaining segments
+            || (i >= offset && i < offset + count && j >= offset && j < offset + count)
+            || Math.sqrt((i - center) * (i - center) + (j - center) * (j - center)) <= center))
+
+        return { mask, startX: offset, startY: offset }
     }
 
     async drawImage({

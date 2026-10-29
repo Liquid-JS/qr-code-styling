@@ -78,11 +78,43 @@ export enum ImageMode {
     background = 'background'
 }
 
+export interface GeneratorMask {
+    /**
+     * Matrix indexed as mask[x][y]; false hides the segment at [x, y]
+     *
+     * The QR code occupies [startX, startX + count) × [startY, startY + count), with count as passed to
+     * Plugin.applyMask; it must lie inside the mask, with its corners visible, or an error is thrown.
+     * Remaining segments are filled pseudo-randomly.
+     *
+     * With a mask, the shape is square and the QR code is drawn from [0, 0], with extra segments outside the
+     * viewBox. Options that extend the image size are ignored, except the image margin in ImageMode.background.
+     */
+    mask: boolean[][]
+    /** Mask column where the QR code starts */
+    startX: number
+    /** Mask row where the QR code starts */
+    startY: number
+    /**
+     * Fit the gradient to the mask bounds instead of centering it at the QR code
+     *
+     * @default false
+     */
+    fitGradient?: boolean
+}
+
 export interface Plugin {
     /**
      * Modify the options before rendering
      */
     configure?: (options: Options) => Options | undefined | void
+    /**
+     * Add (or hide) QR code segments, e.g. to fit a QR code into a custom shape, the same way
+     * ShapeType.circle fits it inside a circle
+     *
+     * @param count QR code size in segments (including the light border in ImageMode.background)
+     * @returns Segment mask; if undefined, try the next plugin or draw without a mask
+     */
+    applyMask?: (count: number) => GeneratorMask | undefined | void
     /**
      * Draw a single dot
      *
@@ -107,7 +139,7 @@ export interface Plugin {
     postProcess?: (svg: SVGSVGElement, options: Options, colors: {
         dots?: ColorElementValue
         background?: ColorElementValue
-    }) => void
+    }) => void | Promise<void>
 }
 
 export interface Options {
