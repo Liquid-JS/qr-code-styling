@@ -10,7 +10,7 @@ import { Gradient } from '../utils/gradient.js'
 import { calculateImageSize } from '../utils/image.js'
 import { CornerDotType, CornerSquareType, DotType, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { getRng } from '../utils/random.js'
-import { numToAttr } from '../utils/svg.js'
+import { mergeShapes, numToAttr, svgAttr } from '../utils/svg.js'
 
 const squareMask = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -65,6 +65,7 @@ export class QRSVG {
     private backgroundMask?: SVGElement
     private dotsMask?: SVGElement
     private lightDotsMask?: SVGElement
+    private colorLayers: Array<{ rect: SVGElement, mask: string }> = []
 
     private qr?: QRCodeMinimal
     private document: Document
@@ -200,6 +201,55 @@ export class QRSVG {
         }
 
         this.drawCorners()
+        this.flattenColorLayers()
+    }
+
+    /**
+     * Replace clipped color rects with plain filled paths where possible
+     * (clip paths are poorly supported by vector editors and some PDF renderers)
+     */
+    private flattenColorLayers() {
+        const masks = new Map<string, Element>()
+        Array.from(this.defs.childNodes).forEach((node) => {
+            const id = (node as Element).getAttribute?.('id')
+            if (id) masks.set(id, node as Element)
+        })
+
+        for (const { rect, mask: id } of this.colorLayers) {
+            const mask = masks.get(id)
+            if (!mask) continue
+
+            const shapes = Array.from(mask.childNodes).filter((node): node is Element => node.nodeType == 1)
+            const paths = mergeShapes(shapes)
+            if (!paths) continue
+
+            const elements = paths.map(({ rule, d }) => {
+                const path = this.document.createElementNS('http://www.w3.org/2000/svg', 'path')
+                path.setAttribute('d', d)
+                if (rule != 'nonzero') path.setAttribute('fill-rule', rule)
+                const fill = rect.getAttribute('fill')
+                if (fill) path.setAttribute('fill', fill)
+                const opacity = rect.getAttribute('opacity')
+                if (opacity) path.setAttribute('fill-opacity', opacity)
+                return path
+            })
+
+            // Keep the layer addressable by the original id
+            let layer: SVGElement | undefined = elements[0]
+            if (elements.length > 1) {
+                const group = this.document.createElementNS('http://www.w3.org/2000/svg', 'g')
+                elements.forEach((el) => group.appendChild(el))
+                layer = group
+            }
+
+            mask.parentNode!.removeChild(mask)
+            if (layer) {
+                layer.setAttribute('id', id)
+                rect.parentNode!.replaceChild(layer, rect)
+            } else {
+                rect.parentNode!.removeChild(rect)
+            }
+        }
     }
 
     drawBackground(): void {
@@ -680,8 +730,8 @@ export class QRSVG {
 
         image.setAttribute('x', numToAttr(dx))
         image.setAttribute('y', numToAttr(dy))
-        image.setAttribute('width', `${numToAttr(dw)}px`)
-        image.setAttribute('height', `${numToAttr(dh)}px`)
+        image.setAttribute('width', svgAttr`${dw}px`)
+        image.setAttribute('height', svgAttr`${dh}px`)
 
         this._element.appendChild(image)
     }
@@ -725,6 +775,7 @@ export class QRSVG {
         }
 
         this._element.appendChild(rect)
+        this.colorLayers.push({ rect, mask: `mask-${cfg.name}` })
         return value
     }
 

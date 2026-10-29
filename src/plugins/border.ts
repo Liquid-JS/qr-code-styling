@@ -1,7 +1,7 @@
 import { ColorElementValue, createColor } from '../utils/color.js'
 import { Gradient } from '../utils/gradient.js'
 import { Options, Plugin } from '../utils/options.js'
-import { extendSVG, numToAttr, svgPath } from './utils.js'
+import { extendSVG, numToAttr, svgAttr } from './utils.js'
 
 enum TextPosition {
     top = 'top',
@@ -160,7 +160,7 @@ export default class BorderPlugin implements Plugin {
                     case TextPosition.top:
                         element.setAttribute(
                             'd',
-                            svgPath`M ${cx} ${cy + pathR + pathL}
+                            svgAttr`M ${cx} ${cy + pathR + pathL}
                           h ${-pathL}
                           a ${pathR} ${pathR} 0 0 1 ${-pathR} ${-pathR}
                           v ${-2 * pathL}
@@ -179,7 +179,7 @@ export default class BorderPlugin implements Plugin {
                             pathL += size * 2 / 3
                         element.setAttribute(
                             'd',
-                            svgPath`M ${cx} ${cy - pathR - pathL}
+                            svgAttr`M ${cx} ${cy - pathR - pathL}
                           h ${-pathL}
                           a ${pathR} ${pathR} 0 0 0 ${-pathR} ${pathR}
                           v ${2 * pathL}
@@ -194,7 +194,7 @@ export default class BorderPlugin implements Plugin {
                     case TextPosition.left:
                         element.setAttribute(
                             'd',
-                            svgPath`M ${cx + pathR + pathL} ${cy}
+                            svgAttr`M ${cx + pathR + pathL} ${cy}
                           v ${pathL}
                           a ${pathR} ${pathR} 0 0 1 ${-pathR} ${pathR}
                           h ${-2 * pathL}
@@ -209,7 +209,7 @@ export default class BorderPlugin implements Plugin {
                     case TextPosition.right:
                         element.setAttribute(
                             'd',
-                            svgPath`M ${cx - pathR - pathL} ${cy}
+                            svgAttr`M ${cx - pathR - pathL} ${cy}
                           v ${-pathL}
                           a ${pathR} ${pathR} 0 0 1 ${pathR} ${-pathR}
                           h ${2 * pathL}
