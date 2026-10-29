@@ -35,6 +35,10 @@
             "types": "./lib/plugins/font-faces.d.ts",
             "default": "./lib/font-faces-plugin.js"
         },
+        "./image-mask-plugin": {
+            "types": "./lib/plugins/image-mask/index.d.ts",
+            "default": "./lib/image-mask-plugin.js"
+        },
         "./vcard-plugin": {
             "types": "./lib/plugins/vcard.d.ts",
             "default": "./lib/vcard-plugin.js"
@@ -80,7 +84,7 @@
         "canvas": "^3.2.3",
         "chai": "^6.3.0",
         "clean-package": "^2.2.0",
-        "commit-and-tag-version": "^13.3.0",
+        "commit-and-tag-version": "<13.1.0",
         "eslint": "^10.13.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsdoc": "^65.4.2",

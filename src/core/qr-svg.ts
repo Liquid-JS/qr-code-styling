@@ -7,10 +7,10 @@ import { browserImageTools } from '../tools/browser-image-tools.js'
 import { DrawArgs } from '../types/helper.js'
 import { ColorElementValue, createColor } from '../utils/color.js'
 import { Gradient } from '../utils/gradient.js'
-import { calculateImageSize } from '../utils/image.js'
+import { calculateImageSize, createImageElement } from '../utils/image.js'
 import { CornerDotType, CornerSquareType, DotType, GeneratorMask, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { getRng } from '../utils/random.js'
-import { mergeShapes, numToAttr, svgAttr } from '../utils/svg.js'
+import { mergeShapes, numToAttr } from '../utils/svg.js'
 
 const squareMask = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -321,16 +321,14 @@ export class QRSVG {
         const fakeBeginningX = beginning - offsetX * dotSize
         const fakeBeginningY = beginning - offsetY * dotSize
 
-        // Color layer area, the whole (fake) matrix if the gradient should fit the mask
-        let colorX = fakeBeginningX
-        let colorY = fakeBeginningY
-        let colorWidth = fakeCountX * dotSize
-        let colorHeight = fakeCountY * dotSize
+        // Square color area (so gradients keep their proportions), covering the mask bounds or centered at the code
+        let colorSize = Math.max(fakeCountX, fakeCountY) * dotSize
+        let colorX = fakeBeginningX + (fakeCountX * dotSize - colorSize) / 2
+        let colorY = fakeBeginningY + (fakeCountY * dotSize - colorSize) / 2
         if (!mask.fitGradient) {
-            // Square centered at the QR code, large enough to cover all segments
             const half = count / 2 + Math.max(offsetX, offsetY, fakeCountX - offsetX - count, fakeCountY - offsetY - count)
             colorX = colorY = beginning + (count / 2 - half) * dotSize
-            colorWidth = colorHeight = 2 * half * dotSize
+            colorSize = 2 * half * dotSize
         }
 
         this._fakeMatrix = new Array(fakeCountX)
@@ -358,20 +356,14 @@ export class QRSVG {
                     continue
                 }
 
+                // Light outline around the code
                 if (
-                    i == offsetX - 1 ||
-                    i == offsetX + count ||
-                    j == offsetY - 1 ||
-                    j == offsetY + count
+                    i >= offsetX - 1 &&
+                    i <= offsetX + count &&
+                    j >= offsetY - 1 &&
+                    j <= offsetY + count
                 ) {
-                    if (
-                        (j == offsetY - 1 && (i < offsetX + 8 || i > offsetX + count - 9)) ||
-                        (j == offsetY + count && i < offsetX + 8) ||
-                        (i == offsetX - 1 && (j < offsetY + 8 || j > offsetY + count - 9)) ||
-                        (i == offsetX + count && j < offsetY + 8)
-                    )
-                        this._fakeMatrix[i][j] = undefined
-                    else this._fakeMatrix[i][j] = false
+                    this._fakeMatrix[i][j] = false
                     continue
                 }
 
@@ -469,8 +461,8 @@ export class QRSVG {
                 additionalRotation: 0,
                 x: colorX,
                 y: colorY,
-                height: colorHeight,
-                width: colorWidth,
+                height: colorSize,
+                width: colorSize,
                 name: 'light-dot-color'
             })
         }
@@ -481,8 +473,8 @@ export class QRSVG {
             additionalRotation: 0,
             x: colorX,
             y: colorY,
-            height: colorHeight,
-            width: colorWidth,
+            height: colorSize,
+            width: colorSize,
             name: 'dot-color'
         })
     }
@@ -733,40 +725,7 @@ export class QRSVG {
         const dh = height - margin * 2
 
         const imageUrl = await this.imageTools.toDataURL(options.image || '')
-        let image: SVGElement = this.document.createElementNS('http://www.w3.org/2000/svg', 'image')
-        image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imageUrl || '')
-
-        if (imageUrl.startsWith('data:image/svg+xml;')) {
-            let data = imageUrl.substring(19)
-            const i = data.indexOf(',')
-            const encoding = data.substring(0, i)
-            data = data.substring(i + 1)
-
-            switch (encoding) {
-                case 'base64':
-                    data = typeof atob == 'function' ? atob(data) : Buffer.from(data, 'base64').toString('utf8')
-                    break
-                default:
-                    data = ''
-                    break
-            }
-
-            if (data) {
-                const container = new DOMParser().parseFromString(data, 'text/xml')
-                const rootEl = Array.from(container.getElementsByTagName('svg'))
-                if (rootEl.length) {
-                    image = rootEl[0]
-                    image.setAttribute('overflow', 'visible')
-                }
-            }
-        }
-
-        image.setAttribute('x', numToAttr(dx))
-        image.setAttribute('y', numToAttr(dy))
-        image.setAttribute('width', svgAttr`${dw}px`)
-        image.setAttribute('height', svgAttr`${dh}px`)
-
-        this._element.appendChild(image)
+        this._element.appendChild(createImageElement(this.document, imageUrl, { x: dx, y: dy, width: dw, height: dh }))
     }
 
     private createColor(cfg: {

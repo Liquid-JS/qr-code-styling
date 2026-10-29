@@ -1,3 +1,5 @@
+import { numToAttr, svgAttr } from './svg.js'
+
 interface ImageSizeOptions {
     originalHeight: number
     originalWidth: number
@@ -93,4 +95,47 @@ export function calculateImageSize({
         hideYDots: hideDots.y,
         hideXDots: hideDots.x
     }
+}
+
+/**
+ * Create an element drawing the image (a data URL) within the bounds; SVG images are embedded inline
+ */
+export function createImageElement(
+    document: Document,
+    imageUrl: string,
+    { x, y, width, height }: { x: number, y: number, width: number, height: number }
+): SVGElement {
+    let image: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+    image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imageUrl || '')
+
+    if (imageUrl.startsWith('data:image/svg+xml;')) {
+        let data = imageUrl.substring(19)
+        const i = data.indexOf(',')
+        const encoding = data.substring(0, i)
+        data = data.substring(i + 1)
+
+        switch (encoding) {
+            case 'base64':
+                data = typeof atob == 'function' ? atob(data) : Buffer.from(data, 'base64').toString('utf8')
+                break
+            default:
+                data = ''
+                break
+        }
+
+        if (data) {
+            const container = new DOMParser().parseFromString(data, 'text/xml')
+            const rootEl = Array.from(container.getElementsByTagName('svg'))
+            if (rootEl.length) {
+                image = rootEl[0]
+                image.setAttribute('overflow', 'visible')
+            }
+        }
+    }
+
+    image.setAttribute('x', numToAttr(x))
+    image.setAttribute('y', numToAttr(y))
+    image.setAttribute('width', svgAttr`${width}px`)
+    image.setAttribute('height', svgAttr`${height}px`)
+    return image
 }

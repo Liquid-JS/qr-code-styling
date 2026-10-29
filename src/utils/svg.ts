@@ -67,7 +67,10 @@ export function scalePath(path: Array<string | number>, { x, y, size }: {
 
 const paramCount: Record<string, number> = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 }
 
-function parsePath(d: string) {
+/**
+ * Parse path data into commands with numeric arguments; undefined if invalid
+ */
+export function parsePath(d: string) {
     const segments: Array<[string, number[]]> = []
     const skipRx = /[\s,]*/y
     const cmdRx = /[MmLlHhVvCcSsQqTtAaZz]/y
@@ -244,11 +247,28 @@ export function mergeShapes(elements: Element[]) {
     return Object.entries(paths).map(([rule, d]) => ({ rule, d: d.join(' ') }))
 }
 
-export function extendSVG(svg: SVGSVGElement, padding: number) {
-    padding = Math.max(padding, 0)
-    svg.setAttribute('width', numToAttr(parseFloat(svg.getAttribute('width') || '0') + 2 * padding))
-    svg.setAttribute('height', numToAttr(parseFloat(svg.getAttribute('height') || '0') + 2 * padding))
-    const vb = (svg.getAttribute('viewBox') || '').split(' ').map((v, i) => parseFloat(v) + (i < 2 ? -1 : 2) * padding)
+export interface SVGPadding {
+    left: number
+    top: number
+    right: number
+    bottom: number
+}
+
+/**
+ * Extend the SVG by a uniform (non-negative) padding, or by the given amount on each side
+ */
+export function extendSVG(svg: SVGSVGElement, padding: number | Partial<SVGPadding>) {
+    if (typeof padding == 'number') padding = { left: Math.max(padding, 0), top: Math.max(padding, 0), right: Math.max(padding, 0), bottom: Math.max(padding, 0) }
+    const { left = 0, top = 0, right = 0, bottom = 0 } = padding
+    svg.setAttribute('width', numToAttr(parseFloat(svg.getAttribute('width') || '0') + left + right))
+    svg.setAttribute('height', numToAttr(parseFloat(svg.getAttribute('height') || '0') + top + bottom))
+    const vb = (svg.getAttribute('viewBox') || '').split(' ').map(parseFloat)
+    if (vb.length >= 4) {
+        vb[0] -= left
+        vb[1] -= top
+        vb[2] += left + right
+        vb[3] += top + bottom
+    }
     svg.setAttribute('viewBox', vb.map(numToAttr).join(' '))
     if (vb.length < 4)
         return undefined

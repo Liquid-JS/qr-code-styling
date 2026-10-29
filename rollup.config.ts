@@ -37,6 +37,7 @@ export default new Array<RollupOptions>(
             'border-plugin': 'src/plugins/border.ts',
             'event-plugin': 'src/plugins/event.ts',
             'font-faces-plugin': 'src/plugins/font-faces.ts',
+            'image-mask-plugin': 'src/plugins/image-mask/index.ts',
             'vcard-plugin': 'src/plugins/vcard.ts',
             'wifi-plugin': 'src/plugins/wifi.ts'
         },

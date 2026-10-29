@@ -2,7 +2,7 @@ import { QRCodeMinimal } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMini
 import { stringToBytes_UTF8 } from '@liquid-js/qrcode-generator/lib/text/stringToBytes_UTF8.js'
 import { RecursivePartial } from '../types/helper.js'
 import { mergeDeep } from '../utils/merge.js'
-import { GeneratorMask, ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from '../utils/options.js'
+import { AppliedMask, GeneratorMask, ImageMode, Options, ShapeType, defaultOptions, sanitizeOptions } from '../utils/options.js'
 import { ErrorCorrectionPercents, getMode } from '../utils/qrcode.js'
 import { QRSVG } from './qr-svg.js'
 
@@ -154,37 +154,49 @@ export class QRCodeStyling {
             return
         }
         let moduleCount = this.qr.getModuleCount()
-        // ImageMode.background draws a light border around the QR code, which is considered a part of the code
         const isBackground = this.options.imageOptions.mode == ImageMode.background
-        const border = isBackground ? 1 : 0
-        const maskCount = moduleCount + 2 * border
+        // Room for the light border in ImageMode.background
+        const padding = isBackground ? 1 : 0
 
         let mask: GeneratorMask | undefined
         for (const plugin of this.options.plugins || []) {
-            mask = plugin.applyMask?.(maskCount) || undefined
+            mask = plugin.applyMask?.(moduleCount, padding) || undefined
             if (mask) break
         }
 
         if (mask) {
             const { startX, startY } = mask
-            const columns = mask.mask.slice(startX, startX + maskCount)
-            if (startX < 0 || startY < 0 || columns.length < maskCount || columns.some((col) => col.length < startY + maskCount))
-                throw new Error('The QR code must lie inside the mask')
+            const columns = mask.mask.slice(startX, startX + moduleCount)
+            if (
+                startX < padding ||
+                startY < padding ||
+                startX + moduleCount + padding > mask.mask.length ||
+                columns.length < moduleCount ||
+                columns.some((col) => startY + moduleCount + padding > col.length)
+            )
+                throw new Error(padding ? `The mask must extend ${padding} segment(s) beyond the QR code on each side` : 'The QR code must lie inside the mask')
 
-            const corners = [[border, border], [maskCount - border - 7, border], [border, maskCount - border - 7]]
+            const corners = [[0, 0], [moduleCount - 7, 0], [0, moduleCount - 7]]
             if (corners.some(([x, y]) => columns.slice(x, x + 7).some((col) => col.slice(startY + y, startY + y + 7).some((v) => !v))))
                 throw new Error('The QR code corners must not be hidden by the mask')
-
-            // Position of the QR code itself, without the border
-            mask = { ...mask, startX: startX + border, startY: startY + border }
         }
 
         let size: number
+        let appliedMask: AppliedMask | undefined
         if (mask) {
-            // The QR code is drawn at [0, 0] in its original size, the remaining cells are drawn outside the viewBox;
-            // the image margin is kept in ImageMode.background, so the code is aligned the same as without a mask
-            const margin = isBackground ? this.options.imageOptions.margin || 0 : 0
-            size = Math.ceil(this.options.dotsOptions.size * (maskCount + 2 * margin))
+            // The code is drawn at [0, 0] in its original size (plus border and margin in ImageMode.background),
+            // the remaining segments outside the viewBox
+            const dotSize = this.options.dotsOptions.size
+            const margin = isBackground ? 1 + (this.options.imageOptions.margin || 0) : 0
+            size = Math.ceil(dotSize * (moduleCount + 2 * margin))
+            const beginning = Math.floor((size - moduleCount * dotSize) / 2)
+            appliedMask = {
+                ...mask,
+                count: moduleCount,
+                dotSize,
+                x: beginning - mask.startX * dotSize,
+                y: beginning - mask.startY * dotSize
+            }
         } else {
             if (this.options.imageOptions.mode == ImageMode.background && this.options.shape != ShapeType.circle)
                 moduleCount += 2
@@ -213,7 +225,8 @@ export class QRCodeStyling {
                         ...this.options,
                         width: size,
                         height: size,
-                        size
+                        size,
+                        mask: appliedMask
                     }, {
                         dots: this.qrSVG?.dotsColor,
                         background: this.qrSVG?.backgroundColor
@@ -223,7 +236,8 @@ export class QRCodeStyling {
                 ...this.options,
                 width: size,
                 height: size,
-                size
+                size,
+                mask: appliedMask
             })
         })
     }

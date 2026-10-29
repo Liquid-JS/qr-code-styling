@@ -83,7 +83,8 @@ export interface GeneratorMask {
      * Matrix indexed as mask[x][y]; false hides the segment at [x, y]
      *
      * The QR code occupies [startX, startX + count) × [startY, startY + count), with count as passed to
-     * Plugin.applyMask; it must lie inside the mask, with its corners visible, or an error is thrown.
+     * Plugin.applyMask; it must lie inside the mask with the requested padding and its corners visible,
+     * or an error is thrown.
      * Remaining segments are filled pseudo-randomly.
      *
      * With a mask, the shape is square and the QR code is drawn from [0, 0], with extra segments outside the
@@ -95,11 +96,24 @@ export interface GeneratorMask {
     /** Mask row where the QR code starts */
     startY: number
     /**
-     * Fit the gradient to the mask bounds instead of centering it at the QR code
+     * Center the gradient at the mask bounds instead of the QR code (scaled proportionally either way)
      *
      * @default false
      */
     fitGradient?: boolean
+}
+
+/**
+ * Mask applied to the QR code, with its rendering data
+ */
+export interface AppliedMask extends GeneratorMask {
+    /** QR code size in segments */
+    count: number
+    /** Segment size */
+    dotSize: number
+    /** Position of the mask's [0, 0] segment within the SVG */
+    x: number
+    y: number
 }
 
 export interface Plugin {
@@ -111,10 +125,11 @@ export interface Plugin {
      * Add (or hide) QR code segments, e.g. to fit a QR code into a custom shape, the same way
      * ShapeType.circle fits it inside a circle
      *
-     * @param count QR code size in segments (including the light border in ImageMode.background)
+     * @param count QR code size in segments
+     * @param padding Mask rows and columns required on each side of the QR code (1 in ImageMode.background)
      * @returns Segment mask; if undefined, try the next plugin or draw without a mask
      */
-    applyMask?: (count: number) => GeneratorMask | undefined | void
+    applyMask?: (count: number, padding: number) => GeneratorMask | undefined | void
     /**
      * Draw a single dot
      *
@@ -159,6 +174,8 @@ export interface Options {
     height: number
     /** @ignore */
     size: number
+    /** @ignore Mask applied to the QR code */
+    mask?: AppliedMask
     /** The data will be encoded in the QR code */
     data: string
     /** The image will be copied to the center of the QR code */

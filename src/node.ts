@@ -12,7 +12,7 @@ export { type RecursivePartial } from './types/helper.js'
 export { type CanvasOptions } from './utils/canvas-options.js'
 export { type ColorElementValue } from './utils/color.js'
 export { GradientType, type Gradient } from './utils/gradient.js'
-export { CornerDotType, CornerSquareType, DotType, ImageMode, ShapeType, type Options, type Plugin } from './utils/options.js'
+export { CornerDotType, CornerSquareType, DotType, ImageMode, ShapeType, type AppliedMask, type GeneratorMask, type Options, type Plugin } from './utils/options.js'
 export { ErrorCorrectionPercents } from './utils/qrcode.js'
 
 export const browserUtils: typeof _browserUtils | undefined = undefined
@@ -64,7 +64,7 @@ export class QRCodeStyling extends _QRCodeStyling {
                     )
                 },
                 getSize: async (src: string | Blob | Buffer): Promise<{ width: number, height: number }> => {
-                    const { data } = Buffer.isBuffer(options.image) ? { data: options.image } : await loadImage(src)
+                    const { data } = Buffer.isBuffer(src) ? { data: src } : await loadImage(src)
                     const meta = await sharp(data).metadata()
                     return {
                         width: meta.width!,

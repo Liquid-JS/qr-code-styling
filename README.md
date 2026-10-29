@@ -124,6 +124,28 @@ const qrCode = new QRCodeStyling({
 })
 ```
 
+#### Image mask
+
+`ImageMaskPlugin` fits the QR code into an area of an image outlined by a path, e.g. to fill a logo or a shape with QR code segments, and draws the image behind the code. The largest square inside the area (preferring squares closer to its center) holds the QR code itself, the rest of the area is filled with random segments. The image is independent of `options.image`, so the code can still have its own logo or background image.
+
+```ts
+import ImageMaskPlugin from '@liquid-js/qr-code-styling/image-mask-plugin'
+
+const qrCode = new QRCodeStyling({
+    plugins: [
+        new ImageMaskPlugin({
+            image: 'https://example.com/heart.png',
+            // Area to fill with QR code segments, in the image coordinate space
+            path: 'M 256 464 C 120 360 32 280 32 176 A 112 112 0 0 1 256 128 A 112 112 0 0 1 480 176 C 480 280 392 360 256 464 Z',
+            fillRule: 'nonzero'
+        })
+    ]
+    // ...other options
+})
+```
+
+Background and border options are ignored, as the image defines the size of the output.
+
 #### Plugin development
 
 A simple plugin example to customize QR code dots:
