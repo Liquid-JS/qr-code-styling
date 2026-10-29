@@ -356,14 +356,17 @@ export class QRSVG {
                     continue
                 }
 
-                // Light outline around the code
+                // Light outline around the code; next to the corners it's drawn by the corner figures
                 if (
                     i >= offsetX - 1 &&
                     i <= offsetX + count &&
                     j >= offsetY - 1 &&
                     j <= offsetY + count
                 ) {
-                    this._fakeMatrix[i][j] = false
+                    const nextToCorner =
+                        (j < offsetY + 8 && (i < offsetX + 8 || i >= offsetX + count - 8)) ||
+                        (i < offsetX + 8 && j >= offsetY + count - 8)
+                    this._fakeMatrix[i][j] = nextToCorner ? undefined : false
                     continue
                 }
 
