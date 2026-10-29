@@ -308,7 +308,7 @@ export const defaultOptions: Options = {
         crossOrigin: undefined,
         margin: 0,
         fill: {
-            color: 'rgba(255,255,255,1)'
+            color: 'rgba(255,255,255,0.75)'
         }
     },
     dotsOptions: {
