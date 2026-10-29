@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.7.0-0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.6.1...v5.7.0-0) (2026-10-29)
+
+### Features
+
+* combine paths to reduce rendering load ([a6ada01](https://github.com/Liquid-JS/qr-code-styling/commit/a6ada015bea837caf58bc9cf85f64e2ec09e0255))
+* image mask plugin ([e9cecc4](https://github.com/Liquid-JS/qr-code-styling/commit/e9cecc446d26f3fc9c32ab28fcf335b6ae3b7d9b))
+* plugin mask hook ([3eaf81e](https://github.com/Liquid-JS/qr-code-styling/commit/3eaf81e87bb87bd965e40df759c271352f61b5bd))
+
+### Bug Fixes
+
+* deps ([cc6a912](https://github.com/Liquid-JS/qr-code-styling/commit/cc6a912d53086a8d6d073003fe209dd5bbcc8f39))
 ## [5.6.1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.6.1-0...v5.6.1) (2026-09-30)
 ## [5.6.1-0](https://github.com/Liquid-JS/qr-code-styling/compare/v5.6.0...v5.6.1-0) (2026-09-30)
 
