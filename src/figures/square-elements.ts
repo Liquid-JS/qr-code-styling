@@ -1,5 +1,5 @@
 import { BasicFigureDrawArgs } from '../types/helper.js'
-import { svgPath } from '../utils/svg.js'
+import { svgAttr } from '../utils/svg.js'
 
 export const SquareElements = {
     dot: (args: BasicFigureDrawArgs): [SVGElement, SVGElement] => {
@@ -11,7 +11,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x + size / 2} ${y}
+            svgAttr`M ${x + size / 2} ${y}
           a ${size / 2} ${size / 2} 0 1 0 0.1 0
           z
           m 0 ${dotSize}
@@ -23,7 +23,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`M ${x + size / 2} ${y - dotSize}
+            svgAttr`M ${x + size / 2} ${y - dotSize}
           a ${size / 2 + dotSize} ${size / 2 + dotSize} 0 1 0 0.1 0
           z`
         )
@@ -39,7 +39,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
+            svgAttr`M ${x} ${y}
           v ${size}
           h ${size}
           v ${-size}
@@ -55,7 +55,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`M ${x - dotSize} ${y - dotSize}
+            svgAttr`M ${x - dotSize} ${y - dotSize}
           h ${size + 2 * dotSize}
           v ${size + 2 * dotSize}
           h ${-size - 2 * dotSize}
@@ -73,7 +73,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + 2.5 * dotSize}
+            svgAttr`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
           a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${2 * dotSize}
@@ -99,7 +99,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`
+            svgAttr`
           M ${x - dotSize} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
           a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 0 ${dotSize * 3.5} ${dotSize * 3.5}
@@ -123,7 +123,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + 2.5 * dotSize}
+            svgAttr`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
           a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
@@ -146,7 +146,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`
+            svgAttr`
           M ${x + 0.5 * dotSize} ${y - dotSize}
           h ${4 * dotSize}
           a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${dotSize * 3.5} ${dotSize * 3.5}
@@ -168,7 +168,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + 2.5 * dotSize}
+            svgAttr`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
           a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
@@ -192,7 +192,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`
+            svgAttr`
           M ${x + 0.5 * dotSize} ${y - dotSize}
           h ${4 * dotSize}
           a ${3.5 * dotSize} ${3.5 * dotSize} 0 0 1 ${dotSize * 3.5} ${dotSize * 3.5}
@@ -218,7 +218,7 @@ export const SquareElements = {
         element.setAttribute('clip-rule', 'evenodd')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
+            svgAttr`M ${x} ${y}
           h ${size}
           v ${size}
           h ${-size}
@@ -233,7 +233,7 @@ export const SquareElements = {
         fill.setAttribute('clip-rule', 'evenodd')
         fill.setAttribute(
             'd',
-            svgPath`M ${x - dotSize} ${y - dotSize}
+            svgAttr`M ${x - dotSize} ${y - dotSize}
           h ${size + 2 * dotSize}
           v ${size + 2 * dotSize}
           h ${-size - 2 * dotSize}

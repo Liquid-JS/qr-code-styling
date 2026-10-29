@@ -129,7 +129,7 @@ const qrCode = new QRCodeStyling({
 A simple plugin example to customize QR code dots:
 
 ```ts
-import { svgPath, DrawArgs } from '@liquid-js/qr-code-styling/plugin-utils'
+import { svgAttr, DrawArgs } from '@liquid-js/qr-code-styling/plugin-utils'
 
 const qrCode = new QRCodeStyling({
     plugins: [
@@ -141,7 +141,7 @@ const qrCode = new QRCodeStyling({
                 // Insert your own SVG path definition, or implement neighbour-aware logic through args.getNeighbor()
                 element.setAttribute(
                     'd',
-                    svgPath`M ${x} ${y + (size - size) / 2}
+                    svgAttr`M ${x} ${y + (size - size) / 2}
                   v ${size}
                   h ${size / 2}
                   a ${size / 2} ${size / 2} 0 0 0 0 ${-size}

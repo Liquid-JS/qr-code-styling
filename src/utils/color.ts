@@ -1,5 +1,5 @@
 import { Gradient, GradientType } from './gradient.js'
-import { numToAttr } from './svg.js'
+import { numToAttr, svgAttr } from './svg.js'
 
 export function parseColor(cstr: string) {
     let m: RegExpExecArray | null
@@ -149,7 +149,7 @@ export function createColor({
 
         options.colorStops.forEach((stopCfg: { offset: number, color: string }) => {
             const stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop')
-            stop.setAttribute('offset', `${numToAttr(100 * stopCfg.offset)}%`)
+            stop.setAttribute('offset', svgAttr`${100 * stopCfg.offset}%`)
 
             const parsed = parseColor(stopCfg.color)
             stop.setAttribute('stop-color', parsed.value)

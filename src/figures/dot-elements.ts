@@ -1,5 +1,5 @@
 import { BasicFigureDrawArgs } from '../types/helper.js'
-import { numToAttr, scalePath, svgPath } from '../utils/svg.js'
+import { numToAttr, scalePath, svgAttr } from '../utils/svg.js'
 
 export const DotElements = {
     dot: (args: BasicFigureDrawArgs): SVGElement => {
@@ -30,7 +30,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + (size - height) / 2}
+            svgAttr`M ${x} ${y + (size - height) / 2}
           v ${height}
           h ${size / 2}
           a ${height / 2} ${height / 2} 0 0 0 0 ${-height}
@@ -46,7 +46,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
+            svgAttr`M ${x} ${y}
           v ${size}
           h ${size}
           v ${-size / 2}
@@ -63,7 +63,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
+            svgAttr`M ${x} ${y}
           v ${size}
           h ${size}
           a ${size} ${size} 0 0 0 ${-size} ${-size}
@@ -79,7 +79,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y}
+            svgAttr`M ${x} ${y}
           v ${size / 2}
           a ${size / 2} ${size / 2} 0 0 0 ${size / 2} ${size / 2}
           h ${size / 2}
@@ -108,7 +108,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + size}
+            svgAttr`M ${x} ${y + size}
           c ${size * s2} 0 ${c23x} ${c23y} ${size} ${-size * s1}
           c ${c31x} ${c31y} ${-size / 2} ${size * (s1 - 1)} ${-size} ${size * (s1 - 1)} 
           z`
@@ -194,7 +194,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + 2.5 * dotSize}
+            svgAttr`M ${x} ${y + 2.5 * dotSize}
           v ${2 * dotSize}
           a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}
           h ${4.5 * dotSize}
@@ -213,7 +213,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x} ${y + size / 2}
+            svgAttr`M ${x} ${y + size / 2}
           v ${size / 4}
           a ${size / 4} ${size / 4} 0 0 0 ${size / 4} ${size / 4}
           h ${(size / 4) * 3}
@@ -244,7 +244,7 @@ export const DotElements = {
                 const radius = i % 2 === 0 ? outerRadius : innerRadius
                 const xPoint = cx + radius * Math.sin(i * angle)
                 const yPoint = cy - radius * Math.cos(i * angle)
-                return svgPath`${i === 0 ? 'M' : 'L'} ${xPoint} ${yPoint} `
+                return svgAttr`${i === 0 ? 'M' : 'L'} ${xPoint} ${yPoint} `
             }).join(' ')
         )
 
@@ -259,7 +259,7 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x + notch} ${y}
+            svgAttr`M ${x + notch} ${y}
           l ${thickness} 0
           l 0 ${notch}
           l ${notch} 0
@@ -283,81 +283,81 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
 
         const parts = [
-            svgPath`M ${x} ${y + 2.5 * dotSize}`
+            svgAttr`M ${x} ${y + 2.5 * dotSize}`
         ]
 
         let l = 2 * dotSize
 
         if (corners.bl == 'round') {
             parts.push(
-                svgPath`v ${l}
+                svgAttr`v ${l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * 2.5}`
             )
             l = 2 * dotSize
         } else if (corners.bl == 'out') {
             parts.push(
-                svgPath`v ${5 * dotSize + l}
+                svgAttr`v ${5 * dotSize + l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * 2.5} ${dotSize * -2.5}`
             )
             l = 2 * dotSize
         } else {
             parts.push(
-                svgPath`v ${2.5 * dotSize + l}`
+                svgAttr`v ${2.5 * dotSize + l}`
             )
             l = 4.5 * dotSize
         }
 
         if (corners.br == 'round') {
             parts.push(
-                svgPath`h ${l}
+                svgAttr`h ${l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * 2.5} ${dotSize * -2.5}`
             )
             l = -2 * dotSize
         } else if (corners.br == 'out') {
             parts.push(
-                svgPath`h ${5 * dotSize + l}
+                svgAttr`h ${5 * dotSize + l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * -2.5} ${dotSize * -2.5}`
             )
             l = -2 * dotSize
         } else {
             parts.push(
-                svgPath`h ${2.5 * dotSize + l}`
+                svgAttr`h ${2.5 * dotSize + l}`
             )
             l = -4.5 * dotSize
         }
 
         if (corners.tr == 'round') {
             parts.push(
-                svgPath`v ${l}
+                svgAttr`v ${l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * -2.5} ${dotSize * -2.5}`
             )
             l = -2 * dotSize
         } else if (corners.tr == 'out') {
             parts.push(
-                svgPath`v ${-5 * dotSize + l}
+                svgAttr`v ${-5 * dotSize + l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * -2.5} ${dotSize * 2.5}`
             )
             l = -2 * dotSize
         } else {
             parts.push(
-                svgPath`v ${-2.5 * dotSize + l}`
+                svgAttr`v ${-2.5 * dotSize + l}`
             )
             l = -4.5 * dotSize
         }
 
         if (corners.tl == 'round') {
             parts.push(
-                svgPath`h ${l}
+                svgAttr`h ${l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 0 ${dotSize * -2.5} ${dotSize * 2.5}`
             )
         } else if (corners.tl == 'out') {
             parts.push(
-                svgPath`h ${-5 * dotSize + l}
+                svgAttr`h ${-5 * dotSize + l}
               a ${2.5 * dotSize} ${2.5 * dotSize} 0 0 1 ${dotSize * 2.5} ${dotSize * 2.5}`
             )
         } else {
             parts.push(
-                svgPath`h ${-2.5 * dotSize + l}`
+                svgAttr`h ${-2.5 * dotSize + l}`
             )
         }
 
@@ -375,13 +375,13 @@ export const DotElements = {
         const element = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         element.setAttribute(
             'd',
-            svgPath`M ${x + size * 0.4} ${y + size * 0.5 - dP}
+            svgAttr`M ${x + size * 0.4} ${y + size * 0.5 - dP}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${left ? size * 0.1 - dP : -0.3 * size} ${left ? dP - 0.1 * size : dP}
-          ${left ? svgPath`
+          ${left ? svgAttr`
           h ${-0.65 * size}
           v ${0.2 * size}
           h ${0.65 * size}
-          a ${0.4 * size} ${0.4 * size} 0 0 0 ${dP} ${0.3 * size}` : svgPath`a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${0.4 * size}`}
+          a ${0.4 * size} ${0.4 * size} 0 0 0 ${dP} ${0.3 * size}` : svgAttr`a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${0.4 * size}`}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${0.4 * size} ${-0.4 * size}
           a ${0.4 * size} ${0.4 * size} 0 0 0 ${-0.3 * size} ${-dP}
           v ${-0.65 * size}
