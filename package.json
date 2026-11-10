@@ -11,7 +11,14 @@
             "default": "./package.json"
         },
         ".": {
-            "node": "./lib/qr-code-styling-node.js",
+            "browser": {
+                "types": "./lib/index.d.ts",
+                "default": "./lib/qr-code-styling.js"
+            },
+            "node": {
+                "types": "./lib/node.d.ts",
+                "default": "./lib/qr-code-styling-node.js"
+            },
             "types": "./lib/index.d.ts",
             "default": "./lib/qr-code-styling.js"
         },
@@ -60,11 +67,32 @@
         "vcards-js": "^2.10.0",
         "vcf": "^2.1.0"
     },
+    "peerDependenciesMeta": {
+        "@xmldom/xmldom": {
+            "optional": true
+        },
+        "file-type": {
+            "optional": true
+        },
+        "ical-generator": {
+            "optional": true
+        },
+        "sharp": {
+            "optional": true
+        },
+        "vcards-js": {
+            "optional": true
+        },
+        "vcf": {
+            "optional": true
+        }
+    },
     "devDependencies": {
         "@commitlint/cli": "^21.2.4",
         "@commitlint/config-conventional": "^21.2.4",
         "@liquid-js/qrcode-generator": "^1.1.7",
-        "@liquid-js/rollup-plugin-closure-compiler": "^0.28.1",
+        "@liquid-js/rollup-plugin-closure-compiler": "^0.28.3",
+        "@napi-rs/canvas": "^1.1.0",
         "@rollup/plugin-commonjs": "^29.0.3",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-terser": "^1.0.2",
@@ -81,46 +109,40 @@
         "@types/vcards-js": "^2.10.5",
         "@types/vcf": "^2.0.7",
         "@xmldom/xmldom": "^0.9.12",
-        "canvas": "^3.2.3",
         "chai": "^6.3.0",
         "clean-package": "^2.2.0",
         "commit-and-tag-version": "<13.1.0",
-        "eslint": "^10.13.0",
-        "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-jsdoc": "^65.4.2",
+        "eslint": "^10.14.0",
+        "eslint-plugin-import-x": "^4.17.1",
+        "eslint-plugin-jsdoc": "^65.4.5",
         "eslint-plugin-prefer-arrow-functions": "^3.10.2",
         "eslint-plugin-unused-imports": "^4.4.1",
         "file-type": "^22.3.0",
         "google-closure-compiler": "^20261026.0.0",
         "husky": "^9.1.7",
         "ical-generator": "^11.1.3",
-        "jsdom": "^30.1.3",
+        "jsdom": "^31.0.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^12.0.3",
         "npm-check-updates": "^23.1.1",
-        "rimraf": "^6.1.3",
-        "rollup": "^4.66.0",
+        "rimraf": "^6.1.4",
+        "rollup": "^4.68.2",
         "rollup-plugin-minify-template-literals": "^2.2.0",
         "rollup-plugin-polyfill-node": "^0.13.0",
         "sharp": "^0.35.5",
         "source-map-support": "^0.5.21",
-        "ts-ics": "^2.4.7",
+        "ts-ics": "^2.4.8",
         "ts-node-maintained": "^10.9.6",
-        "tslib": "^2.8.1",
+        "tslib": "^2.9.1",
         "typedoc": "^0.28.20",
         "typescript": "<7.0.0",
-        "typescript-eslint": "^8.72.1",
+        "typescript-eslint": "^8.72.2",
         "vcards-js": "^2.11.1",
         "vcf": "^2.1.2",
-        "vite": "^8.3.5"
+        "vite": "^8.3.7"
     },
     "resolutions": {
         "@eslint/core": "^0.17.0"
-    },
-    "dependenciesMeta": {
-        "canvas": {
-            "built": true
-        }
     },
     "scripts": {
         "build": "rimraf lib && rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
@@ -175,8 +197,7 @@
             "scripts",
             "devDependencies",
             "clean-package",
-            "resolutions",
-            "dependenciesMeta"
+            "resolutions"
         ]
     }
 }

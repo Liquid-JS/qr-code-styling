@@ -1,11 +1,10 @@
 // @ts-check
 import stylisticPlugin from '@stylistic/eslint-plugin'
-import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin'
-import importPlugin from 'eslint-plugin-import'
+import { importX as importPlugin } from 'eslint-plugin-import-x'
 import jsdocPlugin from 'eslint-plugin-jsdoc'
 import preferArrowPlugin from 'eslint-plugin-prefer-arrow-functions'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
-import { parser } from 'typescript-eslint'
+import { parser, plugin as typescriptEslintPlugin } from 'typescript-eslint'
 import { defineConfig } from 'eslint/config'
 
 export default defineConfig(
