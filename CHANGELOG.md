@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.7.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-1...v5.7.0-2) (2026-11-10)
+
+### Bug Fixes
+
+* exports ([262ca91](https://github.com/Liquid-JS/qr-code-styling/commit/262ca913ada570d11cb6afdaaab80eae80317152))
+* transparent default fill colour in background mode ([9b9ca5a](https://github.com/Liquid-JS/qr-code-styling/commit/9b9ca5aaba8b300afe89d19774595f2ef389a129))
 ## [5.7.0-1](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-0...v5.7.0-1) (2026-10-29)
 
 ### Bug Fixes
