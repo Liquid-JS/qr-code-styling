@@ -1,6 +1,4 @@
 import { DOMImplementation, DOMParser, XMLSerializer } from '@xmldom/xmldom'
-import { fileTypeFromBuffer } from 'file-type'
-import sharp from 'sharp'
 import { QRCodeStyling as _QRCodeStyling } from './core/qr-code-styling.js'
 import type * as _browserUtils from './tools/browser-utils.js'
 import { RecursivePartial } from './types/helper.js'
@@ -17,6 +15,32 @@ export { ErrorCorrectionPercents } from './utils/qrcode.js'
 
 export const browserUtils: typeof _browserUtils | undefined = undefined
 
+// sharp and file-type are only needed for images, so they load when an image first does: codes without images render
+// without them installed, and a bundle that includes this file doesn't need them to resolve.
+let fileTypeModule: Promise<typeof import('file-type')> | undefined
+let sharpModule: Promise<typeof import('sharp')> | undefined
+
+const missing = (name: string, cause: unknown) =>
+    new Error(`Rendering images on the server needs ${name}: install it next to @liquid-js/qr-code-styling`, { cause })
+
+const mimeOf = async (data: Buffer) => {
+    fileTypeModule ??= import('file-type').catch((err: unknown) => {
+        fileTypeModule = undefined
+        throw missing('file-type', err)
+    })
+    const { fileTypeFromBuffer } = await fileTypeModule
+    return fileTypeFromBuffer(data).then((r) => r?.mime)
+}
+
+const sizeOf = async (data: Buffer) => {
+    sharpModule ??= import('sharp').catch((err: unknown) => {
+        sharpModule = undefined
+        throw missing('sharp', err)
+    })
+    const { default: sharp } = await sharpModule
+    return sharp(data).metadata()
+}
+
 export class QRCodeStyling extends _QRCodeStyling {
     constructor(options: RecursivePartial<Options>) {
         const dom = new DOMImplementation().createDocument(null, '')
@@ -31,7 +55,7 @@ export class QRCodeStyling extends _QRCodeStyling {
                         .arrayBuffer()
                         .then((buff) => Buffer.from(buff))
                         .then(async (data) => ({
-                            contentType: res.headers.get('Content-Type') || (await fileTypeFromBuffer(data).then((r) => r?.mime)),
+                            contentType: res.headers.get('Content-Type') || (await mimeOf(data)),
                             data
                         }))
                 )
@@ -39,7 +63,7 @@ export class QRCodeStyling extends _QRCodeStyling {
                 return pr
             } else {
                 const buff = Buffer.from(url as Buffer)
-                const mime = await fileTypeFromBuffer(buff).then((r) => r?.mime)
+                const mime = await mimeOf(buff)
                 return {
                     contentType: mime,
                     data: buff
@@ -65,7 +89,7 @@ export class QRCodeStyling extends _QRCodeStyling {
                 },
                 getSize: async (src: string | Blob | Buffer): Promise<{ width: number, height: number }> => {
                     const { data } = Buffer.isBuffer(src) ? { data: src } : await loadImage(src)
-                    const meta = await sharp(data).metadata()
+                    const meta = await sizeOf(data)
                     return {
                         width: meta.width!,
 

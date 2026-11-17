@@ -184,7 +184,11 @@ See [Border plugin](https://github.com/Liquid-JS/qr-code-styling/blob/master/src
 
 > ⚠️ **Note**: make sure to install peer dependencies when running on Node (not needed for browser environments)
 >
->     npm install @liquid-js/qrcode-generator @xmldom/xmldom file-type sharp
+>     npm install @liquid-js/qrcode-generator @xmldom/xmldom
+>
+> `file-type` and `sharp` are only needed for codes with an image, and load when the first image renders:
+>
+>     npm install file-type sharp
 
 ```js
 import { QRCodeStyling } from '@liquid-js/qr-code-styling'
