@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.7.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-2...v5.7.0-3) (2026-11-17)
+
+### Bug Fixes
+
+* lazy-load image libs on node ([4f0e058](https://github.com/Liquid-JS/qr-code-styling/commit/4f0e05811c6b15bd4d38ddab6e1a8a7271d3595b))
 ## [5.7.0-2](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-1...v5.7.0-2) (2026-11-10)
 
 ### Bug Fixes
