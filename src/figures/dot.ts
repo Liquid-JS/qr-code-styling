@@ -39,18 +39,6 @@ const qrDotFigures: { [type in DotType]: (args: DrawArgs) => SVGElement } = {
             document
         })
     },
-    [DotType.tinySquare]: ({ x, y, size, document }) => {
-        const originalSize = size
-
-        size = originalSize * 0.3
-        x = x + originalSize * 0.35
-        y = y + originalSize * 0.35
-
-        return DotElements.square({
-            x, y, size,
-            document
-        })
-    },
     [DotType.diamond]: args => rotateFigure({
         ...args,
         rotation: Math.PI / 4,
@@ -254,4 +242,17 @@ export function drawPluginDot(plugins: Plugin[]) {
         }
         return undefined
     }
+}
+
+export function tinySquare({ x, y, size, document }: DrawArgs) {
+    const originalSize = size
+
+    size = originalSize * 0.3
+    x = x + originalSize * 0.35
+    y = y + originalSize * 0.35
+
+    return DotElements.square({
+        x, y, size,
+        document
+    })
 }

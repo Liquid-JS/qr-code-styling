@@ -2,13 +2,13 @@ import { QRCodeMinimal } from '@liquid-js/qrcode-generator/lib/qrcode/QRCodeMini
 import { QRUtil } from '@liquid-js/qrcode-generator/lib/qrcode/QRUtil.js'
 import { drawPluginCornerDot, getQrCornerDotFigure } from '../figures/corner-dot.js'
 import { drawPluginCornerSquare, getQrCornerSquareFigure } from '../figures/corner-square.js'
-import { getQrDotFigure } from '../figures/dot.js'
+import { getQrDotFigure, tinySquare } from '../figures/dot.js'
 import { browserImageTools } from '../tools/browser-image-tools.js'
 import { DrawArgs } from '../types/helper.js'
 import { ColorElementValue, createColor } from '../utils/color.js'
 import { Gradient } from '../utils/gradient.js'
 import { calculateImageSize, createImageElement } from '../utils/image.js'
-import { CornerDotType, CornerSquareType, DotType, GeneratorMask, ImageMode, Options, ShapeType } from '../utils/options.js'
+import { CornerDotType, CornerSquareType, GeneratorMask, ImageMode, Options, ShapeType } from '../utils/options.js'
 import { getRng } from '../utils/random.js'
 import { mergeShapes, numToAttr } from '../utils/svg.js'
 
@@ -409,7 +409,7 @@ export class QRSVG {
                 if (this.lightDotsMask) {
                     draw = alignmentMatrix[i][j] != undefined
                         ? orgDarw
-                        : getQrDotFigure(DotType.tinySquare)
+                        : tinySquare
                 }
 
                 const alignmentNb = options.imageOptions.mode == ImageMode.background && alignmentMatrix[i][j] != undefined

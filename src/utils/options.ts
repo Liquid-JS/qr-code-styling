@@ -15,7 +15,6 @@ export enum DotType {
     classyRounded = 'classy-rounded',
     square = 'square',
     smallSquare = 'small-square',
-    tinySquare = 'tiny-square',
     diamond = 'diamond',
     wave = 'wave',
     heart = 'heart',
