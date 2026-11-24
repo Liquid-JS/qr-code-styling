@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.7.0-4](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-3...v5.7.0-4) (2026-11-24)
+
+### Bug Fixes
+
+* drop internal tinysquare option ([caf8052](https://github.com/Liquid-JS/qr-code-styling/commit/caf805229dd30a098dab71c72f2ac618bc71dd3b))
+* partial options for groups that can be false ([007e337](https://github.com/Liquid-JS/qr-code-styling/commit/007e3373ea88bb52cf954c84325f0ed0388cbeb2))
 ## [5.7.0-3](https://github.com/Liquid-JS/qr-code-styling/compare/v5.7.0-2...v5.7.0-3) (2026-11-17)
 
 ### Bug Fixes
